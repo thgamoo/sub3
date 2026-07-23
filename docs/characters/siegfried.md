@@ -18,5 +18,5 @@
 ## 이미지 생성 프롬프트
 
 ```text
-A handsome young male lead of a romance fantasy webnovel, detailed anime style character portrait, jet black hair slightly tousled, sharp crimson red eyes, cold and noble expression, heir of a northern grand duchy, clean black military-style coat with restrained silver embroidery and a fur-trimmed collar, faint dragon-slayer motif with a sword hilt only subtly visible, simple icy blue gradient background with no castle or snowfall, elegant and dangerous aura, clean half body portrait, high detail, no text, no watermark
+A handsome young male lead of a romance fantasy webnovel, detailed anime style character portrait, jet black hair slightly tousled, sharp crimson red eyes, cold and noble expression, heir of a northern grand duchy, plain black military-style coat with a simple fur-trimmed collar, no armor, no jewelry, no chains, no sword visible, simple icy blue gradient background with no castle or snowfall, elegant and dangerous aura, clean half body portrait, polished but not ornate, no text, no watermark
 ```
