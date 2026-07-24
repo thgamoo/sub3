@@ -37,3 +37,11 @@
 ```text
 A deranged and eerie voodoo sorceress, romance fantasy webnovel style, detailed anime character portrait, wild red and green two-tone hair, hollow pitch-black eyes without pupils, wide unhinged grin, plain dark layered robe with no jewelry, no necklace, no earrings, no bone charms, no doll, faint ritual smoke only around her shoulders, muted desert-brown gradient background with no altar or candles, creepy yet strangely charming witch-doctor atmosphere, clean half body portrait, polished but not ornate, no text, no watermark
 ```
+
+## 이미지 생성 프롬프트 v2
+
+> 수정: 부두교 느낌 제거, 독술사 컨셉으로. 손에 독약 병.
+
+```text
+A deranged and eerie poison master, romance fantasy webnovel style, detailed anime character portrait, wild red and green two-tone hair, hollow pitch-black eyes without pupils, wide unhinged grin, dark alchemist robe with small glass vials and herb pouches hanging from a leather belt, holding up a glass vial of glowing green poison in one hand, faint toxic green vapor drifting from the vial, no voodoo elements, no bone charms, no dolls, no skulls, muted desert-brown gradient background, creepy yet strangely charming poisoner atmosphere, clean half body portrait, polished but not ornate, no text, no watermark
+```

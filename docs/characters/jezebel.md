@@ -9,6 +9,8 @@
 ## 설정
 
 - 악마숭배자.
+- 본래 동부의 황녀였다. 현재는 북동부(공국과 동부 제국의 국경)에 그녀만의 자유도시를 세우고 시장을 맡고 있다. 대외적으로는 자유도시지만, 사실은 악마숭배자의 소굴이다.
+- 지크프리트와 본래 약혼 관계였으나, 파혼 수순을 밟았다.
 - `잊혀진 진조 - 바토리`를 깨워 학살에 이용하고, `마력없는 마법사 - 미호`를 금단의 마법으로 유혹하는 등 북부를 중심으로 어둠의 세력을 움직인다.
 - 컨셉: 최대한 예쁘고 치명적이고 매력적이게.
 
@@ -22,4 +24,12 @@
 
 ```text
 A dangerously beautiful villainess witch, romance fantasy webnovel style, detailed anime character portrait, long wild disheveled dark hair, white bandages wrapped over her eyes, ecstatic mad grin showing madness and allure, tattered elegant black priestess robes with only a few subtle occult sigils, minimal dark crimson gradient background with no altar, candles, or runes, seductive yet terrifying atmosphere, deep shadows with restrained crimson highlights, clean half body portrait, high detail, no text, no watermark
+```
+
+## 이미지 생성 프롬프트 v2
+
+> 수정: 눈이 보이지 않도록 붕대로 완전히 가림.
+
+```text
+A dangerously beautiful villainess witch, romance fantasy webnovel style, detailed anime character portrait, long wild disheveled dark hair, thick white bandages fully wrapped around her head completely covering both eyes, eyes entirely hidden, no eyes visible at all, ecstatic mad grin showing madness and allure, tattered elegant black priestess robes with only a few subtle occult sigils, minimal dark crimson gradient background, seductive yet terrifying atmosphere, deep shadows with restrained crimson highlights, clean half body portrait, high detail, no text, no watermark
 ```

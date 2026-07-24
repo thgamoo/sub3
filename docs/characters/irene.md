@@ -37,5 +37,13 @@
 ## 이미지 생성 프롬프트
 
 ```text
-A serene yet unsettling saintess candidate, romance fantasy webnovel style, detailed anime character portrait, pale yellow blonde hair with long bangs covering her eyes, faint glimpse of golden glowing eyes through the bangs, gentle mysterious smile, plain white novice-priestess robe with only thin gold piping, small simple priest cap with no jewel, subtle halo of divine light with no floating objects, soft ivory and gold gradient background with no cathedral, holy but eerie atmosphere, clean half body portrait, polished but not ornate, no text, no watermark
+A serene yet unsettling saintess candidate, romance fantasy webnovel style, detailed anime character portrait, pale yellow blonde hair with long bangs covering her eyes, faint glimpse of golden glowing eyes through the bangs, gentle mysterious smile, extremely ornate white and gold priestess vestments, elaborate jeweled mitre-like veil and priest crown symbolizing holy healing and demon-slaying power, softly glowing circular halo of divine light and floating holy scripture pages, grand cathedral interior with bright stained-glass light in the background, holy but eerie atmosphere, elegant half body portrait, high detail, no text, no watermark
+```
+
+## 이미지 생성 프롬프트 v2
+
+> 수정: 성녀처럼 과하게 나오는 문제. 옷 장식 제거, 왕관 대신 주교관, 후광·성서 페이지 제거.
+
+```text
+A serene yet unsettling saintess candidate, romance fantasy webnovel style, detailed anime character portrait, pale yellow blonde hair with long bangs covering her eyes, faint glimpse of golden glowing eyes through the bangs, gentle mysterious smile, simple unadorned white priestess vestments with only minimal gold trim, plain white and gold bishop's mitre on her head, no crown, no halo, no floating scripture pages, no jewelry, quiet cathedral interior with soft light in the background, holy but subtly eerie atmosphere, elegant half body portrait, high detail, no text, no watermark
 ```

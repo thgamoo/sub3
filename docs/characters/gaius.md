@@ -18,5 +18,13 @@
 ## 이미지 생성 프롬프트
 
 ```text
-A regal young crown prince male lead of a romance fantasy webnovel, detailed anime style character portrait, golden blond hair, piercing azure blue eyes, calm and authoritative expression, simple white formal imperial coat with minimal gold trim, plain purple cape, one small laurel hair ornament at most, Roman-inspired empire aesthetic, soft pale marble-colored gradient background with no columns or scenery, dignified and charismatic aura of a future emperor, clean half body portrait, polished but not ornate, no text, no watermark
+A regal young crown prince male lead of a romance fantasy webnovel, detailed anime style character portrait, golden blond hair, piercing azure blue eyes, calm and authoritative expression, ornate white and gold imperial regalia with layered gold chains and a rich purple cape, large golden laurel hair ornament, refined Roman-inspired empire aesthetic, bright marble palace columns and purple banners in the background, dignified and charismatic aura of a future emperor, elegant half body portrait, high detail, no text, no watermark
+```
+
+## 이미지 생성 프롬프트 v2
+
+> 수정: 옷 장식 과다. 장식을 3개 정도(월계관 머리장식, 금 체인 1개, 보라 망토)로 축소.
+
+```text
+A regal young crown prince male lead of a romance fantasy webnovel, detailed anime style character portrait, golden blond hair, piercing azure blue eyes, calm and authoritative expression, clean white and gold imperial uniform with restrained decoration, exactly three ornaments only: a golden laurel hair ornament, one single gold chain, and a rich purple cape, no other jewelry or embellishments, refined Roman-inspired empire aesthetic, bright marble palace columns and purple banners in the background, dignified and charismatic aura of a future emperor, elegant half body portrait, high detail, no text, no watermark
 ```

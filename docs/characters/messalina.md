@@ -22,5 +22,5 @@
 ## 이미지 생성 프롬프트
 
 ```text
-A bewitchingly seductive imperial villainess, romance fantasy webnovel style, detailed anime character portrait, long flowing crimson red hair, sharp upturned sanpaku eyes with an entrancing gaze, alluring smile, simple deep red Roman-inspired dress with clean draped fabric, no jewelry, holding a plain golden wine goblet as her only prop, soft wine-red and gold gradient background with no banquet or roses, intoxicating and dangerous charm, clean half body portrait, polished but not ornate, no text, no watermark
+A bewitchingly seductive imperial villainess, romance fantasy webnovel style, detailed anime character portrait, long flowing crimson red hair, sharp upturned sanpaku eyes with an entrancing gaze, alluring smile, gold laurel crown and jeweled hair chains, revealing luxurious Roman-inspired imperial silk dress with ornate gold jewelry, holding a golden wine goblet with grape and rose motifs, decadent candlelit palace banquet backdrop with wine-red drapery, grapes, roses, and warm gold light, intoxicating and dangerous charm, half body portrait, high detail, no text, no watermark
 ```

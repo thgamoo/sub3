@@ -21,5 +21,5 @@
 ## 이미지 생성 프롬프트
 
 ```text
-A languid and power-hungry beautiful villainess queen, romance fantasy webnovel style, detailed anime character portrait, voluminous curly deep blue hair, bored half-lidded eyes with an arrogant expression, one small plain golden tiara on her head, simple royal blue desert-kingdom dress with clean fabric, no veil, no jewelry, one hand resting lightly near her chin, warm royal-blue and sand gradient background with no throne room, war banners, or treasure, decadent ambition and dangerous elegance, clean half body portrait, polished but not ornate, no text, no watermark
+A languid and power-hungry beautiful villainess queen, romance fantasy webnovel style, detailed anime character portrait, voluminous curly deep blue hair, bored half-lidded eyes with an arrogant expression, ornate golden tiara with blue gemstones on her head, exotic western desert-kingdom royal dress with layered gold jewelry and translucent silk veils, one hand resting lightly near her chin, luxurious throne-room backdrop with warm sand-colored light, royal blue drapery, gold ornaments, and jewel accents, decadent ambition and dangerous elegance, half body portrait, high detail, no text, no watermark
 ```

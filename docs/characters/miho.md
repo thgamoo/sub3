@@ -36,5 +36,13 @@
 ## 이미지 생성 프롬프트
 
 ```text
-A studious young mage girl with a hidden fox spirit nature, romance fantasy webnovel style, detailed anime character portrait, long straight black hair, black eyes behind round glasses, calm intellectual expression, plain dark scholar mage robe with no jewelry and no hair ornament, no book, faint translucent fox ears and only a soft outline of nine fox tails formed of pale spirit energy behind her, east-asian yokai motif blended with western fantasy academy, muted moonlit blue gradient background with no stars or library, mysterious quiet atmosphere, clean half body portrait, polished but not ornate, no text, no watermark
+A studious young mage girl with a hidden fox spirit nature, romance fantasy webnovel style, detailed anime character portrait, long straight black hair, dark violet-black eyes behind round glasses, calm intellectual expression, ornate dark scholar mage robes of a magic tower with gold details, jeweled hair ornament, book and writing brush in hand, talismans and small magical instruments around her, luminous translucent nine fox tails and fox ears formed of pale spirit energy aura clearly visible behind her, east-asian yokai motif blended with western fantasy academy, moonlit magic tower library interior with a large moonlit window in the background, mysterious quiet atmosphere, three-quarter portrait, high detail, no text, no watermark
+```
+
+## 이미지 생성 프롬프트 v2
+
+> 수정: 구미호 귀·꼬리가 너무 강함. 아지랑이처럼 거의 티 안 나게, 겉보기엔 그냥 마력없는 마법사로. 옷은 수수한 로브로.
+
+```text
+A studious young mage girl, romance fantasy webnovel style, detailed anime character portrait, long straight black hair, dark violet-black eyes behind round glasses, calm intellectual expression, simple plain dark scholar robe with no ornaments, no jewelry, no hair accessories, holding a single book, no visible fox ears, no visible fox tails, only an extremely faint barely-noticeable heat-haze-like shimmer in the air behind her, at first glance she looks like an ordinary mage without mana, moonlit magic tower library interior with a large window in the background, quiet scholarly atmosphere, three-quarter portrait, high detail, no text, no watermark
 ```

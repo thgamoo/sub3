@@ -18,5 +18,13 @@
 ## 이미지 생성 프롬프트
 
 ```text
-A beautiful young male lead of a romance fantasy webnovel, detailed anime style character portrait, soft black hair, warm brown eyes with a gentle yet unreadable smile, pretty boy features, son of the pope destined to become a cardinal, simple white formal clergy coat with crimson trim and one small gold cross pin, small rosary in hand, soft ivory and crimson gradient background with no cathedral or window, holy but subtly scheming atmosphere, clean half body portrait, polished but not ornate, no text, no watermark
+A beautiful young male lead of a romance fantasy webnovel, detailed anime style character portrait, soft black hair, warm brown eyes with a gentle yet unreadable smile, pretty boy features, son of the pope destined to become a cardinal, ornate white and crimson clergy vestments with gold cross embroidery, layered gold crosses, small red jewel earring, rosary in hand, warm cathedral interior with glowing stained-glass light and a few drifting red petals in the background, holy but subtly scheming atmosphere, elegant half body portrait, high detail, no text, no watermark
+```
+
+## 이미지 생성 프롬프트 v2
+
+> 수정: 십자가 과다. 목걸이 1개, 옷(하얀 부분)에는 큰 십자가 1개만. 붉은 꽃잎 제거.
+
+```text
+A beautiful young male lead of a romance fantasy webnovel, detailed anime style character portrait, soft black hair, warm brown eyes with a gentle yet unreadable smile, pretty boy features, son of the pope destined to become a cardinal, white and crimson clergy vestments with one single large cross emblem on the white front panel, only one simple gold cross necklace, no other cross ornaments anywhere, rosary in hand, warm cathedral interior with glowing stained-glass light in the background, no drifting petals, holy but subtly scheming atmosphere, elegant half body portrait, high detail, no text, no watermark
 ```
