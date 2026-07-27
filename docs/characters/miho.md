@@ -46,3 +46,9 @@ A studious young mage girl with a hidden fox spirit nature, romance fantasy webn
 ```text
 A studious young mage girl, romance fantasy webnovel style, detailed anime character portrait, long straight black hair, dark violet-black eyes behind round glasses, calm intellectual expression, simple plain dark scholar robe with no ornaments, no jewelry, no hair accessories, holding a single book, no visible fox ears, no visible fox tails, only an extremely faint barely-noticeable heat-haze-like shimmer in the air behind her, at first glance she looks like an ordinary mage without mana, moonlit magic tower library interior with a large window in the background, quiet scholarly atmosphere, three-quarter portrait, high detail, no text, no watermark
 ```
+
+## 네거티브 프롬프트 (Negative Prompt)
+
+```text
+visible fox ears, visible fox tails, prominent nine tails, glowing spirit tails, ornate robe, heavy jewelry, hair ornaments, no glasses, colored hair, talismans, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+```

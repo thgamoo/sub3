@@ -39,3 +39,9 @@
 ```text
 A stoic female holy knight commander turned church executioner, romance fantasy webnovel style, detailed anime character portrait, long brown hair, dark eyes with no smile, copper tanned skin, plain silver half-mask covering the burned right side of her face, simple white knight coat over a dark inner uniform, no weapon visible, no jewelry, no chains, no cross symbols, muted ash-gray and gold gradient background with no banners or ruins, tragic warrior queen aura, solemn and intimidating atmosphere, clean half body portrait, polished but not ornate, no text, no watermark
 ```
+
+## 네거티브 프롬프트 (Negative Prompt)
+
+```text
+no mask, full face visible, smiling expression, blonde hair, pale skin, cross symbols, ornate armor, heavy jewelry, chains, weapons, banners, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+```

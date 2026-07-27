@@ -44,3 +44,9 @@ A haughty beautiful young noble lady, romance fantasy webnovel style, detailed a
 ```text
 A refined and haughty young noble lady, classic aristocratic ojou-sama, romance fantasy webnovel style, detailed anime character portrait, bright golden blonde hair styled in elegant long twin vertical drill curls, clear blue eyes, proud dignified expression with a subtle hint of hidden insecurity, elegant deep royal blue and white noble dress with modest lace and small ribbons, mature and classy color palette, no pink, holding a simple folding fan, soft neutral academy-toned gradient background, classic noble young lady aura, clean half body portrait, high detail, no text, no watermark
 ```
+
+## 네거티브 프롬프트 (Negative Prompt)
+
+```text
+pink dress, childish outfit, dark hair, red hair, short hair, twin round buns, heavy jewelry, staircase, ballroom crowd, busy background, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+```

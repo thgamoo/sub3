@@ -20,3 +20,9 @@
 ```text
 A fierce and charismatic young conqueror prince, romance fantasy webnovel male lead, detailed anime style character portrait, dark curly hair under a simple jeweled turban, sharp hawk-like eyes, sun-kissed skin, Middle Eastern prince aesthetic, refined desert royal garments with restrained gold accents, a curved scimitar only subtly visible at his waist, minimal warm sand-colored gradient background with no detailed scenery, wild and commanding conqueror aura, clean half body portrait, high detail, no text, no watermark
 ```
+
+## 네거티브 프롬프트 (Negative Prompt)
+
+```text
+blonde hair, light hair, straight hair, bare head, no turban, pale skin, western knight armor, full plate armor, crown, oversized weapon, cluttered detailed background, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+```

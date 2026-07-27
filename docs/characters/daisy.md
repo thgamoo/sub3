@@ -39,3 +39,9 @@
 ```text
 A quiet and mysterious young maid, romance fantasy webnovel style, detailed anime character portrait, brown hair neatly tied up in a bun, calm brown eyes hiding sorrow, classic black and white victorian maid uniform with a small frilled headdress, very faint dark shadow magic around one hand, subtle ancient memory-chip glow at her nape, muted dark neutral gradient background with no corridor, melancholic and secretive atmosphere, clean half body portrait, high detail, no text, no watermark
 ```
+
+## 네거티브 프롬프트 (Negative Prompt)
+
+```text
+blonde hair, colored hair, loose long hair, elaborate gown, heavy jewelry, bright cheerful expression, detailed corridor background, weapons, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+```

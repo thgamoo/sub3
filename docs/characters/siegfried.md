@@ -22,3 +22,9 @@
 ```text
 A handsome young male lead of a romance fantasy webnovel, detailed anime style character portrait, jet black hair slightly tousled, sharp crimson red eyes, cold and noble expression, heir of a northern grand duchy, ornate black military-style coat with silver embroidery, chains, metal gauntlets, and a large fur-trimmed collar, dragon-slayer motif with a great sword held upright in front of him, dark dragon relief or banner beside him, snowy icy blue northern castle in the background, elegant and dangerous aura, half body portrait, high detail, no text, no watermark
 ```
+
+## 네거티브 프롬프트 (Negative Prompt)
+
+```text
+blonde hair, light hair, blue eyes, no weapon, bright warm background, casual clothing, feminine features, soft smile, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+```

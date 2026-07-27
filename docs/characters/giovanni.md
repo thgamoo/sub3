@@ -28,3 +28,9 @@ A beautiful young male lead of a romance fantasy webnovel, detailed anime style 
 ```text
 A beautiful young male lead of a romance fantasy webnovel, detailed anime style character portrait, soft black hair, warm brown eyes with a gentle yet unreadable smile, pretty boy features, son of the pope destined to become a cardinal, white and crimson clergy vestments with one single large cross emblem on the white front panel, only one simple gold cross necklace, no other cross ornaments anywhere, rosary in hand, warm cathedral interior with glowing stained-glass light in the background, no drifting petals, holy but subtly scheming atmosphere, elegant half body portrait, high detail, no text, no watermark
 ```
+
+## 네거티브 프롬프트 (Negative Prompt)
+
+```text
+multiple crosses, many cross ornaments, blonde hair, blue eyes, drifting petals, halo, excessive jewelry, feminine features, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+```

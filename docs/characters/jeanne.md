@@ -25,3 +25,9 @@
 ```text
 A pure and innocent young heroine of a romance fantasy (rofan) webnovel, detailed anime style character portrait, soft pink short bob hair, big clear pink eyes full of innocence and kindness, gentle shy smile, modest and neat academy school uniform with a simple ribbon, no armor, no weapons, subtle faint holy glow, soft warm neutral gradient background with very few light particles, delicate and lovely fresh transfer student atmosphere, clean half body portrait, high detail, no text, no watermark
 ```
+
+## 네거티브 프롬프트 (Negative Prompt)
+
+```text
+armor, weapons, sword, shield, dark hair, blonde hair, red hair, ornate jewelry, revealing outfit, mature seductive expression, heavy makeup, villainess vibe, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+```

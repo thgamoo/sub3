@@ -45,3 +45,9 @@ A deranged and eerie voodoo sorceress, romance fantasy webnovel style, detailed 
 ```text
 A deranged and eerie poison master, romance fantasy webnovel style, detailed anime character portrait, wild red and green two-tone hair, hollow pitch-black eyes without pupils, wide unhinged grin, dark alchemist robe with small glass vials and herb pouches hanging from a leather belt, holding up a glass vial of glowing green poison in one hand, faint toxic green vapor drifting from the vial, no voodoo elements, no bone charms, no dolls, no skulls, muted desert-brown gradient background, creepy yet strangely charming poisoner atmosphere, clean half body portrait, polished but not ornate, no text, no watermark
 ```
+
+## 네거티브 프롬프트 (Negative Prompt)
+
+```text
+voodoo dolls, bone charms, skulls, normal eyes with pupils, single-color hair, ornate jewelry, calm expression, altar, candles, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+```

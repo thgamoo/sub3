@@ -24,3 +24,9 @@
 ```text
 A cold-blooded beautiful noble villainess, romance fantasy webnovel style, detailed anime character portrait, golden blonde hair in elegant vertical drill curls, narrow half-closed icy blue eyes with a faint cruel smile, jeweled tiara-like hair ornament, luxurious pale violet southern noble gown with lace, pearls, and blue gemstones, holding an ornate jeweled folding fan as her main prop, no poison vial, sunlit Renaissance garden with pale roses and stone arches in the background, elegant, calculating and lethal atmosphere, half body portrait, high detail, no text, no watermark
 ```
+
+## 네거티브 프롬프트 (Negative Prompt)
+
+```text
+poison vial, potion bottle, dark hair, red hair, wide open eyes, straight hair, dark gown, weapons, modern clothing, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+```

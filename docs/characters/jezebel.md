@@ -33,3 +33,9 @@ A dangerously beautiful villainess witch, romance fantasy webnovel style, detail
 ```text
 A dangerously beautiful villainess witch, romance fantasy webnovel style, detailed anime character portrait, long wild disheveled dark hair, thick white bandages fully wrapped around her head completely covering both eyes, eyes entirely hidden, no eyes visible at all, ecstatic mad grin showing madness and allure, tattered elegant black priestess robes with only a few subtle occult sigils, minimal dark crimson gradient background, seductive yet terrifying atmosphere, deep shadows with restrained crimson highlights, clean half body portrait, high detail, no text, no watermark
 ```
+
+## 네거티브 프롬프트 (Negative Prompt)
+
+```text
+visible eyes, eyes showing, no bandages, neat tidy hair, blonde hair, altar, candles, glowing runes, ornate robes, heavy jewelry, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+```

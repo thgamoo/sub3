@@ -19,9 +19,16 @@
 - 사람을 홀리는 외모
 - 파란 머리
 - 삐뚤게 씌워진 작은 왕관
+- 흰색 시스루 드레스
 
 ## 이미지 생성 프롬프트
 
 ```text
-A bewitchingly seductive imperial villainess, romance fantasy webnovel style, detailed anime character portrait, long flowing blue hair, sleepy bored half-lidded eyes with a listless gaze, alluring smile, a small crown sitting crookedly and tilted on her head, jeweled hair chains, revealing luxurious Roman-inspired imperial silk dress with ornate gold jewelry, holding a golden wine goblet with grape and rose motifs, decadent candlelit palace banquet backdrop with wine-red drapery, grapes, roses, and warm gold light, intoxicating and dangerous charm, half body portrait, high detail, no text, no watermark
+A bewitchingly seductive imperial villainess named Messalina, romance fantasy webnovel style, detailed anime character portrait, long flowing blue hair, sleepy bored half-lidded eyes with a listless gaze, alluring smile, a small crown sitting crookedly and tilted on her head, jeweled hair chains, revealing luxurious Roman-inspired sheer white see-through silk dress with ornate gold jewelry, holding a golden wine goblet with blue rose motifs, decadent candlelit palace banquet backdrop with midnight-blue drapery, blooming blue roses, silver-blue reflections, and cool moonlit gold candlelight, intoxicating and dangerous charm, cold elegant decadence, half body portrait, high detail, no text, no watermark
+```
+
+## 네거티브 프롬프트 (Negative Prompt)
+
+```text
+grapes, grape motifs, grape vines, bunch of grapes, fruit, colored dress, opaque dress, dark dress, blue dress, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
 ```

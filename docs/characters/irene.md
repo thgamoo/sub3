@@ -47,3 +47,9 @@ A serene yet unsettling saintess candidate, romance fantasy webnovel style, deta
 ```text
 A serene yet unsettling saintess candidate, romance fantasy webnovel style, detailed anime character portrait, pale yellow blonde hair with long bangs covering her eyes, faint glimpse of golden glowing eyes through the bangs, gentle mysterious smile, simple unadorned white priestess vestments with only minimal gold trim, plain white and gold bishop's mitre on her head, no crown, no halo, no floating scripture pages, no jewelry, quiet cathedral interior with soft light in the background, holy but subtly eerie atmosphere, elegant half body portrait, high detail, no text, no watermark
 ```
+
+## 네거티브 프롬프트 (Negative Prompt)
+
+```text
+crown, halo, floating scripture pages, ornate vestments, heavy jewelry, fully visible eyes, dark hair, red hair, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+```

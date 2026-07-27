@@ -28,3 +28,9 @@ A regal young crown prince male lead of a romance fantasy webnovel, detailed ani
 ```text
 A regal young crown prince male lead of a romance fantasy webnovel, detailed anime style character portrait, golden blond hair, piercing azure blue eyes, calm and authoritative expression, clean white and gold imperial uniform with restrained decoration, exactly three ornaments only: a golden laurel hair ornament, one single gold chain, and a rich purple cape, no other jewelry or embellishments, refined Roman-inspired empire aesthetic, bright marble palace columns and purple banners in the background, dignified and charismatic aura of a future emperor, elegant half body portrait, high detail, no text, no watermark
 ```
+
+## 네거티브 프롬프트 (Negative Prompt)
+
+```text
+dark hair, red eyes, excessive jewelry, multiple chains, heavy ornaments, crown, cluttered decoration, armor, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+```

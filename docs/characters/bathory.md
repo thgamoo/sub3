@@ -38,3 +38,9 @@
 ```text
 A forgotten ancient vampire queen, romance fantasy webnovel style, detailed anime character portrait, short white bob hair, glowing crimson red eyes, small fangs visible, pale porcelain skin, petite yet regal figure in a simple worn gothic black and red dress with minimal old royal ornaments, faint cold mist and a muted icy gradient background with no coffin or ruins, melancholic lost-memory atmosphere mixed with predatory elegance, clean half body portrait, high detail, no text, no watermark
 ```
+
+## 네거티브 프롬프트 (Negative Prompt)
+
+```text
+dark hair, colored hair, long hair, no fangs, coffin, ruins, ornate gown, heavy jewelry, bat wings, blood splatter, tall mature figure, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+```

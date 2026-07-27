@@ -37,3 +37,9 @@
 ```text
 A confident and flamboyant female pirate captain and merchant queen, romance fantasy webnovel style, detailed anime character portrait, short curly red bob hair, one eye wearing a prominent golden monocle positioned slightly lower on the eye so it stands out clearly, smirking with one corner of her mouth raised, stylish captain coat with ornate gold trim over a corset, jeweled rings, earrings, a gold chain necklace, and a cutlass hilt at her hip, faint iridescent mermaid-scale shimmer on her neck and skin hinting at siren ancestry, open ocean sunset background with sea-blue sky and warm light, bold and charismatic atmosphere, half body portrait, high detail, no text, no watermark
 ```
+
+## 네거티브 프롬프트 (Negative Prompt)
+
+```text
+dark hair, straight hair, glasses over both eyes, no monocle, plain drab clothing, dull expression, indoor background, armor, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+```

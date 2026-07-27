@@ -17,9 +17,17 @@
 - 권태한 눈빛
 - 작은 왕관
 - 곱슬 머리, 붉은 머리
+- 슬렌더 체형, 작은 가슴
+- 장식은 절제된 느낌으로 (과한 보석·금장식 지양)
 
 ## 이미지 생성 프롬프트
 
 ```text
-A languid and power-hungry beautiful villainess queen, romance fantasy webnovel style, detailed anime character portrait, voluminous curly crimson red hair, bored half-lidded eyes with an arrogant expression, ornate golden tiara with red gemstones on her head, exotic western desert-kingdom royal dress with layered gold jewelry and translucent silk veils, one hand resting lightly near her chin, luxurious throne-room backdrop with warm sand-colored light, deep red drapery, gold ornaments, and jewel accents, decadent ambition and dangerous elegance, half body portrait, high detail, no text, no watermark
+A languid and power-hungry beautiful villainess queen, romance fantasy webnovel style, detailed anime character portrait, slender slim graceful figure with a small modest chest, voluminous curly crimson red hair, bored half-lidded eyes with an arrogant expression, a small simple golden crown with a single red gem, exotic western desert-kingdom royal dress with translucent silk veils and only minimal restrained gold accents, one hand resting lightly near her chin, luxurious throne-room backdrop with warm sand-colored light and deep red drapery, decadent ambition and dangerous elegance, half body portrait, high detail, no text, no watermark
+```
+
+## 네거티브 프롬프트 (Negative Prompt)
+
+```text
+blue hair, blonde hair, straight hair, wide open alert eyes, blue gemstones, blue drapery, ornate tiara, layered heavy jewelry, excessive gold ornaments, cluttered decoration, plump figure, chubby, large breasts, big bust, busty, voluptuous, cleavage, plain clothing, no crown, modern setting, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
 ```
