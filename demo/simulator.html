@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>삼류 악녀는 싫어! — 밸런스 시뮬레이터</title>
+<style>
+  :root{
+    --bg:#14121a; --panel:#1e1b26; --panel2:#26222f; --ink:#ece8f2; --muted:#a99fbb;
+    --line:#332d40; --accent:#e85d9c; --accent2:#7c6bd6; --good:#4bbe8a; --warn:#e0a83a; --bad:#e5556b;
+    --chip:#2d2838;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+  header{padding:16px 20px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,#241a2b,#1a1622)}
+  header h1{margin:0;font-size:18px;letter-spacing:.3px}
+  header .sub{color:var(--muted);font-size:12px;margin-top:2px}
+  .wrap{display:grid;grid-template-columns:320px 1fr;gap:0;min-height:calc(100vh - 62px)}
+  .side{border-right:1px solid var(--line);padding:16px;background:var(--panel);overflow:auto}
+  .main{padding:16px 20px;overflow:auto}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
+  .card h2{margin:0 0 10px;font-size:14px;color:var(--accent)}
+  .card h3{margin:14px 0 6px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  label{display:block;font-size:12px;color:var(--muted);margin:10px 0 4px}
+  select,input[type=number],input[type=text]{width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:7px;padding:7px 8px;font-size:13px}
+  .row{display:flex;gap:8px}
+  .row>*{flex:1}
+  button{cursor:pointer;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px 12px;font-size:13px;font-weight:600}
+  button.ghost{background:var(--chip);color:var(--ink);border:1px solid var(--line)}
+  button.alt{background:var(--accent2)}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  .btns{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .chip{background:var(--chip);border:1px solid var(--line);border-radius:20px;padding:3px 9px;font-size:11px;cursor:pointer;user-select:none}
+  .chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .chip.villain.on{background:var(--accent2);border-color:var(--accent2)}
+  .log{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;background:#0f0d14;border:1px solid var(--line);border-radius:8px;padding:10px;max-height:520px;overflow:auto;white-space:pre-wrap;line-height:1.5}
+  .log .r{color:var(--accent);font-weight:700}
+  .log .card-line{color:var(--warn)}
+  .log .kill{color:var(--good)}
+  .log .death{color:var(--bad)}
+  .log .end{color:#7ad6ff;font-weight:700}
+  .log .approx{color:#8a7fa0;font-style:italic}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+  .pcard{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px}
+  .pcard .nm{font-weight:700;font-size:13px}
+  .pcard.dead{opacity:.5}
+  .pcard .st{font-size:11px;color:var(--muted);margin-top:3px}
+  .badge{display:inline-block;font-size:10px;padding:1px 6px;border-radius:10px;margin:2px 2px 0 0;background:var(--chip);border:1px solid var(--line)}
+  .badge.awk{background:#2b3a52;border-color:#3d5878}
+  .badge.bad{background:#4a2130;border-color:#6e2f44}
+  .badge.eng{background:#3a2b4a;border-color:#553f70}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-weight:600}
+  .bar{height:9px;background:var(--chip);border-radius:5px;overflow:hidden;min-width:60px}
+  .bar>span{display:block;height:100%;background:var(--accent)}
+  .muted{color:var(--muted)}
+  .kpi{display:flex;gap:10px;flex-wrap:wrap}
+  .kpi .k{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 12px;min-width:90px}
+  .kpi .k b{display:block;font-size:20px}
+  .kpi .k span{font-size:11px;color:var(--muted)}
+  details{margin-top:8px}
+  summary{cursor:pointer;color:var(--muted);font-size:12px}
+  .note{font-size:11px;color:var(--muted);line-height:1.5}
+  .tabbtns{display:flex;gap:6px;margin-bottom:12px}
+  .tabbtns button{background:var(--chip);color:var(--muted);border:1px solid var(--line);font-weight:600}
+  .tabbtns button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<header>
+  <h1>삼류 악녀는 싫어! — 운명 카드 밸런스 시뮬레이터</h1>
+  <div class="sub">중반·후반 운명 카드(<code>docs/scenario.md</code>) 초안 검증용 · 규칙 근거 <code>docs/rules/*</code></div>
+</header>
+
+<div class="wrap">
+  <!-- ===== SIDEBAR ===== -->
+  <div class="side">
+    <div class="card">
+      <h2>설정</h2>
+      <label>난이도 (후반 전개 속도)</label>
+      <select id="difficulty">
+        <option value="daisy">데이지 (초20/중10/후6, 두근3)</option>
+        <option value="lily">릴리 (16/12/8, 두근3)</option>
+        <option value="rose" selected>로즈 (12/12/12, 두근3)</option>
+        <option value="anemone">아네모네 (10/10/16, 두근3)</option>
+        <option value="lycoris">리코리스 (10/10/16, 두근1)</option>
+      </select>
+
+      <label>플레이 인원 (최대 4)</label>
+      <select id="pcount">
+        <option>2</option><option>3</option><option selected>4</option>
+      </select>
+
+      <label>참가 캐릭터 (인원 수만큼 선택 · 미선택 시 랜덤)</label>
+      <div class="chips" id="charChips"></div>
+
+      <div class="row" style="margin-top:12px">
+        <div><label>재앙(악령) 사용</label>
+          <select id="useOmens"><option value="1" selected>사용</option><option value="0">미사용</option></select>
+        </div>
+        <div><label>시드(빈칸=랜덤)</label>
+          <input type="text" id="seed" placeholder="예: 42">
+        </div>
+      </div>
+
+      <div class="btns">
+        <button id="btnPlay">▶ 한 판 시연</button>
+        <button class="alt" id="btnBatch">⟳ N판 반복</button>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <div><label>반복 횟수</label><input type="number" id="runs" value="500" min="10" max="20000"></div>
+        <div style="display:flex;align-items:flex-end"><button class="ghost" id="btnStep" style="width:100%">⏭ 한 막씩</button></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>구현 충실도</h2>
+      <div class="note" id="fidelity"></div>
+    </div>
+  </div>
+
+  <!-- ===== MAIN ===== -->
+  <div class="main">
+    <div class="tabbtns">
+      <button class="on" data-tab="play">시연</button>
+      <button data-tab="stats">반복 통계</button>
+      <button data-tab="cards">카드 목록</button>
+    </div>
+
+    <!-- PLAY TAB -->
+    <div id="tab-play">
+      <div class="card">
+        <h2>보드 상태 <span class="muted" id="stateTitle"></span></h2>
+        <div class="kpi" id="kpis"></div>
+        <div class="grid" id="players" style="margin-top:12px"></div>
+        <details><summary>NPC · 남주 · 악녀 · 잔느 위치</summary><div class="note" id="npcState" style="margin-top:6px"></div></details>
+      </div>
+      <div class="card">
+        <h2>진행 로그</h2>
+        <div class="log" id="log"></div>
+      </div>
+    </div>
+
+    <!-- STATS TAB -->
+    <div id="tab-stats" class="hidden">
+      <div class="card">
+        <h2>엔딩 분포 <span class="muted" id="statsN"></span></h2>
+        <table id="endTable"></table>
+      </div>
+      <div class="card">
+        <h2>캐릭터별 승리 / 생존</h2>
+        <table id="charTable"></table>
+      </div>
+      <div class="card">
+        <h2>지표</h2>
+        <div class="kpi" id="statsKpi"></div>
+        <details><summary>후반 [청산] 처형·데드라인 관련 카운터</summary><div class="note" id="omenNote" style="margin-top:6px"></div></details>
+      </div>
+    </div>
+
+    <!-- CARDS TAB -->
+    <div id="tab-cards" class="hidden">
+      <div class="card"><h2>운명 카드 (구현 상태)</h2><div id="cardList"></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* =========================================================================
+   삼류 악녀는 싫어! — 밸런스 시뮬레이터
+   규칙 근거: docs/rules/{phases,actions,tokens,difficulty}.md, docs/scenario.md,
+             docs/world/overall.md, docs/omens.md, docs/endings/*
+   ⚠ 서술형 카드 효과는 [근사]로 처리하며 로그/충실도 패널에 명시.
+   ========================================================================= */
+
+/* ---------- 시드 RNG ---------- */
+let _rng = Math.random;
+function makeRng(seedStr){
+  if(!seedStr) return Math.random;
+  let h = 1779033703 ^ seedStr.length;
+  for(let i=0;i<seedStr.length;i++){ h = Math.imul(h ^ seedStr.charCodeAt(i), 3432918353); h = h<<13 | h>>>19; }
+  let a = h>>>0;
+  return function(){ a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a>>>15, 1|a); t = t + Math.imul(t ^ t>>>7, 61|t) ^ t; return ((t ^ t>>>14)>>>0)/4294967296; };
+}
+const d6 = ()=> Math.floor(_rng()*6)+1;
+const pick = arr => arr[Math.floor(_rng()*arr.length)];
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(_rng()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+/* ---------- 세계 데이터 (world/overall.md) ---------- */
+const REGIONS = ["A","B","C","D","E","F","G"];
+const RNAME = {A:"동부",B:"서부",C:"남부",D:"북부",E:"중부",F:"동해",G:"극동"};
+const ADJ = {A:["C","D","E","F"],B:["C","D","E"],C:["A","B","E"],D:["A","B","E"],E:["A","B","C","D"],F:["A","G"],G:["F"]};
+const DIST = {
+  A:{A:0,B:2,C:1,D:1,E:1,F:1,G:2}, B:{A:2,B:0,C:1,D:1,E:1,F:3,G:4},
+  C:{A:1,B:1,C:0,D:2,E:1,F:2,G:3}, D:{A:1,B:1,C:2,D:0,E:1,F:2,G:3},
+  E:{A:1,B:1,C:1,D:1,E:0,F:2,G:3}, F:{A:1,B:3,C:2,D:2,E:2,F:0,G:1}, G:{A:2,B:4,C:3,D:3,E:3,F:1,G:0}
+};
+// 통치권: region -> {villain, male}
+const RULE = { C:{v:"luc",m:"gio"}, D:{v:"jez",m:"sig"}, B:{v:"rox",m:"alec"}, A:{v:"mes",m:"gai"} };
+const MALES = { sig:{name:"지크프리트",home:"D"}, gio:{name:"조반니",home:"C"}, gai:{name:"가이우스",home:"A"}, alec:{name:"알렉",home:"B"} };
+const VILLAINS = { jez:{name:"이제벨",home:"D"}, luc:{name:"루크레치아",home:"C"}, mes:{name:"메살리나",home:"A"}, rox:{name:"로욱시나",home:"B"} };
+
+const ABIL = ["sword","charm","magic","blood","holy","poison","dark"];
+const ABIL_KR = {sword:"검",charm:"매력",magic:"마법",blood:"선혈",holy:"신성",poison:"독",dark:"어둠"};
+
+/* 플레이어 캐릭터 (characters/overall.md, superpowers/overall.md) */
+const CHARS = {
+  charlotte:{kr:"샬롯", start:"E", res:{charm:3}, gold:2, pref:"charm", awaken:"general", thr:5},
+  daisy:    {kr:"데이지", start:"A", res:{dark:2,charm:1}, gold:1, pref:"dark", awaken:"general", thr:5},
+  marie:    {kr:"마리", start:"B", res:{poison:2,charm:1}, gold:1, pref:"poison", awaken:"독술사", thr:5},
+  miho:     {kr:"미호", start:"E", res:{magic:2,charm:2}, gold:1, pref:"magic", awaken:"요술사", thr:5},
+  bathory:  {kr:"바토리", start:"D", res:{blood:2,charm:2}, gold:0, pref:"blood", awaken:"진조", thr:4},
+  zenobia:  {kr:"제노비아", start:"C", res:{sword:2}, gold:1, pref:"sword", awaken:"검성", thr:4},
+  irene:    {kr:"이레네", start:"E", res:{holy:2,charm:1}, gold:0, pref:"holy", awaken:"성녀", thr:5},
+  grace:    {kr:"그레이스", start:"F", res:{charm:2}, gold:3, pref:"charm", awaken:"만물금본", thr:5},
+};
+const CHAR_KEYS = Object.keys(CHARS);
+// 원작 청산 그룹
+const DOOM = {
+  bathory:["북부대공자, 관을 부수다"], miho:["이단 재판"], marie:["이단 재판"],
+  zenobia:["성기사단의 심판"], irene:["성기사단의 심판"],
+  charlotte:["황가의 뒤처리"], daisy:["황가의 뒤처리"], grace:["황가의 뒤처리"]
+};
+
+/* ---------- 난이도 (difficulty.md) ---------- */
+const DIFF = {
+  daisy:{e:20,m:10,l:6,hearts:3}, lily:{e:16,m:12,l:8,hearts:3},
+  rose:{e:12,m:12,l:12,hearts:3}, anemone:{e:10,m:10,l:16,hearts:3}, lycoris:{e:10,m:10,l:16,hearts:1}
+};
+
+/* =========================================================================
+   운명 카드 정의
+   effect(S, ctx) : 게임 상태를 변경. 반환값 없음. S.log()로 기록.
+   fidelity: "full" | "approx" | "narrative"
+   ========================================================================= */
+function CARD(deck,name,copies,fidelity,desc,effect){ return {deck,name,copies,fidelity,desc,effect}; }
+
+const EARLY = [
+  CARD("e","주인공의 각성",2,"full","잔느가 주사위로 능력 각성",(S)=>{
+    if(!S.jeanne.awaken){ const r=d6(); const map={1:"팜므파탈",2:"마리오네트",3:"소드마스터",4:"빛의사제",5:"마도사",6:"혈술사"}; S.jeanne.awaken=map[r]; S.log(`잔느가 [${map[r]}]로 각성했다.`,"card-line"); }
+    else S.log(`잔느는 이미 각성해 있다.`,"card-line");
+  }),
+  CARD("e","내가 일을 하나 맡기려고",11,"approx","가장 가까운 악녀 조우 토큰 획득; 전부 모으면 무료 모략",(S)=>{
+    S.eachPlayer(p=>{
+      // [근사] 조우 토큰 대신, 전원 모였으면 같은 지역 무료 모략 기회 부여
+      p._encTokens=(p._encTokens||0)+1;
+      if(p._encTokens>=4){ const t=S.sameRegionTarget(p); if(t){ S.freeScheme(p,t,"암살 의뢰"); } p.gold+=2; }
+    });
+  }),
+  CARD("e","제노비아, 쓸어버려",1,"full","제노비아 무료 모략(3↓암살/4↑처단)",(S)=>{ S.namedScheme(S.find("zenobia"),{low:"암살",high:"처단"},"검성"); }),
+  CARD("e","이레네, 이 자는 이교도야",1,"full","이레네가 같은 지역에 여론악화(성녀=현상수배)",(S)=>{
+    const p=S.find("irene"); const t=p&&S.sameRegionAnyChar(p); if(!p){return;}
+    if(t){ S.addState(t, p.awaken==="성녀"?"wanted":"badrep"); S.log(`이레네가 ${S.nm(t)}에게 ${p.awaken==="성녀"?"현상수배":"여론악화"}.`,"card-line"); }
+    else if(p.alive){ p.hearts--; S.checkDeath(p,"고립"); }
+  }),
+  CARD("e","데이지, 처리해",1,"full","데이지 무료 모략(마리오네트=암살)",(S)=>{ S.namedScheme(S.find("daisy"),{low:"처단",high:"처단"},"마리오네트",true); }),
+  CARD("e","해적을 소탕하라",1,"full","그레이스 동해면 두근-1 후 아카데미행, 아니면 금화+1",(S)=>{
+    const p=S.find("grace"); if(!p||!p.alive) return;
+    if(p.loc==="F"){ p.hearts--; if(S.checkDeath(p,"소탕")) return; p.loc="E"; S.log(`그레이스 피습→아카데미로.`,"card-line"); }
+    else { p.gold++; }
+  }),
+  CARD("e","도망자 마리를 찾아",1,"approx","마리 서부면 능력전부 상실/두근-1 중 택",(S)=>{
+    const p=S.find("marie"); if(!p||!p.alive) return;
+    if(p.loc==="B"){ p.hearts--; if(S.checkDeath(p,"추격")) return; p.loc="E"; S.log(`마리 발각→아카데미로(두근-1).`,"card-line"); }
+  }),
+  CARD("e","앗, 남주다!",1,"narrative","가장 가까운 남주 조우 토큰(서사)",(S)=>{ S.log(`플레이어들이 가까운 남주와 안면을 텄다. [근사: 조우토큰 생략]`,"approx"); }),
+  CARD("e","주인공, 잔느 등장!",1,"full","잔느 순회 후 아카데미 복귀 + 추종규칙 개시",(S)=>{ S.jeanne.appeared=true; S.jeanne.loc="E"; S.log(`잔느가 대륙을 순회하고 아카데미로. (남주 추종 규칙 개시)`,"card-line"); }),
+];
+
+const MID = [
+  // ① 메인 악녀 공세
+  CARD("m","이제벨의 어둠 강림",1,"full","북부 최다 능력카드 캐릭터에 여론악화(어둠계열 면역)",(S)=>{
+    const t=S.villainStrike("D","jez"); if(!t) return;
+    if(t.awaken==="마리오네트"||t.awaken==="진조"){ S.gainAbil(t,"dark",1); S.log(`${S.nm(t)}는 어둠 면역(어둠+1).`,"card-line"); }
+    else { S.addState(t,"badrep"); S.log(`이제벨이 ${S.nm(t)}에게 악마숭배 누명→여론악화.`,"card-line"); }
+  }),
+  CARD("m","메살리나의 연회",1,"full","동부 캐릭터 매력카드 갈취(팜므파탈 면역)",(S)=>{
+    const t=S.villainStrike("A","mes"); if(!t) return;
+    if(t.awaken==="팜므파탈"){ S.log(`${S.nm(t)}가 홀림을 되받아침.`,"card-line"); return; }
+    if((t.abil.charm||0)>0){ t.abil.charm--; S.log(`메살리나가 ${S.nm(t)}의 매력 카드를 갈취.`,"card-line"); }
+    else { t.hearts--; S.checkDeath(t,"연회"); }
+  }),
+  CARD("m","루크레치아의 독배",1,"full","남부 캐릭터 빈사(독술사/사제/성녀 면역)",(S)=>{
+    const t=S.villainStrike("C","luc"); if(!t) return;
+    if(["독술사","빛의사제","성녀"].includes(t.awaken)){ S.log(`${S.nm(t)}는 독배 면역.`,"card-line"); return; }
+    S.addState(t,"binsa"); S.log(`루크레치아의 독배→${S.nm(t)} 빈사.`,"card-line");
+  }),
+  CARD("m","로욱시나의 투기장",1,"full","서부 캐릭터 검카드 요구(소드마스터/검성 금화)",(S)=>{
+    const t=S.villainStrike("B","rox"); if(!t) return;
+    if(["소드마스터","검성"].includes(t.awaken)){ t.gold+=2; S.log(`${S.nm(t)} 투기장 제압(금화+2).`,"card-line"); return; }
+    if((t.abil.sword||0)>0){ t.abil.sword--; } else { t.hearts--; S.checkDeath(t,"투기장"); }
+  }),
+  // ② 잔느의 매혹
+  CARD("m","잔느의 매혹",3,"approx","같은 지역 남주의 만남/약혼을 방해(팜므파탈 가로채기)",(S)=>{
+    const m=S.jeanneNearestMale(); if(!m) return;
+    S.jeanne.loc=MALES[m].loc; // 근사: 잔느가 그 남주 쪽으로
+    // 그 남주와 약혼한 플레이어 방해
+    S.eachPlayer(p=>{ if(p.engaged===m){ if((p.abil.charm||0)>0){ p.abil.charm--; } else { p.engaged=null; S.log(`잔느의 매혹으로 ${S.nm(p)}가 ${MALES[m].name}와 파혼.`,"card-line"); } }});
+    // 팜므파탈 가로채기
+    const femme=S.playersAt(MALES[m].loc).find(p=>p.awaken==="팜므파탈");
+    if(femme){ femme._idealOpen=(femme._idealOpen||{}); femme._idealOpen[m]=(femme._idealOpen[m]||0)+1; }
+    S.log(`잔느가 ${MALES[m].name}를 홀린다. [근사: 이상형 오픈 방해]`,"approx");
+  }),
+  // ③ 로판 사교
+  CARD("m","가면 무도회",1,"full","전원 아카데미 소집→조우 폭증",(S)=>{
+    S.jeanne.loc="E"; S.allChars().forEach(c=>{ c.loc="E"; }); S.log(`가면 무도회: 전원 아카데미 집결.`,"card-line"); S.eachPlayer(p=>S.encounterCheck(p));
+  }),
+  CARD("m","서부 투기장의 결투",1,"approx","서부 캐릭터 검대결, 최고눈 금화",(S)=>{
+    const at=S.playersAt("B"); if(!at.length){ return; }
+    let best=null,bestv=-1; at.forEach(p=>{ let v=(["소드마스터","검성"].includes(p.awaken))?7:((p.abil.sword||0)>0?d6():-1); if((p.abil.sword||0)>0&&!["소드마스터","검성"].includes(p.awaken))p.abil.sword--; if(v<0){p.hearts--;S.checkDeath(p,"투기장결투");} if(v>bestv){bestv=v;best=p;} });
+    if(best&&best.alive){ best.gold+=2; S.log(`투기장 결투 승자 ${S.nm(best)}(금화+2).`,"card-line"); }
+  }),
+  CARD("m","사교계의 모함",1,"full","선순서 주사위 3↓ 여론악화(누적시 현상수배)",(S)=>{
+    S.turnOrderPlayers().forEach(p=>{ if(!p.alive)return; if(d6()<=3){ if(p.states.badrep) S.addState(p,"wanted"); else S.addState(p,"badrep"); S.log(`사교계 소문: ${S.nm(p)} ${p.states.wanted?"현상수배":"여론악화"}.`,"card-line"); }});
+  }),
+  CARD("m","성지 순례",1,"full","잔느 남부행; 남부 신성카드 헌납시 금화+빈사치료",(S)=>{
+    S.jeanne.loc="C"; S.eachPlayer(p=>S.encounterCheck(p));
+    S.playersAt("C").forEach(p=>{ if((p.abil.holy||0)>0){ p.abil.holy--; p.gold+=2; if(p.states.binsa){p.states.binsa=false;} } });
+  }),
+  // ④ 각성 시련
+  CARD("m","힘을 시험받다",1,"full","미각성자 능력2장, 각성자 금화1",(S)=>{ S.eachPlayer(p=>{ if(!p.awaken){ S.drawAbil(p,2);} else p.gold++; }); }),
+  CARD("m","각성하지 못한 자의 위기",1,"full","미각성자 두근-1 또는 능력3장 버림",(S)=>{ S.eachPlayer(p=>{ if(!p.awaken){ if(S.totalAbil(p)>=3){ S.loseAbil(p,3);} else { p.hearts--; S.checkDeath(p,"미각성 위기"); } }}); }),
+  // ⑤ 잔느 추적
+  CARD("m","잔느의 추적",1,"full","잔느가 현상수배/여론악화 플레이어 쪽으로",(S)=>{
+    let tg=S.players.filter(p=>p.alive&&p.states.wanted); if(!tg.length) tg=S.players.filter(p=>p.alive&&p.states.badrep);
+    if(tg.length){ tg.sort((a,b)=>DIST[S.jeanne.loc][a.loc]-DIST[S.jeanne.loc][b.loc]); S.jeanne.loc=tg[0].loc; } else S.jeanne.loc="E";
+    S.eachPlayer(p=>S.encounterCheck(p));
+  }),
+  CARD("m","남주와 함께 순찰",1,"approx","잔느+남주 인접지 순찰(조우 판정)",(S)=>{ const adj=pick(ADJ[S.jeanne.loc]); S.jeanne.loc=adj; S.eachPlayer(p=>S.encounterCheck(p)); S.log(`잔느가 ${RNAME[adj]} 순찰. [근사]`,"approx"); }),
+  // ⑥ 원작 진행
+  CARD("m","마탑의 척살령 — 미호",1,"full","미호 마법카드 압수+여론악화(요술사 면역)",(S)=>{
+    const p=S.find("miho"); if(!p||!p.alive) return;
+    if(p.awaken==="요술사"){ p.gold+=2; return; }
+    if((p.abil.magic||0)>0)p.abil.magic--; else {p.hearts--;S.checkDeath(p,"척살령");}
+    if(p.alive)S.addState(p,"badrep");
+  }),
+  CARD("m","잊혀진 진조의 태동 — 바토리",1,"full","바토리 선혈+2, 북부시 암습",(S)=>{
+    const p=S.find("bathory"); if(!p||!p.alive) return; S.gainAbil(p,"blood",2);
+    if(p.loc==="D"){ const t=S.sameRegionTarget(p); if(t){ if(p.awaken==="진조") S.addState(t,"binsa"); else S.loseAbil(t,2); S.log(`바토리가 ${S.nm(t)} 암습.`,"card-line"); } }
+  }),
+  CARD("m","황실모독의 씨앗 — 샬롯",1,"full","샬롯 조우2+면 두근-1(단서로 면제)",(S)=>{
+    const p=S.find("charlotte"); if(!p||!p.alive) return;
+    if((p.enc||0)>=2){ if((p.clues||0)>0){ S.log(`샬롯이 단서로 면제.`,"card-line"); } else { p.hearts--; S.checkDeath(p,"황실모독"); } }
+  }),
+  // ⑦ 자원 변동
+  CARD("m","금화 요정의 변덕",1,"full","전원 금화+2",(S)=>{ S.eachPlayer(p=>p.gold+=2); }),
+  CARD("m","뒷세계의 농간",1,"full","금화2 지불 또는 물건1 파괴",(S)=>{ S.eachPlayer(p=>{ if(p.gold>=2)p.gold-=2; else if(p.items.length)p.items.pop(); else {p.hearts--;S.checkDeath(p,"농간");} }); }),
+];
+
+const LATE = [
+  // ① 원작 청산 (공통 저항: 빌런포인트1 / 각성+약혼 / 개별조건)
+  CARD("l","북부대공자, 관을 부수다",1,"full","바토리 북부시 처형(진조+선혈2 저항)",(S)=>{
+    S.jeanne.loc="D"; const p=S.find("bathory");
+    if(p&&p.alive&&p.loc==="D"){ if(S.resistExecute(p,()=> p.awaken==="진조"&&(p.abil.blood||0)>=2 && (p.abil.blood-=2,true))) return; S.execute(p,"진조 토벌"); }
+  }),
+  CARD("l","이단 재판 — 마탑과 교회",1,"full","미호·마리 미각성시 여론악화+능력2; 조반니+잔느 동석 처형",(S)=>{
+    ["miho","marie"].forEach(k=>{ const p=S.find(k); if(!p||!p.alive)return;
+      if(!p.awaken){ S.addState(p,"badrep"); S.loseAbil(p,2); }
+      const gioHere = MALES.gio.loc===p.loc && S.jeanne.loc===p.loc;
+      if(gioHere){ if(S.resistExecute(p,()=>false)) return; S.execute(p,"이단 재판"); }
+    });
+  }),
+  CARD("l","성기사단의 심판",1,"full","제노비아·이레네 미각성시 현상수배; 교황칙서로 반전",(S)=>{
+    ["zenobia","irene"].forEach(k=>{ const p=S.find(k); if(!p||!p.alive)return;
+      if(p._hasEdict){ p.vp++; S.log(`${S.nm(p)}가 교황칙서 폭로→빌런포인트+1.`,"kill"); return; }
+      if(!p.awaken) S.addState(p,"wanted");
+    });
+  }),
+  CARD("l","황가의 뒤처리",1,"full","샬롯·데이지·그레이스 단서2미만 빈사; 그레이스 동부/동해 처형",(S)=>{
+    ["charlotte","daisy","grace"].forEach(k=>{ const p=S.find(k); if(!p||!p.alive)return;
+      if((p.clues||0)<2){ S.addState(p,"binsa"); }
+      if(k==="grace"&&["A","F"].includes(p.loc)){ if(S.resistExecute(p,()=> p.awaken==="만물금본"&&p.gold>=5&&(p.gold-=5,true))) return; S.execute(p,"대륙공적선언"); }
+    });
+  }),
+  CARD("l","잔느 일행, 악녀를 사냥하다",1,"full","잔느 동석 플레이어 조우단계+1, 현상수배는 강제모략",(S)=>{
+    S.playersAt(S.jeanne.loc).forEach(p=>{ if(!p.alive)return; if(p.states.wanted){ S.forcedSchemeJeanne(p); } else S.escalateEncounter(p); });
+  }),
+  // ② 남주 규합
+  CARD("l","남주 규합 완성",3,"approx","남주1 잔느 귀속→미약혼자 루트봉쇄(팜므파탈 예외)",(S)=>{
+    const m=S.jeanneNearestMale(); if(!m) return; MALES[m].pledged=true; S.jeanne.loc=MALES[m].loc;
+    S.eachPlayer(p=>{ if(p.engaged===m){ if((p.abil.charm||0)>=2)p.abil.charm-=2; else {p.engaged=null; S.log(`${S.nm(p)} 파혼(${MALES[m].name} 규합).`,"card-line");} } });
+    S.log(`${MALES[m].name}가 잔느에게 귀속. 미약혼자 루트 봉쇄.`,"card-line");
+  }),
+  // ③ 세계 진실 개봉
+  CARD("l","승천의 문, 태동하다",1,"full","진실물건4종+ 보유자 승천 착수",(S)=>{
+    S.ascensionOpen=true;
+    S.eachPlayer(p=>{ if(p.truth.size>=4 && p.loc==="E" && S.correctAwaken(p)){ p._ascendReady=true; S.log(`${S.nm(p)} 승천의 문 소환 착수!`,"end"); } });
+  }),
+  CARD("l","극동으로의 항로",1,"full","F-G 항로 개방(군림 경로)",(S)=>{
+    S.farEastOpen=true; const g=S.find("grace"); if(g&&g.alive&&(["F","G"].includes(g.loc)||g.awaken==="만물금본"))g.gold+=3;
+    S.log(`극동 항로 개방. 극동에서 황제의 증표 탐색 가능.`,"card-line");
+  }),
+  CARD("l","진실의 파편",1,"full","전원 물건1(중부는 능력1)",(S)=>{ S.eachPlayer(p=>{ if(p.loc==="E")S.drawAbil(p,1); else S.search(p,true); }); }),
+  CARD("l","소설의 균열 — 메타",1,"approx","이전빙의자수기 보유자 빌런+1, 없으면 탐색덱 소멸",(S)=>{
+    let any=false; S.eachPlayer(p=>{ if(p.truth.has("meta")){ p.vp++; any=true; } });
+    if(!any){ const r=pick(["A","B","C","D"]); if(S.regionDeck[r].length)S.regionDeck[r].pop(); S.log(`아무도 진실을 못 봐 ${RNAME[r]} 탐색덱 1장 소멸. [근사]`,"approx"); }
+  }),
+  // ④ 데드라인
+  CARD("l","폭풍전야",1,"full","이후 조우 1단계 가속(지속)",(S)=>{ S.fastEncounter=true; S.log(`폭풍전야: 이후 조우가 여론악화부터 시작.`,"card-line"); }),
+  CARD("l","왕가의 최후통첩",1,"full","현상수배자 주사위 4↑ 처형",(S)=>{ S.eachPlayer(p=>{ if(p.states.wanted && d6()>=4){ if(S.resistExecute(p,()=>false)) return; S.execute(p,"최후통첩"); } }); }),
+  // ⑤ 잔느 결전
+  CARD("l","각성한 여주",1,"full","잔느 각성+현상수배 피해 2배 상시",(S)=>{ if(!S.jeanne.awaken){ const map={1:"팜므파탈",2:"마리오네트",3:"소드마스터",4:"빛의사제",5:"마도사",6:"혈술사"}; S.jeanne.awaken=map[d6()]; } S.jeanne.doubled=true; S.log(`각성한 여주: 잔느 현상수배 판정 2배.`,"card-line"); }),
+  CARD("l","잔느의 최후 심판",1,"full","잔느 동석 플레이어 강제모략",(S)=>{ S.playersAt(S.jeanne.loc).forEach(p=>{ if(p.alive)S.forcedSchemeJeanne(p); }); }),
+  // ⑥ 대재앙 연출
+  CARD("l","대륙의 균열",1,"full","한 지역 탐색덱3제거+그 지역 플레이어 금화-1",(S)=>{ const r=pick(["A","B","C","D","E","F"]); if(S.regionDeck[r]){for(let i=0;i<3;i++)S.regionDeck[r].pop&&S.regionDeck[r].pop();} S.playersAt(r).forEach(p=>{ if(p.gold>0)p.gold--; else if(p.items.length)p.items.pop(); }); S.log(`대륙의 균열: ${RNAME[r]} 자원 붕괴.`,"card-line"); }),
+  CARD("l","종말의 그림자",1,"full","전원 두근-1(각성+생존 면역)",(S)=>{ S.eachPlayer(p=>{ if(p.awaken){ return; } p.hearts--; S.checkDeath(p,"종말의 그림자"); }); }),
+  // ⑦ 막판 반전·보상
+  CARD("l","과거 청산",1,"full","단서3+ 상태해제+빌런+1",(S)=>{ S.eachPlayer(p=>{ if((p.clues||0)>=3){ p.states.wanted=false;p.states.badrep=false; p.vp++; } }); }),
+  CARD("l","구원의 손길",1,"full","각성+생존 금화2 또는 능력2",(S)=>{ S.eachPlayer(p=>{ if(p.awaken){ if(_rng()<.5)p.gold+=2; else S.drawAbil(p,2); } }); }),
+];
+
+const ALL_CARDS = [...EARLY,...MID,...LATE];
+
+/* ---------- 재앙 (omens.md) 요약 구현 ---------- */
+const OMENS = [
+  {n:"선혈의 비",f:(S)=>{ const r=pick(["A","B","C","D","E","F"]); S.omenBlood=r; }},
+  {n:"칼날 비",f:(S)=>{ S.eachPlayer(p=>{ if(["A","B","C","D","E"].includes(p.loc)){ if(p.awaken==="소드마스터")return; if(p.awaken==="검성"){S.drawAbil(p,5);return;} if(p.items.length)p.items=[]; else {p.hearts--;S.checkDeath(p,"칼날비");} } }); }},
+  {n:"돌림병",f:(S)=>{ const r=pick(["A","B","C","D","E"]); S.playersAt(r).forEach(p=>p._binsaLite=true); }},
+  {n:"흑암",f:(S)=>{ S.blackout=true; }},
+  {n:"마력폭발",f:(S)=>{ S.eachPlayer(p=>{ if(p.awaken==="요술사")return; if((p.abil.magic||0)>0||p.awaken==="마도사"){ p.abil.magic=0; p.hearts--; S.checkDeath(p,"마력폭발"); } }); }},
+  {n:"초태 몰살",f:(S)=>{ Object.keys(MALES).forEach(m=>{ // 첫째 남주 전원(전부 첫째) 제거, 약혼자 두근2로 보호
+      let saved=false; S.eachPlayer(p=>{ if(p.engaged===m&&p.hearts>=2){ p.hearts-=2; saved=true; } }); if(!saved){ MALES[m].dead=true; } }); S.log(`초태 몰살: 보호받지 못한 남주 사망.`,"death"); }},
+  {n:"마수폭주",f:(S)=>{ const r=pick(["A","B","C","D","E"]); S.playersAt(r).forEach(p=>{ if(["소드마스터","마도사"].includes(p.awaken))return; if((p.abil.sword||0)>0)p.abil.sword--; else if((p.abil.magic||0)>0)p.abil.magic--; else {p.hearts--;S.checkDeath(p,"마수폭주");} }); }},
+  {n:"파리",f:(S)=>{ const r=pick(["A","B","C","D","E"]); S.playersAt(r).forEach(p=>{ if((p.abil.holy||0)>0)p.abil.holy--; else if(p.items.length)p.items.pop(); }); }},
+  {n:"소멸",f:(S)=>{ const r=pick(["A","B","C","D"]); S.playersAt(r).forEach(p=>{ p.hearts--; if(!S.checkDeath(p,"소멸"))p.loc=pick(ADJ[r]); }); if(S.jeanne.loc===r)S.jeanne.loc="E"; S.log(`소멸: ${RNAME[r]} 소실.`,"death"); }},
+  {n:"종막",f:(S)=>{ S.forceLate=true; S.log(`종막! 즉시 후반부 전개로.`,"card-line"); }},
+];
+
+/* =========================================================================
+   게임 상태 & 엔진
+   ========================================================================= */
+class Game {
+  constructor(opts){
+    this.opts=opts; this.logs=[]; this.round=0; this.maxRounds=18; this.ended=null; this.winner=null;
+    this.diff=DIFF[opts.difficulty];
+    this.jeanne={loc:"E",awaken:null,appeared:false,doubled:false};
+    // 남주/악녀 위치 리셋
+    Object.keys(MALES).forEach(m=>{MALES[m].loc=MALES[m].home;MALES[m].dead=false;MALES[m].pledged=false;});
+    Object.keys(VILLAINS).forEach(v=>{VILLAINS[v].dead=false;});
+    // 지역 탐색 덱 (물건10+금화10) 근사
+    this.regionDeck={}; ["A","B","C","D"].forEach(r=>{ const d=[]; for(let i=0;i<10;i++)d.push("item"); for(let i=0;i<10;i++)d.push("gold"); this.regionDeck[r]=shuffle(d); });
+    this.regionDeck.E=[];this.regionDeck.F=this.regionDeck.A;this.regionDeck.G=[];
+    // 플레이어
+    this.players=opts.chosen.map((ck,i)=>this.makePlayer(ck,i));
+    // NPC (미선택)
+    this.npcs=CHAR_KEYS.filter(k=>!opts.chosen.includes(k)).map(k=>({key:k,kr:CHARS[k].kr,loc:CHARS[k].start,isNpc:true,alive:true,awaken:null,abil:{},items:[],clues:0,gold:0,hearts:0,states:{},enc:0,vp:0,truth:new Set()}));
+    // 덱 구성
+    this.buildDeck();
+    // 재앙
+    this.omenPool = opts.useOmens ? shuffle(OMENS.slice()) : [];
+    this.omenInjected=false;
+    // 상태 플래그
+    this.blackout=false;this.forceLate=false;this.ascensionOpen=false;this.farEastOpen=false;this.fastEncounter=false;
+    this.stats={executions:0,forcedSchemes:0,omenFired:0};
+    this.leadIdx=0;
+  }
+  makePlayer(ck,i){
+    const c=CHARS[ck]; const abil={}; Object.assign(abil,c.res);
+    return {key:ck,kr:c.kr,idx:i,loc:c.start,gold:c.gold,hearts:this.diff.hearts,abil,items:[],clues:0,
+      awaken:null,pref:c.pref,awakenType:c.awaken,thr:c.thr,states:{binsa:false,wanted:false,badrep:false},
+      enc:0,vp:0,engaged:null,engagedRound:-99,truth:new Set(),alive:true,isGhost:false,_hasEdict:false,
+      plan:pick(["happy","happy","happy","domination","ascension","normal"])};
+  }
+  /* --- 덱 --- */
+  buildDeck(){
+    const draw=(pool,n)=>{ const bag=[]; pool.forEach(c=>{for(let i=0;i<c.copies;i++)bag.push(c);}); shuffle(bag); return bag.slice(0,n); };
+    this.earlyDeck=draw(EARLY,this.diff.e);
+    this.midDeck=draw(MID,this.diff.m);
+    this.lateDeck=draw(LATE,this.diff.l);
+    // 시나리오 카드(서막)는 구간 전환 표시용 — 막 소모 안 함(근사 생략)
+    this.phase="early";
+    this.curDeck=this.earlyDeck.slice();
+    this.deckOrder=["early","mid","late"];
+  }
+  nextCard(){
+    if(this.forceLate && this.phase!=="late"){ this.phase="late"; this.curDeck=this.lateDeck.slice(); this.forceLate=false; this.log(`※ 후반부 전개로 전환.`,"r"); }
+    if(this.curDeck.length===0){
+      if(this.phase==="early"){ this.phase="mid"; this.curDeck=this.midDeck.slice(); this.log(`── 서막: 중반부 시작 ──`,"r"); }
+      else if(this.phase==="mid"){ this.phase="late"; this.curDeck=this.lateDeck.slice(); this.log(`── 서막: 후반부 시작 ──`,"r"); }
+      else return null;
+    }
+    return this.curDeck.length?this.curDeck.shift():null;
+  }
+  /* --- 로그 --- */
+  log(msg,cls){ this.logs.push({r:this.round,msg,cls:cls||""}); }
+  nm(p){ return p.kr + (p.isNpc?"(N)":""); }
+  /* --- 조회 --- */
+  find(key){ return this.players.find(p=>p.key===key&&p.alive) || this.npcs.find(n=>n.key===key&&n.alive); }
+  eachPlayer(fn){ this.players.forEach(p=>{ if(p.alive)fn(p); }); }
+  playersAt(loc){ return this.players.filter(p=>p.alive&&p.loc===loc); }
+  allChars(){ return [...this.players.filter(p=>p.alive),...this.npcs.filter(n=>n.alive)]; }
+  turnOrderPlayers(){ const a=this.players.filter(p=>p.alive); const n=a.length; return a.map((_,i)=>a[(this.leadIdx+i)%n]).filter(Boolean); }
+  sameRegionAnyChar(p){ const c=this.allChars().filter(x=>x!==p&&x.loc===p.loc); return c.length?pick(c):null; }
+  sameRegionTarget(p){ const c=this.playersAt(p.loc).filter(x=>x!==p); return c.length?pick(c):(this.sameRegionAnyChar(p)); }
+  villainStrike(region,vkey){ if(VILLAINS[vkey].dead)return null; const c=this.allChars().filter(x=>x.loc===region); return c.length?c.sort((a,b)=>this.totalAbil(b)-this.totalAbil(a))[0]:null; }
+  jeanneNearestMale(){ const live=Object.keys(MALES).filter(m=>!MALES[m].dead&&!MALES[m].pledged); if(!live.length)return null; const same=live.filter(m=>MALES[m].loc===this.jeanne.loc); if(same.length)return pick(same); live.sort((a,b)=>DIST[this.jeanne.loc][MALES[a].loc]-DIST[this.jeanne.loc][MALES[b].loc]); return live[0]; }
+  /* --- 능력 카드 --- */
+  totalAbil(p){ return ABIL.reduce((s,a)=>s+(p.abil[a]||0),0); }
+  gainAbil(p,type,n){ p.abil[type]=(p.abil[type]||0)+n; }
+  drawAbil(p,n){ for(let i=0;i<n;i++){ const t=pick(ABIL); p.abil[t]=(p.abil[t]||0)+1; } this.trimHand(p); }
+  loseAbil(p,n){ let left=n; const order=shuffle(ABIL.slice()); for(const t of order){ while((p.abil[t]||0)>0&&left>0){p.abil[t]--;left--;} } }
+  trimHand(p){ let tot=this.totalAbil(p); while(tot>10){ this.loseAbil(p,1); tot--; } while(p.items.length>10)p.items.pop(); }
+  /* --- 탐색/수행 --- */
+  search(p,forced){ const r=p.loc; const deck=this.regionDeck[r]; if(!deck||!deck.length){ p.gold+=2; return; }
+    const roll=forced?4:d6();
+    if(roll<=2){ this.drawAbil(p,1); }
+    else { const c=deck.shift(); if(c==="gold")p.gold++; else { this.gainItem(p); } if(roll===6&&deck.length){ const c2=deck.shift(); if(c2==="gold")p.gold++; else this.gainItem(p); } }
+  }
+  gainItem(p){ p.items.push("item"); // 근사: 20% 단서, 8% 진실물건
+    const r=_rng(); if(r<0.20){ p.clues=(p.clues||0)+1; if((p.key==="zenobia"||p.key==="irene"||p.key==="daisy")&&_rng()<0.3)p._hasEdict=true; }
+    else if(r<0.28){ const t=pick(["ax1","ax1b","ax2","ax2b","meta"]); p.truth.add(t.replace("b","")); }
+    this.trimHand(p);
+  }
+  perform(p){ this.drawAbil(p, p.loc==="E"?3:2); }
+  /* --- 각성 --- */
+  correctAwaken(p){ const need=CHARS[p.key].awaken; if(need==="general")return !!p.awaken; return p.awaken===need || (p.awaken && need==="general"); }
+  tryAwaken(p){ if(p.awaken)return false;
+    // 특수 우선
+    const need=p.awakenType, pref=p.pref, cnt=p.abil[pref]||0, thr=p.thr;
+    if(cnt>=thr){ if(need!=="general"){ // 특수 각성 (경쟁 무시 근사)
+        p.abil[pref]-=thr; p.awaken=need; this.log(`${this.nm(p)} 특수각성 [${need}]!`,"kill"); return true;
+      } else { p.abil[pref]-=thr; p.awaken="일반각성"; this.log(`${this.nm(p)} 각성 [일반]!`,"kill"); return true; }
+    }
+    // 그레이스 만물금본: 금화5
+    if(p.key==="grace"&&p.gold>=5){ p.gold-=5; p.awaken="만물금본"; this.log(`${this.nm(p)} 만물금본 각성!`,"kill"); return true; }
+    return false;
+  }
+  /* --- 모략 --- */
+  namedScheme(p,rule,ability,forcePlayer){ if(!p||!p.alive)return; const t=this.sameRegionTarget(p);
+    if(!t){ if(!p.isNpc){p.hearts--;this.checkDeath(p,"고립모략");} return; }
+    let res; if(forcePlayer&&p.awaken==="마리오네트")res="암살"; else { const r=d6(); res=r<=3?rule.low:rule.high; }
+    if(p.awaken===ability&&ability==="검성")res="암살";
+    this.applySchemeResult(p,t,res);
+  }
+  freeScheme(p,t,tag){ if(!t)return; const n=Math.min(5,Math.max(2,this.totalAbil(p)||2)); const roll=d6(); let res=roll>n?"발각":(roll<n?"암습":"암살"); this.applySchemeResult(p,t,res); }
+  scheme(p,t,n){ // 플레이어 자발 모략
+    const roll=d6(); let res; if(roll>n)res="발각"; else if(roll<n)res=(t._isVillain?"처단":"암습"); else res="암살";
+    // 카드 소모
+    this.loseAbil(p,n);
+    this.applySchemeResult(p,t,res);
+    return res;
+  }
+  applySchemeResult(atk,t,res){
+    if(res==="발각"){ if(!atk.isNpc){atk.hearts--; this.addState(atk,"wanted"); this.checkDeath(atk,"발각");} return; }
+    if(res==="암습"){ if(t.isNpc){} else { this.loseAbil(t,2); } if(!atk.isNpc)this.addState(atk,"badrep"); return; }
+    if(res==="처단"){ if(t._isVillain){ VILLAINS[t.vkey].dead=true; this.log(`${this.nm(atk)}가 ${VILLAINS[t.vkey].name} 처단!`,"kill"); atk.vp+=0; } else if(!t.isNpc){ this.killTargetSoft(t,atk);} if(!atk.isNpc)this.addState(atk,"badrep"); return; }
+    if(res==="암살"){ if(t._isVillain){ VILLAINS[t.vkey].dead=true; atk.vp++; this.log(`${this.nm(atk)}가 ${VILLAINS[t.vkey].name} 암살! (빌런+1)`,"kill"); }
+      else { if(!t.isNpc)this.killTargetSoft(t,atk,true); else { t.alive=false; } if(!atk.isNpc)atk.vp++; } return; }
+  }
+  killTargetSoft(t,atk,hard){ if(t.hearts>0){ t.hearts--; this.addState(t,"binsa"); if(t.hearts<=0)this.toGhost(t,"암살"); } else this.toGhost(t,"암살"); }
+  /* --- 잔느 강제 모략 (운명의 가호) --- */
+  forcedSchemeJeanne(p){ this.stats.forcedSchemes++; const n=Math.min(5,this.totalAbil(p)); const use=Math.max(0,n); const roll=d6();
+    let loss; if(use===0)loss=2; else if(roll>use)loss=2; else if(roll<use)loss=1; else loss=0;
+    if(use>0)this.loseAbil(p,use);
+    if(loss>0){ p.hearts-=loss; this.log(`${this.nm(p)} 잔느 강제모략 → 두근-${loss}.`,"card-line"); this.checkDeath(p,"운명의 가호"); }
+  }
+  /* --- 청산 처형 --- */
+  resistExecute(p,indiv){ // 공통저항: 빌런포인트 / 각성+약혼 / 개별조건
+    if(indiv&&indiv()){ this.log(`${this.nm(p)} 개별조건으로 청산 저항.`,"kill"); return true; }
+    if(p.awaken&&p.engaged){ this.log(`${this.nm(p)} 각성+약혼으로 운명 저항.`,"kill"); return true; }
+    if(p.vp>0){ p.vp--; this.log(`${this.nm(p)} 빌런포인트 소모해 청산 회피.`,"kill"); return true; }
+    return false;
+  }
+  execute(p,reason){ this.stats.executions++;
+    if(p.isNpc){ p.alive=false; this.log(`${this.nm(p)} 처형(${reason}).`,"death"); return; }
+    if(p.hearts>0){ p.hearts--; this.addState(p,"binsa"); this.log(`${this.nm(p)} 처형 시도→두근-1, 빈사(${reason}).`,"death"); if(p.hearts<=0)this.toGhost(p,reason); }
+    else this.toGhost(p,reason);
+  }
+  /* --- 상태 --- */
+  addState(t,s){ if(!t.states)t.states={}; t.states[s]=true; }
+  escalateEncounter(p){ if(!p.states.badrep)this.addState(p,"badrep"); else if(!p.states.wanted)this.addState(p,"wanted"); else this.forcedSchemeJeanne(p); }
+  encounterCheck(p){ if(!this.jeanne.appeared)return; if(p.loc!==this.jeanne.loc)return; p.enc=(p.enc||0)+1;
+    const start=this.fastEncounter?2:1;
+    if(p.enc<=start){ if(this.fastEncounter)this.addState(p,"badrep"); }
+    else if(!p.states.badrep&&!p.states.wanted)this.addState(p,"badrep");
+    else if(p.states.badrep&&!p.states.wanted)this.addState(p,"wanted");
+    else if(p.states.wanted)this.forcedSchemeJeanne(p);
+  }
+  /* --- 사망 --- */
+  checkDeath(p,reason){ if(p.isNpc){ if(p.hearts<=0){p.alive=false;} return !p.alive; } if(p.hearts<=0){ this.toGhost(p,reason); return true; } return false; }
+  toGhost(p,reason){ if(!p.alive)return; p.alive=false; p.isGhost=true; this.log(`${this.nm(p)} 사망 → 악령 (${reason}).`,"death"); }
+  /* --- 현상수배 턴 시작 판정 (actions.md) --- */
+  wantedTick(p){ if(!p.states.wanted)return; if(d6()>=4){ const male=Object.values(MALES).some(m=>!m.dead&&m.loc===p.loc); const vill=Object.values(VILLAINS).some(v=>!v.dead&&v.home===p.loc); const jeanneHere=this.jeanne.loc===p.loc;
+      if(male){ p.hearts-=(jeanneHere?2:1); this.checkDeath(p,"현상수배-남주"); }
+      else if(vill){ if(this.totalAbil(p)>=2)this.loseAbil(p,jeanneHere?4:2); else if(p.items.length)p.items.pop(); }
+    } }
+
+  /* =========================
+     AI: 한 행동 결정 (휴리스틱)
+     ========================= */
+  aiAction(p){
+    // 여론악화: 수행/탐색만
+    const canFull = !p.states.badrep;
+    // 1) 위험회피: badrep/wanted 상태에서 잔느 동석 → 이동
+    if((p.states.wanted||p.states.badrep) && this.jeanne.loc===p.loc && p.gold>0){ this.moveAway(p); return; }
+    // 2) 상태 해제 시도
+    if(p.states.wanted && p.gold>=5){ p.gold-=5; p.states.wanted=false; p.states.badrep=true; return; }
+    if(p.states.badrep && p.gold>=3){ p.gold-=3; p.states.badrep=false; return; }
+    // 3) 각성
+    if(!p.awaken){ if(this.tryAwaken(p))return; }
+    // 4) 계획별 행동
+    if(canFull && p.awaken){
+      if(p.plan==="happy"){ if(this.pursueHappy(p))return; }
+      if(p.plan==="domination"){ if(this.pursueDom(p))return; }
+      if(p.plan==="ascension"){ if(this.pursueAsc(p))return; }
+    }
+    // 5) 자원 수집 (기본)
+    if(!p.awaken){ // 각성 재료 모으기
+      if(p.loc==="E"){ this.perform(p); return; }
+      // pref 카드가 탐색보다 수행이 유리
+      this.perform(p); return;
+    }
+    // 각성 후: 계획 자원(매력/단서/진실)
+    if(p.loc==="E") this.perform(p); else this.search(p);
+  }
+  moveAway(p){ const opts=ADJ[p.loc].filter(r=>r!==this.jeanne.loc); const dest=opts.length?pick(opts):pick(ADJ[p.loc]); p.gold--; p.loc=dest; this.encounterCheck(p); }
+  moveToward(p,dest){ if(p.loc===dest)return false; if(p.gold<=0)return false; // 한 칸 이동
+    let best=ADJ[p.loc][0],bd=99; ADJ[p.loc].forEach(r=>{ if(DIST[r][dest]<bd){bd=DIST[r][dest];best=r;} }); p.gold--; p.loc=best; this.encounterCheck(p); return true; }
+  pursueHappy(p){
+    // 목표 남주: 이미 약혼했으면 그 남주, 아니면 자기 통치권 남주(가까운 살아있는 남주)
+    let m=p.engaged;
+    if(!m){ const live=Object.keys(MALES).filter(k=>!MALES[k].dead&&!MALES[k].pledged); if(!live.length)return false; live.sort((a,b)=>DIST[p.loc][MALES[a].loc]-DIST[p.loc][MALES[b].loc]); m=live[0]; }
+    const mloc=MALES[m].loc;
+    if(p.loc!==mloc){ return this.moveToward(p,mloc); }
+    // 같은 지역: 만남/약혼
+    if(!p.engaged){
+      const need = p.awaken==="팜므파탈"?0:1;
+      if((p.abil.charm||0)>=need+1){ // 만남 후 약혼 근사: 매력 2 소모로 약혼
+        p.abil.charm-=Math.max(1,need+1); p.engaged=m; p.engagedRound=this.round; this.log(`${this.nm(p)}가 ${MALES[m].name}와 약혼.`,"kill"); return true;
+      } else { this.perform(p); return true; } // 매력 모으기
+    }
+    // 약혼 상태: 통치권 빌런 처치
+    const reg=Object.keys(RULE).find(r=>RULE[r].m===m); const vk=reg?RULE[reg].v:null;
+    if(vk&&!VILLAINS[vk].dead){ if(p.loc!==VILLAINS[vk].home){ return this.moveToward(p,VILLAINS[vk].home); }
+      // 같은 지역이면 모략
+      if((p.abil[p.pref]||0)>=2){ const tgt={_isVillain:true,vkey:vk,isNpc:false}; this.scheme(p,tgt,Math.min(5,p.abil[p.pref])); return true; }
+      else { this.perform(p); return true; }
+    }
+    // 결혼 대기: 자원 정비
+    this.perform(p); return true;
+  }
+  pursueDom(p){ // 단서3 + 극동 증표
+    if((p.clues||0)<3){ if(p.loc==="E"){this.perform(p);return true;} this.search(p); return true; }
+    if(this.farEastOpen){ if(p.loc!=="G"){ return this.moveToward(p,"G"); } if(!p._emperor){ if(_rng()<0.5){p._emperor=true;this.log(`${this.nm(p)} 황제의 증표 획득!`,"kill");} else this.search(p); return true; } if(p._emperor&&p.loc!=="E"){return this.moveToward(p,"E");} if(p._emperor&&p.loc==="E"){p._declared=(p._declared||0)+1;} return true; }
+    this.search(p); return true;
+  }
+  pursueAsc(p){ // 진실물건4 + 아카데미 소환
+    if(p.truth.size<4){ if(p.loc==="E"){this.perform(p);return true;} this.search(p); return true; }
+    if(p.loc!=="E")return this.moveToward(p,"E");
+    if(this.ascensionOpen){ p._ascendReady=true; p._ascendTurns=(p._ascendTurns||0)+1; }
+    else this.perform(p);
+    return true;
+  }
+
+  /* =========================
+     한 막(라운드) 진행 (phases.md)
+     ========================= */
+  playRound(){
+    if(this.ended)return;
+    this.round++;
+    const order=this.turnOrderPlayers();
+    if(!order.length){ this.finishAllDead(); return; }
+    this.log(`━━ ${this.round}막 시작 (${this.phase}) ━━`,"r");
+    // 플레이어 행동
+    order.forEach(p=>{ if(!p.alive)return;
+      this.wantedTick(p); if(!p.alive)return;
+      let acts = p.states.binsa?1:2;
+      for(let a=0;a<acts && p.alive;a++){ try{ this.aiAction(p); }catch(e){ /* 방어 */ } }
+      // 승천/군림 판정 진행
+    });
+    // 운명 카드 2장 (막의 마지막 플레이어가 오픈)
+    let opened=0;
+    while(opened<2){
+      // 재앙 유입: 악령 존재 & 미주입 시 1회 섞기
+      this.maybeInjectOmen();
+      const c=this.nextCard();
+      if(!c){ this.finishDeckOut(); return; }
+      if(c.__omen){ this.stats.omenFired++; this.log(`⚑ 재앙: ${c.name}`,"death"); try{c.effect(this);}catch(e){} continue; } // 막 소모 안 함
+      this.log(`▷ ${c.name}`,"card-line");
+      try{ c.effect(this); }catch(e){ /* */ }
+      opened++;
+    }
+    // 라운드 종료: 남주 추종
+    this.maleFollow();
+    // 지속 재앙(선혈의 비)
+    if(this.omenBlood){ this.playersAt(this.omenBlood).forEach(p=>{ if(this.totalAbil(p)>0)this.loseAbil(p,1); }); }
+    // 엔딩 체크
+    this.checkEndings();
+    // 선 교대
+    this.leadIdx=(this.leadIdx+ (order.length-1)) % Math.max(1,this.players.filter(x=>x.alive).length||1);
+    this.leadIdx = this.leadIdx % Math.max(1,this.players.length);
+    if(this.round>=this.maxRounds && !this.ended){ this.finishDeckOut(); }
+  }
+  maybeInjectOmen(){ if(!this.opts.useOmens)return; if(this.omenInjected)return; const anyGhost=this.players.some(p=>p.isGhost); if(anyGhost && this.omenPool.length){ // 징조: 1장 주입
+      const o=this.omenPool.shift(); const card={name:o.n,effect:o.f,__omen:true}; const pos=Math.floor(_rng()*(this.curDeck.length+1)); this.curDeck.splice(pos,0,card); if(this.omenPool.length===0)this.omenInjected=true;
+      // 계속 주입되게: 매 막 1장씩 (omenInjected는 풀 소진시만)
+    } }
+  maleFollow(){ if(!this.jeanne.appeared)return; const jl=this.jeanne.loc;
+    const here=Object.keys(MALES).some(m=>!MALES[m].dead&&MALES[m].loc===jl);
+    if(here)return;
+    // 약혼된 남주 우선, 아니면 최단거리
+    const live=Object.keys(MALES).filter(m=>!MALES[m].dead);
+    if(!live.length)return;
+    const engagedMale=live.find(m=>this.players.some(p=>p.alive&&p.engaged===m));
+    let mv=engagedMale;
+    if(!mv){ live.sort((a,b)=>DIST[MALES[a].loc][jl]-DIST[MALES[b].loc][jl]); mv=live[0]; }
+    // 한 칸 접근(근사: 즉시 합류)
+    MALES[mv].loc=jl;
+    this.eachPlayer(p=>{ if(p.loc===jl)this.encounterCheck(p); });
+  }
+
+  /* =========================
+     엔딩 판정 (endings/*)
+     ========================= */
+  checkEndings(){
+    if(this.ended)return;
+    const alive=this.players.filter(p=>p.alive);
+    // 승천
+    for(const p of alive){ if(p._ascendReady && this.correctAwaken(p) && p.truth.size>=4 && p.loc==="E" && (p._ascendTurns||0)>=1){ return this.win(p,"승천"); } }
+    // 군림
+    for(const p of alive){ if(p.awaken && (p.clues||0)>=3 && p._emperor && (p._declared||0)>=1){ return this.win(p,"군림"); } }
+    // 해피
+    for(const p of alive){ if(p.awaken && p.engaged && (this.round-p.engagedRound)>=10){ const m=p.engaged; const reg=Object.keys(RULE).find(r=>RULE[r].m===m); const vk=reg?RULE[reg].v:null; if(vk&&VILLAINS[vk].dead && !MALES[m].dead && !MALES[m].pledged){ return this.win(p,"해피"); } } }
+    // 노멀
+    if(alive.length===1){ const p=alive[0]; if(p.awaken && Object.values(VILLAINS).every(v=>v.dead)){ return this.win(p,"노멀"); } }
+    // 전멸
+    if(alive.length===0){ this.finishAllDead(); }
+  }
+  win(p,type){ this.ended=type; this.winner=p; this.log(`★ ${this.nm(p)} 승리 — ${type}엔딩!`,"end"); }
+  finishAllDead(){ if(this.ended)return; this.ended="멸망"; // 빌런포인트 최다
+    const all=this.players.slice().sort((a,b)=>b.vp-a.vp); this.winner=all[0]; this.log(`☠ 전멸 — 멸망엔딩 (최다 빌런포인트: ${all[0]?this.nm(all[0]):"-"} ${all[0]?all[0].vp:0})`,"end"); }
+  finishDeckOut(){ if(this.ended)return; // 시나리오 종료: 생존자 중 최다 빌런포인트? 규칙상 별도 승자 없음 → 무승부/생존 판정
+    const alive=this.players.filter(p=>p.alive);
+    if(alive.length===0){ this.finishAllDead(); return; }
+    this.ended="시나리오종료"; alive.sort((a,b)=>b.vp-a.vp||b.hearts-a.hearts); this.winner=alive[0];
+    this.log(`⧗ 시나리오 종료(카드 소진) — 승리 조건 미달. 최다 빌런포인트 생존자: ${this.nm(alive[0])}`,"end");
+  }
+  run(){ let guard=0; while(!this.ended && guard<60){ this.playRound(); guard++; } if(!this.ended)this.finishDeckOut(); return {ending:this.ended,winner:this.winner?this.winner.key:null,rounds:this.round,stats:this.stats}; }
+}
+
+/* =========================================================================
+   UI
+   ========================================================================= */
+const $=s=>document.querySelector(s);
+let selectedChars=[];
+function initChips(){
+  const box=$("#charChips"); box.innerHTML="";
+  CHAR_KEYS.forEach(k=>{ const c=document.createElement("span"); c.className="chip"; c.textContent=CHARS[k].kr; c.dataset.k=k;
+    c.onclick=()=>{ const pc=+$("#pcount").value; if(c.classList.contains("on")){ c.classList.remove("on"); selectedChars=selectedChars.filter(x=>x!==k); }
+      else { if(selectedChars.length>=pc){ // 가장 오래된 것 해제
+        const rm=selectedChars.shift(); box.querySelector(`[data-k="${rm}"]`).classList.remove("on"); } selectedChars.push(k); c.classList.add("on"); } };
+    box.appendChild(c); });
+}
+function resolveChars(){ const pc=+$("#pcount").value; let chosen=selectedChars.slice(0,pc);
+  const rest=shuffle(CHAR_KEYS.filter(k=>!chosen.includes(k))); while(chosen.length<pc)chosen.push(rest.pop()); return chosen; }
+function readOpts(){ const seed=$("#seed").value.trim(); _rng=makeRng(seed);
+  return {difficulty:$("#difficulty").value, useOmens:$("#useOmens").value==="1", chosen:resolveChars()}; }
+
+/* --- 시연 --- */
+let liveGame=null;
+function renderState(g){
+  $("#stateTitle").textContent=`· ${g.round}막 / ${g.phase} / ${g.ended?("종료: "+g.ended):"진행중"}`;
+  const alive=g.players.filter(p=>p.alive).length;
+  $("#kpis").innerHTML=`
+    <div class="k"><b>${g.round}</b><span>막 / 18</span></div>
+    <div class="k"><b>${alive}/${g.players.length}</b><span>생존</span></div>
+    <div class="k"><b>${g.phase}</b><span>구간</span></div>
+    <div class="k"><b>${Object.values(VILLAINS).filter(v=>v.dead).length}/4</b><span>악녀 처치</span></div>
+    <div class="k"><b>${g.stats.executions}</b><span>청산 처형</span></div>`;
+  $("#players").innerHTML=g.players.map(p=>{
+    const ab=ABIL.filter(a=>p.abil[a]).map(a=>`${ABIL_KR[a]}${p.abil[a]}`).join(" ")||"·";
+    const badges=[]; if(p.awaken)badges.push(`<span class="badge awk">${p.awaken}</span>`);
+    if(p.engaged)badges.push(`<span class="badge eng">♥${MALES[p.engaged].name}</span>`);
+    if(p.states.wanted)badges.push(`<span class="badge bad">현상수배</span>`); else if(p.states.badrep)badges.push(`<span class="badge bad">여론악화</span>`);
+    if(p.states.binsa)badges.push(`<span class="badge bad">빈사</span>`);
+    return `<div class="pcard ${p.alive?"":"dead"}">
+      <div class="nm">${p.kr} <span class="muted">@${RNAME[p.loc]}</span></div>
+      <div class="st">두근 ${p.hearts} · 금화 ${p.gold} · 빌런 ${p.vp} · 단서 ${p.clues||0} · 진실 ${p.truth.size}</div>
+      <div class="st">${ab}</div>
+      <div>${badges.join("")}</div>
+      ${p.isGhost?'<div class="st" style="color:var(--bad)">악령</div>':""}
+    </div>`;}).join("");
+  $("#npcState").innerHTML =
+    `잔느: @${RNAME[g.jeanne.loc]} ${g.jeanne.awaken?("["+g.jeanne.awaken+"]"):""} ${g.jeanne.appeared?"":"(미등장)"}<br>`+
+    `남주: `+Object.keys(MALES).map(m=>`${MALES[m].name}@${RNAME[MALES[m].loc]}${MALES[m].dead?"✝":""}${MALES[m].pledged?"(잔느)":""}`).join(" · ")+`<br>`+
+    `악녀: `+Object.keys(VILLAINS).map(v=>`${VILLAINS[v].name}${VILLAINS[v].dead?"✝":""}`).join(" · ")+`<br>`+
+    `NPC: `+g.npcs.map(n=>`${n.kr}@${RNAME[n.loc]}${n.alive?"":"✝"}`).join(" · ");
+}
+function renderLog(g){
+  $("#log").innerHTML=g.logs.map(l=>{ const cls=l.cls?` class="${l.cls}"`:""; return `<span${cls}>${String(l.msg)}</span>`; }).join("\n");
+  const el=$("#log"); el.scrollTop=el.scrollHeight;
+}
+function playOnce(){ const g=new Game(readOpts()); g.run(); liveGame=g; renderState(g); renderLog(g); }
+function stepInit(){ liveGame=new Game(readOpts()); renderState(liveGame); renderLog(liveGame); }
+function stepOne(){ if(!liveGame||liveGame.ended){ stepInit(); return; } liveGame.playRound(); renderState(liveGame); renderLog(liveGame); }
+
+/* --- 반복 통계 --- */
+function batch(){
+  const runs=Math.max(10,Math.min(20000,+$("#runs").value||500));
+  const baseSeed=$("#seed").value.trim();
+  const endings={}, charWins={}, charSurv={}, charPlay={};
+  let totalRounds=0, execs=0, forced=0, omenF=0, deckouts=0;
+  CHAR_KEYS.forEach(k=>{charWins[k]=0;charSurv[k]=0;charPlay[k]=0;});
+  for(let i=0;i<runs;i++){
+    _rng = makeRng(baseSeed? (baseSeed+"#"+i) : ""); // 시드 있으면 재현가능 분산
+    const opts={difficulty:$("#difficulty").value, useOmens:$("#useOmens").value==="1", chosen:resolveChars()};
+    const g=new Game(opts); const r=g.run();
+    endings[r.ending]=(endings[r.ending]||0)+1; totalRounds+=r.rounds; execs+=g.stats.executions; forced+=g.stats.forcedSchemes; omenF+=g.stats.omenFired;
+    if(r.ending==="시나리오종료")deckouts++;
+    g.players.forEach(p=>{ charPlay[p.key]++; if(p.alive)charSurv[p.key]++; if(g.winner===p&&["해피","군림","승천","노멀","멸망","시나리오종료"].includes(r.ending))charWins[p.key]++; });
+  }
+  // 엔딩 테이블
+  const order=["해피","군림","승천","노멀","멸망","시나리오종료"];
+  const et=$("#endTable"); et.innerHTML=`<tr><th>엔딩</th><th>횟수</th><th>비율</th><th></th></tr>`+
+    order.filter(k=>endings[k]).concat(Object.keys(endings).filter(k=>!order.includes(k))).map(k=>{ const v=endings[k]||0; const pct=(v/runs*100); return `<tr><td>${k}</td><td>${v}</td><td>${pct.toFixed(1)}%</td><td><div class="bar"><span style="width:${pct}%"></span></div></td></tr>`; }).join("");
+  $("#statsN").textContent=`· ${runs}판 · ${$("#difficulty").value} · 재앙 ${$("#useOmens").value==="1"?"ON":"OFF"}`;
+  // 캐릭터 테이블
+  const ct=$("#charTable"); ct.innerHTML=`<tr><th>캐릭터</th><th>플레이</th><th>승률</th><th>생존율</th><th></th></tr>`+
+    CHAR_KEYS.map(k=>{ const pl=charPlay[k]||0; const w=pl?charWins[k]/pl*100:0; const s=pl?charSurv[k]/pl*100:0; return `<tr><td>${CHARS[k].kr}</td><td>${pl}</td><td>${w.toFixed(1)}%</td><td>${s.toFixed(1)}%</td><td><div class="bar"><span style="width:${w}%"></span></div></td></tr>`; }).join("");
+  // KPI
+  $("#statsKpi").innerHTML=`
+    <div class="k"><b>${(totalRounds/runs).toFixed(1)}</b><span>평균 막 수</span></div>
+    <div class="k"><b>${(execs/runs).toFixed(2)}</b><span>판당 청산 처형</span></div>
+    <div class="k"><b>${(forced/runs).toFixed(2)}</b><span>판당 강제모략</span></div>
+    <div class="k"><b>${(omenF/runs).toFixed(2)}</b><span>판당 재앙 발동</span></div>
+    <div class="k"><b>${(deckouts/runs*100).toFixed(1)}%</b><span>승리조건 미달(카드소진)</span></div>`;
+  $("#omenNote").innerHTML=`청산 처형·데드라인은 후반 덱 도달 후에만 발생. "승리조건 미달" 비율이 높으면 → 엔딩 조건이 너무 빡빡하거나 후반 전개(난이도)가 느린 것. 특정 엔딩이 0%에 가까우면 그 경로(예: 승천=진실물건4, 군림=단서3+극동)가 실질적으로 도달 불가한지 점검.`;
+}
+
+/* --- 카드 목록 탭 --- */
+function renderCardList(){
+  const groups={e:"초반부",m:"중반부",l:"후반부"};
+  const fidBadge={full:'<span class="badge awk">규칙구현</span>',approx:'<span class="badge">근사</span>',narrative:'<span class="badge bad">서사</span>'};
+  $("#cardList").innerHTML=["e","m","l"].map(d=>{
+    const cards=ALL_CARDS.filter(c=>c.deck===d);
+    return `<h3>${groups[d]} (${cards.reduce((s,c)=>s+c.copies,0)}장 / ${cards.length}종)</h3>`+
+      `<table><tr><th>카드</th><th>매수</th><th>구현</th><th>요약</th></tr>`+
+      cards.map(c=>`<tr><td>${c.name}</td><td>${c.copies}</td><td>${fidBadge[c.fidelity]}</td><td class="muted">${c.desc}</td></tr>`).join("")+`</table>`;
+  }).join("");
+}
+function renderFidelity(){
+  $("#fidelity").innerHTML=`
+    <b>규칙대로 구현:</b> 이동/탐색/수행/각성, 모략 판정(발각·암습·처단·암살), 상태이상(여론악화·현상수배·빈사), 잔느 강제모략(운명의 가호), 조우 단계, 남주 추종, 약혼→10막→해피엔딩, 빌런포인트, 재앙 10종, 후반 청산 공통저항.<br><br>
+    <b>[근사] 처리:</b> 조우 토큰 루프, 이상형 카드 개별 조건(약혼을 매력카드 소모로 단순화), 지역 탐색덱의 단서/진실물건 분포(확률 근사), 시나리오 서막카드(막 소모 없음이라 생략), 남주 이동을 즉시 합류로 단순화.<br><br>
+    <b>AI:</b> 각 플레이어가 해피/군림/승천/노멀 중 한 계획을 갖고 자원수집→각성→목표추구하는 휴리스틱. 최적플레이가 아니라 <i>대략의 밸런스 경향</i>을 보기 위한 것.`;
+}
+
+/* --- 탭 --- */
+document.querySelectorAll(".tabbtns button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".tabbtns button").forEach(x=>x.classList.remove("on")); b.classList.add("on");
+  ["play","stats","cards"].forEach(t=>$("#tab-"+t).classList.add("hidden")); $("#tab-"+b.dataset.tab).classList.remove("hidden");
+});
+
+/* --- 바인딩 --- */
+$("#btnPlay").onclick=playOnce;
+$("#btnBatch").onclick=()=>{ document.querySelector('.tabbtns button[data-tab="stats"]').click(); setTimeout(batch,10); };
+$("#btnStep").onclick=stepOne;
+$("#pcount").onchange=()=>{ selectedChars=[]; initChips(); };
+initChips(); renderCardList(); renderFidelity();
+</script>
+</body>
+</html>
