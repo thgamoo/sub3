@@ -1,4 +1,4 @@
-# 가이우스 옥타비우스 투리누스 (Gaius Octavius Thurinus)
+# 가이우스 프린켑스 투리누스 (Gaius Princeps Thurinus)
 
 ## 기본 정보
 

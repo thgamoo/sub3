@@ -15,12 +15,13 @@
 
 ## 외모
 
-- 위로 올라간 날카로운 눈, 삼백안
+- 졸리고 따분한 눈
 - 사람을 홀리는 외모
-- 붉은 머리
+- 파란 머리
+- 삐뚤게 씌워진 작은 왕관
 
 ## 이미지 생성 프롬프트
 
 ```text
-A bewitchingly seductive imperial villainess, romance fantasy webnovel style, detailed anime character portrait, long flowing crimson red hair, sharp upturned sanpaku eyes with an entrancing gaze, alluring smile, gold laurel crown and jeweled hair chains, revealing luxurious Roman-inspired imperial silk dress with ornate gold jewelry, holding a golden wine goblet with grape and rose motifs, decadent candlelit palace banquet backdrop with wine-red drapery, grapes, roses, and warm gold light, intoxicating and dangerous charm, half body portrait, high detail, no text, no watermark
+A bewitchingly seductive imperial villainess, romance fantasy webnovel style, detailed anime character portrait, long flowing blue hair, sleepy bored half-lidded eyes with a listless gaze, alluring smile, a small crown sitting crookedly and tilted on her head, jeweled hair chains, revealing luxurious Roman-inspired imperial silk dress with ornate gold jewelry, holding a golden wine goblet with grape and rose motifs, decadent candlelit palace banquet backdrop with wine-red drapery, grapes, roses, and warm gold light, intoxicating and dangerous charm, half body portrait, high detail, no text, no watermark
 ```

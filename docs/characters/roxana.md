@@ -16,10 +16,10 @@
 
 - 권태한 눈빛
 - 작은 왕관
-- 곱슬 머리, 청발
+- 곱슬 머리, 붉은 머리
 
 ## 이미지 생성 프롬프트
 
 ```text
-A languid and power-hungry beautiful villainess queen, romance fantasy webnovel style, detailed anime character portrait, voluminous curly deep blue hair, bored half-lidded eyes with an arrogant expression, ornate golden tiara with blue gemstones on her head, exotic western desert-kingdom royal dress with layered gold jewelry and translucent silk veils, one hand resting lightly near her chin, luxurious throne-room backdrop with warm sand-colored light, royal blue drapery, gold ornaments, and jewel accents, decadent ambition and dangerous elegance, half body portrait, high detail, no text, no watermark
+A languid and power-hungry beautiful villainess queen, romance fantasy webnovel style, detailed anime character portrait, voluminous curly crimson red hair, bored half-lidded eyes with an arrogant expression, ornate golden tiara with red gemstones on her head, exotic western desert-kingdom royal dress with layered gold jewelry and translucent silk veils, one hand resting lightly near her chin, luxurious throne-room backdrop with warm sand-colored light, deep red drapery, gold ornaments, and jewel accents, decadent ambition and dangerous elegance, half body portrait, high detail, no text, no watermark
 ```
