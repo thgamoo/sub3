@@ -80,13 +80,13 @@
   <div class="side">
     <div class="card">
       <h2>설정</h2>
-      <label>난이도 (후반 전개 속도)</label>
+      <label>난이도 (덱 16/16/16 고정 · 두근! 개수로만 조절)</label>
       <select id="difficulty">
-        <option value="daisy">데이지 (초20/중10/후6, 두근3)</option>
-        <option value="lily">릴리 (16/12/8, 두근3)</option>
-        <option value="rose" selected>로즈 (12/12/12, 두근3)</option>
-        <option value="anemone">아네모네 (10/10/16, 두근3)</option>
-        <option value="lycoris">리코리스 (10/10/16, 두근1)</option>
+        <option value="daisy">데이지 — 내 두근 5 / NPC 두근 0 (가장 쉬움)</option>
+        <option value="lily">릴리 — 내 두근 5 / NPC 두근 1</option>
+        <option value="rose" selected>로즈 — 내 두근 3 / NPC 두근 1</option>
+        <option value="anemone">아네모네 — 내 두근 2 / NPC 두근 1</option>
+        <option value="lycoris">리코리스 — 내 두근 1 / NPC 두근 2 (가장 어려움)</option>
       </select>
 
       <label>플레이 인원 (최대 4)</label>
@@ -226,10 +226,10 @@ const DOOM = {
   charlotte:["황가의 뒤처리"], daisy:["황가의 뒤처리"], grace:["황가의 뒤처리"]
 };
 
-/* ---------- 난이도 (difficulty.md) ---------- */
+/* ---------- 난이도 (difficulty.md) — 덱 16/16/16 고정, 난이도는 두근! 개수로만 ---------- */
 const DIFF = {
-  daisy:{e:20,m:10,l:6,hearts:3}, lily:{e:16,m:12,l:8,hearts:3},
-  rose:{e:12,m:12,l:12,hearts:3}, anemone:{e:10,m:10,l:16,hearts:3}, lycoris:{e:10,m:10,l:16,hearts:1}
+  daisy:{e:16,m:16,l:16,hearts:5,npc:0}, lily:{e:16,m:16,l:16,hearts:5,npc:1},
+  rose:{e:16,m:16,l:16,hearts:3,npc:1}, anemone:{e:16,m:16,l:16,hearts:2,npc:1}, lycoris:{e:16,m:16,l:16,hearts:1,npc:2}
 };
 
 /* =========================================================================
@@ -244,7 +244,7 @@ const EARLY = [
     if(!S.jeanne.awaken){ const r=d6(); const map={1:"팜므파탈",2:"마리오네트",3:"소드마스터",4:"빛의사제",5:"마도사",6:"혈술사"}; S.jeanne.awaken=map[r]; S.log(`잔느가 [${map[r]}]로 각성했다.`,"card-line"); }
     else S.log(`잔느는 이미 각성해 있다.`,"card-line");
   }),
-  CARD("e","내가 일을 하나 맡기려고",11,"approx","가장 가까운 악녀 조우 토큰 획득; 전부 모으면 무료 모략",(S)=>{
+  CARD("e","내가 일을 하나 맡기려고",7,"approx","가장 가까운 악녀 조우 토큰 획득; 전부 모으면 무료 모략",(S)=>{
     S.eachPlayer(p=>{
       // [근사] 조우 토큰 대신, 전원 모였으면 같은 지역 무료 모략 기회 부여
       p._encTokens=(p._encTokens||0)+1;
@@ -295,7 +295,7 @@ const MID = [
     if((t.abil.sword||0)>0){ t.abil.sword--; } else { t.hearts--; S.checkDeath(t,"투기장"); }
   }),
   // ② 잔느의 매혹
-  CARD("m","잔느의 매혹",3,"approx","같은 지역 남주의 만남/약혼을 방해(팜므파탈 가로채기)",(S)=>{
+  CARD("m","잔느의 매혹",2,"approx","같은 지역 남주의 만남/약혼을 방해(팜므파탈 가로채기)",(S)=>{
     const m=S.jeanneNearestMale(); if(!m) return;
     S.jeanne.loc=MALES[m].loc; // 근사: 잔느가 그 남주 쪽으로
     // 그 남주와 약혼한 플레이어 방해
@@ -317,20 +317,14 @@ const MID = [
   CARD("m","사교계의 모함",1,"full","선순서 주사위 3↓ 여론악화(누적시 현상수배)",(S)=>{
     S.turnOrderPlayers().forEach(p=>{ if(!p.alive)return; if(d6()<=3){ if(p.states.badrep) S.addState(p,"wanted"); else S.addState(p,"badrep"); S.log(`사교계 소문: ${S.nm(p)} ${p.states.wanted?"현상수배":"여론악화"}.`,"card-line"); }});
   }),
-  CARD("m","성지 순례",1,"full","잔느 남부행; 남부 신성카드 헌납시 금화+빈사치료",(S)=>{
-    S.jeanne.loc="C"; S.eachPlayer(p=>S.encounterCheck(p));
-    S.playersAt("C").forEach(p=>{ if((p.abil.holy||0)>0){ p.abil.holy--; p.gold+=2; if(p.states.binsa){p.states.binsa=false;} } });
-  }),
-  // ④ 각성 시련
+  // ④ 각성 시련 (16장 정리: "힘을 시험받다"만)
   CARD("m","힘을 시험받다",1,"full","미각성자 능력2장, 각성자 금화1",(S)=>{ S.eachPlayer(p=>{ if(!p.awaken){ S.drawAbil(p,2);} else p.gold++; }); }),
-  CARD("m","각성하지 못한 자의 위기",1,"full","미각성자 두근-1 또는 능력3장 버림",(S)=>{ S.eachPlayer(p=>{ if(!p.awaken){ if(S.totalAbil(p)>=3){ S.loseAbil(p,3);} else { p.hearts--; S.checkDeath(p,"미각성 위기"); } }}); }),
-  // ⑤ 잔느 추적
+  // ⑤ 잔느 추적 (16장 정리: "잔느의 추적"만)
   CARD("m","잔느의 추적",1,"full","잔느가 현상수배/여론악화 플레이어 쪽으로",(S)=>{
     let tg=S.players.filter(p=>p.alive&&p.states.wanted); if(!tg.length) tg=S.players.filter(p=>p.alive&&p.states.badrep);
     if(tg.length){ tg.sort((a,b)=>DIST[S.jeanne.loc][a.loc]-DIST[S.jeanne.loc][b.loc]); S.jeanne.loc=tg[0].loc; } else S.jeanne.loc="E";
     S.eachPlayer(p=>S.encounterCheck(p));
   }),
-  CARD("m","남주와 함께 순찰",1,"approx","잔느+남주 인접지 순찰(조우 판정)",(S)=>{ const adj=pick(ADJ[S.jeanne.loc]); S.jeanne.loc=adj; S.eachPlayer(p=>S.encounterCheck(p)); S.log(`잔느가 ${RNAME[adj]} 순찰. [근사]`,"approx"); }),
   // ⑥ 원작 진행
   CARD("m","마탑의 척살령 — 미호",1,"full","미호 마법카드 압수+여론악화(요술사 면역)",(S)=>{
     const p=S.find("miho"); if(!p||!p.alive) return;
@@ -380,7 +374,7 @@ const LATE = [
     S.playersAt(S.jeanne.loc).forEach(p=>{ if(!p.alive)return; if(p.states.wanted){ S.forcedSchemeJeanne(p); } else S.escalateEncounter(p); });
   }),
   // ② 남주 규합
-  CARD("l","남주 규합 완성",3,"approx","남주1 잔느 귀속→미약혼자 루트봉쇄(팜므파탈 예외)",(S)=>{
+  CARD("l","남주 규합 완성",2,"approx","남주1 잔느 귀속→미약혼자 루트봉쇄(팜므파탈 예외)",(S)=>{
     const m=S.jeanneNearestMale(); if(!m) return; MALES[m].pledged=true; S.jeanne.loc=MALES[m].loc;
     S.eachPlayer(p=>{ if(p.engaged===m){ if((p.abil.charm||0)>=2)p.abil.charm-=2; else {p.engaged=null; S.log(`${S.nm(p)} 파혼(${MALES[m].name} 규합).`,"card-line");} } });
     S.log(`${MALES[m].name}가 잔느에게 귀속. 미약혼자 루트 봉쇄.`,"card-line");
@@ -394,7 +388,6 @@ const LATE = [
     S.farEastOpen=true; const g=S.find("grace"); if(g&&g.alive&&(["F","G"].includes(g.loc)||g.awaken==="만물금본"))g.gold+=3;
     S.log(`극동 항로 개방. 극동에서 황제의 증표 탐색 가능.`,"card-line");
   }),
-  CARD("l","진실의 파편",1,"full","전원 물건1(중부는 능력1)",(S)=>{ S.eachPlayer(p=>{ if(p.loc==="E")S.drawAbil(p,1); else S.search(p,true); }); }),
   CARD("l","소설의 균열 — 메타",1,"approx","이전빙의자수기 보유자 빌런+1, 없으면 탐색덱 소멸",(S)=>{
     let any=false; S.eachPlayer(p=>{ if(p.truth.has("meta")){ p.vp++; any=true; } });
     if(!any){ const r=pick(["A","B","C","D"]); if(S.regionDeck[r].length)S.regionDeck[r].pop(); S.log(`아무도 진실을 못 봐 ${RNAME[r]} 탐색덱 1장 소멸. [근사]`,"approx"); }
@@ -404,9 +397,7 @@ const LATE = [
   CARD("l","왕가의 최후통첩",1,"full","현상수배자 주사위 4↑ 처형",(S)=>{ S.eachPlayer(p=>{ if(p.states.wanted && d6()>=4){ if(S.resistExecute(p,()=>false)) return; S.execute(p,"최후통첩"); } }); }),
   // ⑤ 잔느 결전
   CARD("l","각성한 여주",1,"full","잔느 각성+현상수배 피해 2배 상시",(S)=>{ if(!S.jeanne.awaken){ const map={1:"팜므파탈",2:"마리오네트",3:"소드마스터",4:"빛의사제",5:"마도사",6:"혈술사"}; S.jeanne.awaken=map[d6()]; } S.jeanne.doubled=true; S.log(`각성한 여주: 잔느 현상수배 판정 2배.`,"card-line"); }),
-  CARD("l","잔느의 최후 심판",1,"full","잔느 동석 플레이어 강제모략",(S)=>{ S.playersAt(S.jeanne.loc).forEach(p=>{ if(p.alive)S.forcedSchemeJeanne(p); }); }),
-  // ⑥ 대재앙 연출
-  CARD("l","대륙의 균열",1,"full","한 지역 탐색덱3제거+그 지역 플레이어 금화-1",(S)=>{ const r=pick(["A","B","C","D","E","F"]); if(S.regionDeck[r]){for(let i=0;i<3;i++)S.regionDeck[r].pop&&S.regionDeck[r].pop();} S.playersAt(r).forEach(p=>{ if(p.gold>0)p.gold--; else if(p.items.length)p.items.pop(); }); S.log(`대륙의 균열: ${RNAME[r]} 자원 붕괴.`,"card-line"); }),
+  // ⑥ 대재앙 연출 (16장 정리: "종말의 그림자"만; 나머지 대재앙은 재앙 카드가 담당)
   CARD("l","종말의 그림자",1,"full","전원 두근-1(각성+생존 면역)",(S)=>{ S.eachPlayer(p=>{ if(p.awaken){ return; } p.hearts--; S.checkDeath(p,"종말의 그림자"); }); }),
   // ⑦ 막판 반전·보상
   CARD("l","과거 청산",1,"full","단서3+ 상태해제+빌런+1",(S)=>{ S.eachPlayer(p=>{ if((p.clues||0)>=3){ p.states.wanted=false;p.states.badrep=false; p.vp++; } }); }),
@@ -435,7 +426,7 @@ const OMENS = [
    ========================================================================= */
 class Game {
   constructor(opts){
-    this.opts=opts; this.logs=[]; this.round=0; this.maxRounds=18; this.ended=null; this.winner=null;
+    this.opts=opts; this.logs=[]; this.round=0; this.maxRounds=24; this.ended=null; this.winner=null;
     this.diff=DIFF[opts.difficulty];
     this.jeanne={loc:"E",awaken:null,appeared:false,doubled:false};
     // 남주/악녀 위치 리셋
@@ -447,7 +438,7 @@ class Game {
     // 플레이어
     this.players=opts.chosen.map((ck,i)=>this.makePlayer(ck,i));
     // NPC (미선택)
-    this.npcs=CHAR_KEYS.filter(k=>!opts.chosen.includes(k)).map(k=>({key:k,kr:CHARS[k].kr,loc:CHARS[k].start,isNpc:true,alive:true,awaken:null,abil:{},items:[],clues:0,gold:0,hearts:0,states:{},enc:0,vp:0,truth:new Set()}));
+    this.npcs=CHAR_KEYS.filter(k=>!opts.chosen.includes(k)).map(k=>({key:k,kr:CHARS[k].kr,loc:CHARS[k].start,isNpc:true,alive:true,awaken:null,abil:Object.assign({},CHARS[k].res),items:[],clues:0,gold:CHARS[k].gold,hearts:this.diff.npc,states:{binsa:false,wanted:false,badrep:false},enc:0,vp:0,truth:new Set(),pref:CHARS[k].pref,awakenType:CHARS[k].awaken,thr:CHARS[k].thr}));
     // 덱 구성
     this.buildDeck();
     // 재앙
@@ -546,11 +537,12 @@ class Game {
   }
   applySchemeResult(atk,t,res){
     if(res==="발각"){ if(!atk.isNpc){atk.hearts--; this.addState(atk,"wanted"); this.checkDeath(atk,"발각");} return; }
-    if(res==="암습"){ if(t.isNpc){} else { this.loseAbil(t,2); } if(!atk.isNpc)this.addState(atk,"badrep"); return; }
-    if(res==="처단"){ if(t._isVillain){ VILLAINS[t.vkey].dead=true; this.log(`${this.nm(atk)}가 ${VILLAINS[t.vkey].name} 처단!`,"kill"); atk.vp+=0; } else if(!t.isNpc){ this.killTargetSoft(t,atk);} if(!atk.isNpc)this.addState(atk,"badrep"); return; }
+    if(res==="암습"){ this.loseAbil(t,2); if(!atk.isNpc)this.addState(atk,"badrep"); return; }
+    if(res==="처단"){ if(t._isVillain){ VILLAINS[t.vkey].dead=true; this.log(`${this.nm(atk)}가 ${VILLAINS[t.vkey].name} 처단!`,"kill"); } else { this.killTargetSoft(t,atk);} if(!atk.isNpc)this.addState(atk,"badrep"); return; }
     if(res==="암살"){ if(t._isVillain){ VILLAINS[t.vkey].dead=true; atk.vp++; this.log(`${this.nm(atk)}가 ${VILLAINS[t.vkey].name} 암살! (빌런+1)`,"kill"); }
-      else { if(!t.isNpc)this.killTargetSoft(t,atk,true); else { t.alive=false; } if(!atk.isNpc)atk.vp++; } return; }
+      else { this.killTargetSoft(t,atk,true); if(!atk.isNpc)atk.vp++; } return; }
   }
+  // 플레이어·NPC 서브빌런 공통: 두근! 있으면 1 잃고 빈사, 없으면 사망. (NPC도 두근! 보유 — difficulty)
   killTargetSoft(t,atk,hard){ if(t.hearts>0){ t.hearts--; this.addState(t,"binsa"); if(t.hearts<=0)this.toGhost(t,"암살"); } else this.toGhost(t,"암살"); }
   /* --- 잔느 강제 모략 (운명의 가호) --- */
   forcedSchemeJeanne(p){ this.stats.forcedSchemes++; const n=Math.min(5,this.totalAbil(p)); const use=Math.max(0,n); const roll=d6();
@@ -581,8 +573,8 @@ class Game {
     else if(p.states.wanted)this.forcedSchemeJeanne(p);
   }
   /* --- 사망 --- */
-  checkDeath(p,reason){ if(p.isNpc){ if(p.hearts<=0){p.alive=false;} return !p.alive; } if(p.hearts<=0){ this.toGhost(p,reason); return true; } return false; }
-  toGhost(p,reason){ if(!p.alive)return; p.alive=false; p.isGhost=true; this.log(`${this.nm(p)} 사망 → 악령 (${reason}).`,"death"); }
+  checkDeath(p,reason){ if(p.hearts<=0){ this.toGhost(p,reason); return true; } return false; }
+  toGhost(p,reason){ if(!p.alive)return; p.alive=false; if(p.isNpc){ this.log(`${this.nm(p)} 처치됨 (${reason}).`,"death"); return; } p.isGhost=true; this.log(`${this.nm(p)} 사망 → 악령 (${reason}).`,"death"); }
   /* --- 현상수배 턴 시작 판정 (actions.md) --- */
   wantedTick(p){ if(!p.states.wanted)return; if(d6()>=4){ const male=Object.values(MALES).some(m=>!m.dead&&m.loc===p.loc); const vill=Object.values(VILLAINS).some(v=>!v.dead&&v.home===p.loc); const jeanneHere=this.jeanne.loc===p.loc;
       if(male){ p.hearts-=(jeanneHere?2:1); this.checkDeath(p,"현상수배-남주"); }
@@ -766,7 +758,7 @@ function renderState(g){
   $("#stateTitle").textContent=`· ${g.round}막 / ${g.phase} / ${g.ended?("종료: "+g.ended):"진행중"}`;
   const alive=g.players.filter(p=>p.alive).length;
   $("#kpis").innerHTML=`
-    <div class="k"><b>${g.round}</b><span>막 / 18</span></div>
+    <div class="k"><b>${g.round}</b><span>막 / ${g.maxRounds}</span></div>
     <div class="k"><b>${alive}/${g.players.length}</b><span>생존</span></div>
     <div class="k"><b>${g.phase}</b><span>구간</span></div>
     <div class="k"><b>${Object.values(VILLAINS).filter(v=>v.dead).length}/4</b><span>악녀 처치</span></div>
@@ -828,7 +820,7 @@ function batch(){
     <div class="k"><b>${(forced/runs).toFixed(2)}</b><span>판당 강제모략</span></div>
     <div class="k"><b>${(omenF/runs).toFixed(2)}</b><span>판당 재앙 발동</span></div>
     <div class="k"><b>${(deckouts/runs*100).toFixed(1)}%</b><span>승리조건 미달(카드소진)</span></div>`;
-  $("#omenNote").innerHTML=`청산 처형·데드라인은 후반 덱 도달 후에만 발생. "승리조건 미달" 비율이 높으면 → 엔딩 조건이 너무 빡빡하거나 후반 전개(난이도)가 느린 것. 특정 엔딩이 0%에 가까우면 그 경로(예: 승천=진실물건4, 군림=단서3+극동)가 실질적으로 도달 불가한지 점검.`;
+  $("#omenNote").innerHTML=`덱은 난이도 무관 16/16/16(48장)·24막 고정이며, 난이도는 두근! 개수로만 갈린다(플레이어 5~1 / NPC 서브빌런 0~2). "승리조건 미달"(시나리오종료) 비율이 높으면 → 엔딩 조건이 빡빡한 것. 특정 엔딩이 0%에 가까우면 그 경로(승천=진실물건4, 군림=단서3+극동 증표, 노멀=단독생존+악녀전멸)가 실질적으로 도달 불가한지 점검. NPC 두근!이 높은 난이도(리코리스)일수록 NPC가 잘 안 죽어 정리가 어려워진다.`;
 }
 
 /* --- 카드 목록 탭 --- */
