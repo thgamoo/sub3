@@ -15,20 +15,20 @@
 
 ## 외모
 
-- 졸리고 따분한 눈
+- 유혹하듯 곁눈질하는, 날카롭고 매혹적인 눈매
+- 악녀다운 교활하고 오만한 미소
 - 사람을 홀리는 외모
 - 파란 머리
-- 삐뚤게 씌워진 작은 왕관
 - 흰색 시스루 드레스
 
 ## 이미지 생성 프롬프트
 
 ```text
-A bewitchingly seductive imperial villainess named Messalina, romance fantasy webnovel style, detailed anime character portrait, long flowing blue hair, sleepy bored half-lidded eyes with a listless gaze, alluring smile, a small crown sitting crookedly and tilted on her head, jeweled hair chains, revealing luxurious Roman-inspired sheer white see-through silk dress with ornate gold jewelry, holding a golden wine goblet with blue rose motifs, decadent candlelit palace banquet backdrop with midnight-blue drapery, blooming blue roses, silver-blue reflections, and cool moonlit gold candlelight, intoxicating and dangerous charm, cold elegant decadence, half body portrait, high detail, no text, no watermark
+A bewitchingly seductive imperial villainess named Messalina, romance fantasy webnovel style, detailed anime character portrait, long flowing blue hair, casting a seductive sidelong glance, sharp alluring cat-like eyes, wicked mischievous smirk, cruel and confident villainous expression, jeweled hair chains, revealing luxurious Roman-inspired sheer white see-through silk dress with ornate gold jewelry, intoxicating and dangerous charm, cold elegant decadence, softly blurred opulent palace background with warm golden bokeh and glittering gold light, half body portrait, high detail, no text, no watermark
 ```
 
 ## 네거티브 프롬프트 (Negative Prompt)
 
 ```text
-grapes, grape motifs, grape vines, bunch of grapes, fruit, colored dress, opaque dress, dark dress, blue dress, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+crown, tiara, goblet, cup, wine glass, chalice, holding object, sleepy eyes, half-lidded eyes, drowsy, listless gaze, innocent, kind gentle eyes, naive expression, wholesome, cute childish, cluttered background, grapes, grape motifs, grape vines, bunch of grapes, fruit, colored dress, opaque dress, dark dress, blue dress, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
 ```
