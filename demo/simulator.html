@@ -382,7 +382,7 @@ const LATE = [
   // ③ 세계 진실 개봉
   CARD("l","승천의 문, 태동하다",1,"full","진실물건4종+ 보유자 승천 착수",(S)=>{
     S.ascensionOpen=true;
-    S.eachPlayer(p=>{ if(p.truth.size>=4 && p.loc==="E" && S.correctAwaken(p)){ p._ascendReady=true; S.log(`${S.nm(p)} 승천의 문 소환 착수!`,"end"); } });
+    S.eachPlayer(p=>{ if(S.axesComplete(p) && p.loc==="E" && S.correctAwaken(p)){ p._ascendReady=true; S.log(`${S.nm(p)} 승천의 문 소환 착수!`,"end"); } });
   }),
   CARD("l","극동으로의 항로",1,"full","F-G 항로 개방(군림 경로)",(S)=>{
     S.farEastOpen=true; const g=S.find("grace"); if(g&&g.alive&&(["F","G"].includes(g.loc)||g.awaken==="만물금본"))g.gold+=3;
@@ -653,7 +653,7 @@ class Game {
     this.search(p); return true;
   }
   pursueAsc(p){ // 진실물건4 + 아카데미 소환
-    if(p.truth.size<4){ if(p.loc==="E"){this.perform(p);return true;} this.search(p); return true; }
+    if(!this.axesComplete(p)){ if(p.loc==="E"){this.perform(p);return true;} this.search(p); return true; }
     if(p.loc!=="E")return this.moveToward(p,"E");
     if(this.ascensionOpen){ p._ascendReady=true; p._ascendTurns=(p._ascendTurns||0)+1; }
     else this.perform(p);
@@ -724,7 +724,7 @@ class Game {
     if(this.ended)return;
     const alive=this.players.filter(p=>p.alive);
     // 승천
-    for(const p of alive){ if(p._ascendReady && this.correctAwaken(p) && p.truth.size>=4 && p.loc==="E" && (p._ascendTurns||0)>=1){ return this.win(p,"승천"); } }
+    for(const p of alive){ if(p._ascendReady && this.correctAwaken(p) && this.axesComplete(p) && p.loc==="E" && (p._ascendTurns||0)>=1){ return this.win(p,"승천"); } }
     // 군림
     for(const p of alive){ if(p.awaken && (p.clues||0)>=3 && p._emperor && (p._declared||0)>=1){ return this.win(p,"군림"); } }
     // 해피
@@ -832,7 +832,7 @@ function batch(){
     <div class="k"><b>${(forced/runs).toFixed(2)}</b><span>판당 강제모략</span></div>
     <div class="k"><b>${(omenF/runs).toFixed(2)}</b><span>판당 재앙 발동</span></div>
     <div class="k"><b>${(deckouts/runs*100).toFixed(1)}%</b><span>승리조건 미달(카드소진)</span></div>`;
-  $("#omenNote").innerHTML=`덱은 난이도 무관 16/16/16(48장)·24막 고정이며, 난이도는 두근! 개수로만 갈린다(플레이어 5~1 / NPC 서브빌런 0~2). "승리조건 미달"(시나리오종료) 비율이 높으면 → 엔딩 조건이 빡빡한 것. 특정 엔딩이 0%에 가까우면 그 경로(승천=진실물건4, 군림=단서3+극동 증표, 노멀=단독생존+악녀전멸)가 실질적으로 도달 불가한지 점검. NPC 두근!이 높은 난이도(리코리스)일수록 NPC가 잘 안 죽어 정리가 어려워진다.`;
+  $("#omenNote").innerHTML=`덱은 난이도 무관 16/16/16(48장)·24막 고정이며, 난이도는 두근! 개수로만 갈린다(플레이어 5~1 / NPC 서브빌런 0~2). "승리조건 미달"(시나리오종료) 비율이 높으면 → 엔딩 조건이 빡빡한 것. 특정 엔딩이 0%에 가까우면 그 경로(승천=진실 3축 모두, 군림=단서3+극동 증표, 노멀=단독생존+악녀전멸)가 실질적으로 도달 불가한지 점검. NPC 두근!이 높은 난이도(리코리스)일수록 NPC가 잘 안 죽어 정리가 어려워진다.`;
 }
 
 /* --- 카드 목록 탭 --- */
