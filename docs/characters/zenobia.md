@@ -12,6 +12,7 @@
 - 구리빛 피부와 검은 눈
 - 반쪽 가면 (오른쪽 얼굴의 화상을 가림)
 - 긴 머리, 갈색 머리
+- 가슴 정중앙에 십자가 모양의 목걸이 (필수)
 
 ## 원래 운명
 
@@ -37,11 +38,11 @@
 ## 이미지 생성 프롬프트
 
 ```text
-A stoic female holy knight commander turned church executioner, romance fantasy webnovel style, detailed anime character portrait, long brown hair, dark eyes with no smile, copper tanned skin, plain silver half-mask covering the burned right side of her face, simple white knight coat over a dark inner uniform, no weapon visible, no jewelry, no chains, no cross symbols, muted ash-gray and gold gradient background with no banners or ruins, tragic warrior queen aura, solemn and intimidating atmosphere, clean half body portrait, polished but not ornate, no text, no watermark
+A stoic female holy knight commander turned church executioner, romance fantasy webnovel style, detailed anime character portrait, long brown hair, dark eyes with no smile, copper tanned skin, plain silver half-mask covering the burned right side of her face, simple white knight coat over a dark inner uniform, a prominent cross-shaped pendant necklace hanging clearly at the exact center of her chest, this cross necklace as her only jewelry, no weapon visible, muted ash-gray and gold gradient background with no banners or ruins, tragic warrior queen aura, solemn and intimidating atmosphere, clean half body portrait, polished but not ornate, no text, no watermark
 ```
 
 ## 네거티브 프롬프트 (Negative Prompt)
 
 ```text
-no mask, full face visible, smiling expression, blonde hair, pale skin, cross symbols, ornate armor, heavy jewelry, chains, weapons, banners, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+no necklace, missing cross pendant, cross off-center, no mask, full face visible, smiling expression, blonde hair, pale skin, ornate armor, heavy jewelry, weapons, banners, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
 ```

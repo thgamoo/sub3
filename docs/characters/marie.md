@@ -9,7 +9,7 @@
 
 ## 외모
 
-- 검은 눈 (눈동자가 없고 공허함)
+- 흰자가 없는 새까만 눈 (온통 검은 눈, 핵심 특징)
 - 적녹색 머리
 - 광기에 찬 웃음
 
@@ -46,8 +46,16 @@ A deranged and eerie voodoo sorceress, romance fantasy webnovel style, detailed 
 A deranged and eerie poison master, romance fantasy webnovel style, detailed anime character portrait, wild red and green two-tone hair, hollow pitch-black eyes without pupils, wide unhinged grin, dark alchemist robe with small glass vials and herb pouches hanging from a leather belt, holding up a glass vial of glowing green poison in one hand, faint toxic green vapor drifting from the vial, no voodoo elements, no bone charms, no dolls, no skulls, muted desert-brown gradient background, creepy yet strangely charming poisoner atmosphere, clean half body portrait, polished but not ornate, no text, no watermark
 ```
 
+## 이미지 생성 프롬프트 v3
+
+> 수정: 너무 징그럽지 않고 여성적인 인상 유지. **흰자가 없는 새까만 눈**을 핵심 특징으로. 복장은 v2 그대로.
+
+```text
+An alluring yet subtly eerie female poison master, romance fantasy webnovel style, detailed anime character portrait, beautiful feminine face, wild red and green two-tone hair, distinctive solid pitch-black eyes with no whites and no visible sclera as her defining trait, a faint unsettling smile rather than a grotesque grin, dark alchemist robe with small glass vials and herb pouches hanging from a leather belt, holding up a glass vial of glowing green poison in one hand, faint toxic green vapor drifting from the vial, no voodoo elements, no bone charms, no dolls, no skulls, muted desert-brown gradient background, mysterious and quietly unnerving yet beautiful poisoner atmosphere, clean half body portrait, polished but not ornate, no text, no watermark
+```
+
 ## 네거티브 프롬프트 (Negative Prompt)
 
 ```text
-voodoo dolls, bone charms, skulls, normal eyes with pupils, single-color hair, ornate jewelry, calm expression, altar, candles, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+white sclera, visible eye whites, normal eyes with pupils, masculine face, grotesque, monstrous, gory, ugly, voodoo dolls, bone charms, skulls, single-color hair, ornate jewelry, calm expression, altar, candles, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
 ```

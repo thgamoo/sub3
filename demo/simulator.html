@@ -432,8 +432,16 @@ class Game {
     // 남주/악녀 위치 리셋
     Object.keys(MALES).forEach(m=>{MALES[m].loc=MALES[m].home;MALES[m].dead=false;MALES[m].pledged=false;});
     Object.keys(VILLAINS).forEach(v=>{VILLAINS[v].dead=false;});
-    // 지역 탐색 덱 (물건10+금화10) 근사
-    this.regionDeck={}; ["A","B","C","D"].forEach(r=>{ const d=[]; for(let i=0;i<10;i++)d.push("item"); for(let i=0;i<10;i++)d.push("gold"); this.regionDeck[r]=shuffle(d); });
+    // 지역 탐색 덱 (tokens.md §3): 물건 40장(단서27 + 진실10[5종×2] + 엘릭서3)을 10장씩 4묶음,
+    // 각 묶음에 금화 10장 → 동서남북 각 20장. 진실물건은 유한(총 10장, 종당 2장).
+    const items=[];
+    for(let i=0;i<27;i++)items.push(i<9?"clue_edict":"clue");   // 근사: 9장은 교황칙서 계열(제노비아/이레네/데이지 _hasEdict용)
+    ["t1","t2","t3","t4","meta"].forEach(t=>{ items.push(t); items.push(t); }); // 진실 5종 각 2장
+    for(let i=0;i<3;i++)items.push("elixir");
+    shuffle(items);
+    const groups=[[],[],[],[]]; items.forEach((c,i)=>groups[i%4].push(c));
+    this.regionDeck={};
+    ["A","B","C","D"].forEach((r,idx)=>{ const d=groups[idx].slice(); for(let i=0;i<10;i++)d.push("gold"); this.regionDeck[r]=shuffle(d); });
     this.regionDeck.E=[];this.regionDeck.F=this.regionDeck.A;this.regionDeck.G=[];
     // 플레이어
     this.players=opts.chosen.map((ck,i)=>this.makePlayer(ck,i));
@@ -496,19 +504,23 @@ class Game {
   loseAbil(p,n){ let left=n; const order=shuffle(ABIL.slice()); for(const t of order){ while((p.abil[t]||0)>0&&left>0){p.abil[t]--;left--;} } }
   trimHand(p){ let tot=this.totalAbil(p); while(tot>10){ this.loseAbil(p,1); tot--; } while(p.items.length>10)p.items.pop(); }
   /* --- 탐색/수행 --- */
-  search(p,forced){ const r=p.loc; const deck=this.regionDeck[r]; if(!deck||!deck.length){ p.gold+=2; return; }
+  search(p,forced){ const r=p.loc; const deck=this.regionDeck[r]; if(!deck||!deck.length){ p.gold+=2; return; } // 고갈 시 금화만 보충(§3)
     const roll=forced?4:d6();
     if(roll<=2){ this.drawAbil(p,1); }
-    else { const c=deck.shift(); if(c==="gold")p.gold++; else { this.gainItem(p); } if(roll===6&&deck.length){ const c2=deck.shift(); if(c2==="gold")p.gold++; else this.gainItem(p); } }
+    else { this.takeCard(p,deck.shift()); if(roll===6&&deck.length){ this.takeCard(p,deck.shift()); } }
   }
-  gainItem(p){ p.items.push("item"); // 근사: 20% 단서, 8% 진실물건
-    const r=_rng(); if(r<0.20){ p.clues=(p.clues||0)+1; if((p.key==="zenobia"||p.key==="irene"||p.key==="daisy")&&_rng()<0.3)p._hasEdict=true; }
-    else if(r<0.28){ const t=pick(["ax1","ax1b","ax2","ax2b","meta"]); p.truth.add(t.replace("b","")); }
+  takeCard(p,c){ if(!c)return; if(c==="gold"){ p.gold++; return; }
+    p.items.push("item");
+    if(c==="t1"||c==="t2"||c==="t3"||c==="t4"||c==="meta"){ p.truth.add(c); }           // 진실 물건(유한): 종당 2장
+    else if(c==="elixir"){ p.elixir=(p.elixir||0)+1; }
+    else { p.clues=(p.clues||0)+1; if(c==="clue_edict"&&(p.key==="zenobia"||p.key==="irene"||p.key==="daisy"))p._hasEdict=true; } // 단서(clue_edict=교황칙서 계열)
     this.trimHand(p);
   }
   perform(p){ this.drawAbil(p, p.loc==="E"?3:2); }
   /* --- 각성 --- */
   correctAwaken(p){ const need=CHARS[p.key].awaken; if(need==="general")return !!p.awaken; return p.awaken===need || (p.awaken && need==="general"); }
+  // 승천 조건: 세 축 모두 대표(축1 t1|t2 · 축2 t3|t4 · 축3 meta) — endings/4-ascensionending.md
+  axesComplete(p){ return (p.truth.has("t1")||p.truth.has("t2")) && (p.truth.has("t3")||p.truth.has("t4")) && p.truth.has("meta"); }
   tryAwaken(p){ if(p.awaken)return false;
     // 특수 우선
     const need=p.awakenType, pref=p.pref, cnt=p.abil[pref]||0, thr=p.thr;
