@@ -50,8 +50,7 @@
 
 | 경로 | 내용 |
 | --- | --- |
-| [`images/character/`](images/character/) | 캐릭터 일러스트 |
-| [`images/anima/`](images/anima/) · [`images/anima_2/`](images/anima_2/) | 각성/변신 일러스트 |
+| [`images/chars/`](images/chars/) | 캐릭터 확정 일러스트 17종 (캐릭터 카드 앞면에 사용) |
 
 ---
 

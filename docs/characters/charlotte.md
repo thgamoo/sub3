@@ -198,7 +198,8 @@ A proud young aristocratic daughter of a ducal house, a teenage academy student,
 
 ## 이미지 생성 프롬프트 v4
 
-> **역반영 + 조정**: 참고본 `sub3/images/anima_2/charlotte.png` 를 보고 다시 기술.
+> **역반영 + 조정**: 참고본(당시 `images/anima_2/charlotte.png`, 현재는 삭제됨)을 보고 다시 기술.
+> 확정 이미지는 [`images/chars/charlotte.png`](../../images/chars/charlotte.png).
 > 참고본에서 "귀족영애다움"을 만드는 요소를 명시 — 은백색 다마스크 자수,
 > 양 어깨의 흰 실크 리본, 작은 펜던트와 청색 드롭 귀걸이, 곁눈질하는 의뭉스러운 미소.
 > **참고본의 부채는 빼고 흰 레이스 장갑으로 대체** (루크레치아의 부채와 겹치므로).

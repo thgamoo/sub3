@@ -39,7 +39,7 @@
 
 ## 🎨 아트 / 에셋
 
-- [ ] `images/anima_2/` 보강 — 현재 7종만 존재. 전 캐릭터 필요 여부 결정 (결정필요/제작)
+- [x] 캐릭터 일러스트 확정 — `images/chars/` 17종. 이전 후보군(`images/anima/`, `images/anima_2/`, `images/characters/`)은 삭제
 - [ ] 카드/보드 실물 디자인. 목업/렌더링은 로컬 자체 제작 (제작)
 - [ ] 보드판 지도 제작 — 프롬프트는 [docs/world/map-prompt.md](docs/world/map-prompt.md) (제작)
 
