@@ -29,8 +29,22 @@ A regal young crown prince male lead of a romance fantasy webnovel, detailed ani
 A regal young crown prince male lead of a romance fantasy webnovel, detailed anime style character portrait, golden blond hair, piercing azure blue eyes, calm and authoritative expression, clean white and gold imperial uniform with restrained decoration, exactly three ornaments only: a golden laurel hair ornament, one single gold chain, and a rich purple cape, no other jewelry or embellishments, refined Roman-inspired empire aesthetic, bright marble palace columns and purple banners in the background, dignified and charismatic aura of a future emperor, elegant half body portrait, high detail, no text, no watermark
 ```
 
+## 이미지 생성 프롬프트 v3
+
+> 역반영: v2로 생성한 결과가 채택됨. 실제 출력에 맞춰 프롬프트를 다시 기술.
+> v2의 "장식 정확히 3개" 제약은 모델이 따르지 않았고, 결과는 오히려 v1에 가까운
+> 화려한 금장식으로 나옴. 그 결과물이 좋아서 제약을 걷어내고 실제 모습으로 기술함.
+
+```text
+A regal young crown prince male lead of a romance fantasy webnovel, detailed anime style character portrait, short tousled golden blond hair, piercing azure blue eyes, calm and authoritative expression, a golden laurel wreath resting on his head, white high-collared imperial military uniform with an ornate gold standing collar, gold braid and trim down the front, gold epaulettes, layered gold chains draped across his chest, and a large round gold brooch set with a blue gem clasping a rich purple cape over one shoulder, refined Roman-inspired empire aesthetic, bright marble palace columns and hanging purple banners in the background, dignified and charismatic aura of a future emperor, elegant half body portrait, high detail, no text, no watermark
+```
+
 ## 네거티브 프롬프트 (Negative Prompt)
 
 ```text
-dark hair, red eyes, excessive jewelry, multiple chains, heavy ornaments, crown, cluttered decoration, armor, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+dark hair, red eyes, crown, tiara, plate armor, breastplate, helmet, weapons, cluttered background, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
 ```
+
+> v3 역반영에 맞춰 `excessive jewelry, multiple chains, heavy ornaments, cluttered decoration` 를 제거함
+> — 화려한 금장식을 채택했으므로 이 항목들이 포지티브와 충돌했음.
+> 머리에 쓰는 것은 월계관이어야 하므로 `crown, tiara` 는 유지.

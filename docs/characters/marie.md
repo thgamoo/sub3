@@ -54,8 +54,21 @@ A deranged and eerie poison master, romance fantasy webnovel style, detailed ani
 An alluring yet subtly eerie female poison master, romance fantasy webnovel style, detailed anime character portrait, beautiful feminine face, wild red and green two-tone hair, distinctive solid pitch-black eyes with no whites and no visible sclera as her defining trait, a faint unsettling smile rather than a grotesque grin, dark alchemist robe with small glass vials and herb pouches hanging from a leather belt, holding up a glass vial of glowing green poison in one hand, faint toxic green vapor drifting from the vial, no voodoo elements, no bone charms, no dolls, no skulls, muted desert-brown gradient background, mysterious and quietly unnerving yet beautiful poisoner atmosphere, clean half body portrait, polished but not ornate, no text, no watermark
 ```
 
+## 이미지 생성 프롬프트 v4
+
+> 수정: v3가 너무 안 무서워짐. 눈을 **안구 자체가 없는 텅 빈 눈구멍**으로 강화.
+> 독약 병이 너무 많아 벨트에 3개 이하로 제한. 가슴 크기 축소.
+
+```text
+An eerie and unsettling female poison master, romance fantasy webnovel style, detailed anime character portrait, slender feminine figure with a small modest chest, wild red and green two-tone hair, hollow empty eye sockets with no eyeballs at all, only depthless black voids where her eyes should be, a thin unnerving smile, dark alchemist robe with a plain leather belt carrying no more than three small glass vials, holding up a single glass vial of glowing green poison in one hand, faint toxic green vapor drifting from the vial, no voodoo elements, no bone charms, no dolls, no skulls, muted desert-brown gradient background, quietly menacing and haunting poisoner atmosphere, clean half body portrait, polished but not ornate, no text, no watermark
+```
+
 ## 네거티브 프롬프트 (Negative Prompt)
 
 ```text
-white sclera, visible eye whites, normal eyes with pupils, masculine face, grotesque, monstrous, gory, ugly, voodoo dolls, bone charms, skulls, single-color hair, ornate jewelry, calm expression, altar, candles, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+visible eyeballs, eye whites, white sclera, pupils, irises, normal eyes, many vials, rows of bottles, cluttered belt, bandolier of potions, large breasts, big bust, busty, voluptuous, cleavage, masculine face, gory, bloody, ugly, voodoo dolls, bone charms, skulls, single-color hair, ornate jewelry, calm expression, altar, candles, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
 ```
+
+> v4에 맞춰 네거티브 조정: `grotesque, monstrous` 제거(텅 빈 눈구멍 표현을 억제하므로),
+> `gory, bloody, ugly` 는 유지(고어로 넘어가지 않도록).
+> 병 개수·가슴 크기 억제 항목 추가.

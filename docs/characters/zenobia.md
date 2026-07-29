@@ -11,7 +11,10 @@
 
 - 구리빛 피부와 검은 눈
 - 반쪽 가면 (오른쪽 얼굴의 화상을 가림)
+- **화상은 영원히 타오른다** — 꺼지지 않는 불이 가면 가장자리와 오른쪽 얼굴에
+  작게 계속 일렁인다. 활활 타오르는 큰 불이 아니라, 사그라들지 않는 잔불에 가깝다
 - 긴 머리, 갈색 머리
+- 후드나 두건은 쓰지 않는다
 - 가슴 정중앙에 십자가 모양의 목걸이 (필수)
 
 ## 원래 운명
@@ -41,8 +44,33 @@
 A stoic female holy knight commander turned church executioner, romance fantasy webnovel style, detailed anime character portrait, long brown hair, dark eyes with no smile, copper tanned skin, plain silver half-mask covering the burned right side of her face, simple white knight coat over a dark inner uniform, a prominent cross-shaped pendant necklace hanging clearly at the exact center of her chest, this cross necklace as her only jewelry, no weapon visible, muted ash-gray and gold gradient background with no banners or ruins, tragic warrior queen aura, solemn and intimidating atmosphere, clean half body portrait, polished but not ornate, no text, no watermark
 ```
 
+## 이미지 생성 프롬프트 v2
+
+> 수정: 가면 주변에 타오르는 불꽃이 나오는 문제. `burned` 라는 단어가 불을 끌어옴.
+> 화상 흔적(그을림·검댕)은 남기되 **활활 타는 불은 제거**. 십자가 목걸이는 그대로 유지.
+
+```text
+A stoic female holy knight commander turned church executioner, romance fantasy webnovel style, detailed anime character portrait, long brown hair, dark eyes with no smile, copper tanned skin, plain silver half-mask covering the scarred right side of her face, only faint dark scorch marks and soot staining around the edge of the mask, no active fire, no burning flames anywhere, simple white knight coat over a dark inner uniform, a prominent cross-shaped pendant necklace hanging clearly at the exact center of her chest, this cross necklace as her only jewelry, no weapon visible, muted ash-gray and gold gradient background with no banners or ruins, tragic warrior queen aura, solemn and intimidating atmosphere, clean half body portrait, polished but not ornate, no text, no watermark
+```
+
+## 이미지 생성 프롬프트 v3
+
+> 수정 (설정 반영): 화상이 **영원히 타오른다**는 설정을 프롬프트에 반영.
+> v2에서 불을 완전히 없앤 것을 되돌리되, 얼굴을 삼키는 큰 불이 아니라
+> 가면 가장자리에 계속 일렁이는 **작은 잔불** 수준으로 통제.
+> 또 v2에서 요청 없이 생겼던 **흰 후드를 제거**하고, 옅어진 피부를 구리빛으로 되돌림.
+
+```text
+A stoic female holy knight commander turned church executioner, romance fantasy webnovel style, detailed anime character portrait, long brown hair worn loose, bare head with no hood and no head covering, dark eyes with no smile, deep copper tanned skin, plain silver half-mask covering the eternally burning scar on the right side of her face, small live flames still flickering steadily along the edge of the mask and across the scarred right side, an eternal burn that never goes out, the fire small and contained rather than engulfing her, simple white knight coat over a dark inner uniform, a prominent cross-shaped pendant necklace hanging clearly at the exact center of her chest, this cross necklace as her only jewelry, no weapon visible, muted ash-gray and gold gradient background with no banners or ruins, tragic warrior queen aura, solemn and intimidating atmosphere, clean half body portrait, polished but not ornate, no text, no watermark
+```
+
 ## 네거티브 프롬프트 (Negative Prompt)
 
 ```text
-no necklace, missing cross pendant, cross off-center, no mask, full face visible, smiling expression, blonde hair, pale skin, ornate armor, heavy jewelry, weapons, banners, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+hood, hooded cloak, cowl, head covering, veil, headscarf, raging fire, fire engulfing her head, wildfire, explosion, burning background, flames covering the whole face, pale skin, light skin, no necklace, missing cross pendant, cross off-center, no mask, full face visible, smiling expression, blonde hair, ornate armor, heavy jewelry, weapons, banners, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
 ```
+
+> v3에 맞춰 네거티브 조정: 불을 통째로 막던
+> `large flames, blazing fire, burning fire, roaring flames, fire sparks, floating embers, glowing embers` 를
+> 제거하고, **과열만 막는** `raging fire, fire engulfing her head, wildfire, explosion, burning background,
+> flames covering the whole face` 로 교체. 후드 억제 항목과 `pale skin, light skin` 추가.
