@@ -34,6 +34,29 @@
 - "폐태자의 편지"
 - "추기경서임서"
 
+## 이미지 생성 프롬프트 v10
+
+> **기도 포즈 버전.**
+> 두 손을 가슴 앞에서 **손바닥끼리 맞댄 정식 기도 자세**로 못박았다 — `pressed together palm to palm`, `fingers straight and pointing upward`, `elbows drawn in close`. 손 모양이 흐트러지지 않도록 네거티브에 `(hands apart:1.5) (one hand:1.5) hands at sides, reaching out` 을 걸었다.
+>
+> ⚠️ **성스럽게만 보이면 이 캐릭터가 아니다.** 앞머리가 눈을 완전히 덮고 금빛만 새어나오는 기존 설정을 유지하고, 표정을 `completely blank expressionless` 로 둔다. 후광도 `very faint pale halo` 로 약하게 — 네거티브에 `(warm golden glow:1.3) strong halo, blinding light, divine radiance` 를 넣어 경건함이 과해지는 것을 막았다. **겉은 독실하고 속은 안 읽히는 상태**가 목표다.
+>
+> `fate_art.md` 의 `irene_heretic` v7 이 붉은 낙인으로 규탄을 그린다면, 이쪽은 그 반대쪽 얼굴이다.
+
+```text
+cowboy shot, front view, eye level,
+
+Irene, a serene yet unsettling saintess candidate, standing in prayer,
+
+both hands raised and pressed together palm to palm in front of her chest in a formal prayer gesture, fingers straight and pointing upward, elbows drawn in close to her body, her head bowed very slightly, her chin lowered, a completely blank expressionless face, lips closed and relaxed, no smile, pale blonde hair with long heavy straight bangs falling completely over her eyes, only a faint golden glow seeping through the hair where her eyes would be, white and gold priestess vestments with a tall pointed white mitre, a golden cross embroidered down the front of her robe, wide sleeves falling away from her raised forearms, a very faint pale halo of light behind her head, quiet and still, devout on the surface and unreadable underneath, (flat color:1.3), (anime coloring:1.3), bold clean outlines, hard-edged cel shading, matte finish, muted dark neutral gradient background with a few drifting light particles, vertical composition
+```
+
+## 네거티브 프롬프트 v10
+
+```text
+(hands apart:1.5), (one hand:1.5), hands at sides, arms down, reaching out, outstretched arm, open palm facing the viewer, waving, pointing, holding an object, book, staff, rod, candle, rosary, beads, (visible eyes:1.4), uncovered eyes, bangs parted, eyes showing through, smiling, gentle smile, grin, laughing, crying, tears, angry, kneeling, sitting, lying down, bowing deeply, head fully down, (warm golden glow:1.3), strong halo, blinding light, divine radiance, light beam from above, soft airbrush shading, smooth gradient shading, subsurface scattering, glossy skin, shiny skin, specular highlight, plump lips, glossy lips, sparkling eyes, catchlight, 3d, realistic, photorealistic, rendered, cgi, second person, two people, crowd, text, watermark, signature, logo, extra fingers, deformed hands, six fingers, fused fingers, bad anatomy, lowres, blurry
+```
+
 ## 이미지 생성 프롬프트
 
 ```text
@@ -88,6 +111,25 @@ A quietly ominous saintess candidate, romance fantasy webnovel style, detailed a
 
 ```text
 A quietly ominous saintess candidate, romance fantasy webnovel style, detailed anime character portrait, pale yellow blonde hair with long heavy straight bangs falling completely over her eyes, her eyes fully hidden behind her hair, only a faint golden glow seeping dimly through the strands, blank expressionless face with lips set in a flat neutral line, no smile at all, facing forward with her head level, simple unadorned white priestess vestments with only minimal gold trim, wearing a tall pointed bishop's mitre rising high above her head and narrowing to a sharp peak at the top, the classic two-panel mitre silhouette with a clearly pointed apex, white with slim gold trim and a small gold cross on the front, no crown, no halo, no floating scripture pages, no jewelry, quiet dim cathedral interior with soft light in the background, holy but hollow and unsettling atmosphere, the emptiness of someone who commits atrocities without feeling anything, elegant half body portrait, high detail, no text, no watermark
+```
+
+## 이미지 생성 프롬프트 v9
+
+> 구도: **올려다보기.** 고개가 젖혀지면 사제관 실루엣이 살고 앞머리가 뜬다. (금안이 비치는 난제는 해결하지 않아도 된다는 판단)
+
+```text
+looking up, head tilted back, cowboy shot, eye level,
+
+Irene, a quietly ominous saintess candidate with her face turned upward toward the light,
+
+ pale yellow blonde hair with long heavy straight bangs falling completely over her eyes, her eyes fully hidden behind her hair, only a faint golden glow seeping dimly through the strands, blank expressionless face with lips set in a flat neutral line, no smile at all, simple unadorned white priestess vestments with only minimal gold trim, wearing a tall pointed bishop's mitre rising high above her head and narrowing to a sharp peak at the top, the classic two-panel mitre silhouette with a clearly pointed apex, white with slim gold trim and a small gold cross on the front, no crown, no halo, no floating scripture pages, no jewelry, quiet dim cathedral interior with soft light in the background, holy but hollow and unsettling atmosphere, the emptiness of someone who commits atrocities without feeling anything, vertical composition
+```
+
+## 네거티브 프롬프트 v9
+
+```text
+head level, facing forward, looking at viewer, looking down,
+flat topped hat, round hat, pillbox hat, soft cap, low hat, short hat, brimmed hat, nurse cap, beanie, hood, veil only, closed eyes, downcast face, looking down, head tilted down, light beam, light shaft, glowing pillar of light, lens flare, smiling, smile, grin, gentle smile, happy expression, cheerful, kind expression, visible eyes, eyes showing, eyes above the bangs, parted bangs, short bangs, hair tucked behind ears, crown, halo, floating scripture pages, ornate vestments, heavy jewelry, dark hair, red hair, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
 ```
 
 ## 네거티브 프롬프트 v8

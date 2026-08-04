@@ -63,6 +63,25 @@ An alluring yet subtly eerie female poison master, romance fantasy webnovel styl
 An eerie and unsettling female poison master, romance fantasy webnovel style, detailed anime character portrait, slender feminine figure with a small modest chest, wild red and green two-tone hair, hollow empty eye sockets with no eyeballs at all, only depthless black voids where her eyes should be, a thin unnerving smile, dark alchemist robe with a plain leather belt carrying no more than three small glass vials, holding up a single glass vial of glowing green poison in one hand, faint toxic green vapor drifting from the vial, no voodoo elements, no bone charms, no dolls, no skulls, muted desert-brown gradient background, quietly menacing and haunting poisoner atmosphere, clean half body portrait, polished but not ornate, no text, no watermark
 ```
 
+## 이미지 생성 프롬프트 v5
+
+> 구도: **구도 유지 + cowboy shot.** 흰자 없는 검은 눈은 멀리서도 읽히므로 클로즈업이 필요 없다.
+
+```text
+cowboy shot, eye level, facing viewer, looking at viewer,
+
+Marie, an eerie and unsettling female poison master,
+
+ slender feminine figure with a small modest chest, wild red and green two-tone hair, hollow empty eye sockets with no eyeballs at all, only depthless black voids where her eyes should be, a thin unnerving smile, dark alchemist robe with a plain leather belt carrying no more than three small glass vials, holding up a single glass vial of glowing green poison in one hand, faint toxic green vapor drifting from the vial, no voodoo elements, no bone charms, no dolls, no skulls, muted desert-brown gradient background, quietly menacing and haunting poisoner atmosphere, vertical composition
+```
+
+## 네거티브 프롬프트 v5
+
+```text
+close-up, portrait crop, full body, wide shot,
+visible eyeballs, eye whites, white sclera, pupils, irises, normal eyes, many vials, rows of bottles, cluttered belt, bandolier of potions, large breasts, big bust, busty, voluptuous, cleavage, masculine face, gory, bloody, ugly, voodoo dolls, bone charms, skulls, single-color hair, ornate jewelry, calm expression, altar, candles, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+```
+
 ## 네거티브 프롬프트 (Negative Prompt)
 
 ```text

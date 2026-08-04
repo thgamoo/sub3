@@ -40,6 +40,56 @@
 A quiet and mysterious young maid, romance fantasy webnovel style, detailed anime character portrait, brown hair neatly tied up in a bun, calm brown eyes hiding sorrow, classic black and white victorian maid uniform with a small frilled headdress, very faint dark shadow magic around one hand, subtle ancient memory-chip glow at her nape, muted dark neutral gradient background with no corridor, melancholic and secretive atmosphere, clean half body portrait, high detail, no text, no watermark
 ```
 
+## 이미지 생성 프롬프트 v2
+
+> 구도: **측면(profile).** 지금 채택본이 이미 측면 + 시선 내리깔기인데 아무도 안 쓴 각도다. 수족·시녀라 앞에 나서지 않는 성격과도 맞는다. cowboy shot 으로 넓히기만 한다.
+
+```text
+from side, profile, cowboy shot, eye level, looking down,
+
+Daisy, a quiet and mysterious young maid seen from the side, standing still with her hands folded in front of her,
+
+ brown hair neatly tied up in a bun, calm brown eyes hiding sorrow, classic black and white victorian maid uniform with a small frilled headdress, very faint dark shadow magic around one hand, subtle ancient memory-chip glow at her nape, muted dark neutral gradient background with no corridor, melancholic and secretive atmosphere, vertical composition
+```
+
+## 이미지 생성 프롬프트 v3
+
+> **v2(측면) 기준에서 세 가지 수정.** `daisy_11` 의 어두운 표정이 맞는 방향이었다.
+>
+> 1. **어둠이 손을 삼키게** — v2 는 `very faint dark shadow magic around one hand` 라
+>    두 손으로 **구슬을 받쳐 드는** 그림이 나왔다. 이제 손 자체가 먹히도록 서술하고,
+>    네거티브에 `holding an orb, cupped hands, ball of shadow, sphere of darkness` 를 넣는다.
+> 2. **금화 제거** — 어둠 한가운데 발광체가 박혀 나왔다. 원인으로 보이는
+>    `subtle ancient memory-chip glow at her nape` 를 지우고,
+>    네거티브에 `gold coin, coin, medallion, glowing gem, glowing orb, ember, glowing core` 추가.
+> 3. **어두운 표정 명시** — `downcast eyes lowered to the floor, gloomy sorrowful expression,
+>    shadow across her eyes, lips pressed thin`.
+
+```text
+from side, profile, cowboy shot, eye level, looking down,
+
+Daisy, a quiet and mysterious young maid seen from the side, standing still with her hands folded in front of her,
+
+ brown hair neatly tied up in a bun, downcast eyes lowered to the floor, gloomy sorrowful expression, shadow across her eyes, lips pressed thin, classic black and white victorian maid uniform with a small frilled headdress, her lowered hand swallowed by black shadow, the darkness devouring her fingers and creeping up her forearm, ragged black tendrils dripping from her hand, muted dark neutral gradient background with no corridor, melancholic and secretive atmosphere, vertical composition
+```
+
+## 네거티브 프롬프트 v3
+
+```text
+holding an orb, holding a ball, cupped hands, ball of shadow, sphere of darkness,
+gold coin, coin, medallion, glowing gem, glowing orb, ember, spark, glowing core,
+smiling, cheerful, bright expression, looking at viewer,
+facing viewer, front view, three-quarter view, looking at viewer, back view,
+blonde hair, colored hair, loose long hair, elaborate gown, heavy jewelry, bright cheerful expression, detailed corridor background, weapons, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+```
+
+## 네거티브 프롬프트 v2
+
+```text
+facing viewer, front view, three-quarter view, looking at viewer, back view,
+blonde hair, colored hair, loose long hair, elaborate gown, heavy jewelry, bright cheerful expression, detailed corridor background, weapons, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
+```
+
 ## 네거티브 프롬프트 (Negative Prompt)
 
 ```text

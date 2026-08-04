@@ -47,6 +47,563 @@ A haughty beautiful young noble lady, romance fantasy webnovel style, detailed a
 child, little girl, chibi, toddler, oversized head, childish proportions, dark hair, red hair, short hair, tiara, jeweled hair ornament, heavy jewelry, pale violet gown, garden background, stone arches, outdoor background, narrow half-closed eyes, slit eyes, staircase, ballroom crowd, busy background, text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy, lowres, blurry
 ```
 
+## 이미지 생성 프롬프트 v21
+
+> **v19(부채+teenage) + 자세 강제 두 가지.** 화풍은 `--flat` 플래그로 얹는다(md 에 안 박는다).
+>
+> 1. **허리에 손** — `the other hand resting at her waist` 라는 자연어가 약했다.
+>    **`hand_on_own_hip`(204,436장)** 이 정확한 태그다. `elbow out` 을 더해 실루엣을 만든다.
+>    ⚠️ 네거티브에 `hands on own hips, both hands on hips` — **양손 허리는 안 된다**
+>    (한 손은 부채를 들고 있어야 한다). `arm hanging at side, hand behind back` 도 억제.
+>
+> 2. **고개 젖혀 내려다보기** — `head back` 태그 + 자연어.
+>    ⚠️ **`looking down` 태그는 쓰지 않는다.** 그건 "고개를 **숙여** 아래를 봄"(125k)이라
+>    젖히는 것과 정반대고, roxana 에서 이 태그가 눈을 감게 만든 전력이 있다.
+>    대신 `head tilted back so she looks down her nose at the viewer, chin raised,
+>    condescending gaze` 로 서술하고, 네거티브에 `head lowered, looking up, bowing` 을 넣는다.
+
+```text
+laughing, open mouth, covered mouth, holding fan, folding fan, hand on own hip, head back, head tilt, looking at viewer,
+
+Charlotte, a haughty young noblewoman, the daughter of a duke, freshly presented at court, only just finished her debutante season, laughing haughtily, the classic arrogant noble lady laugh,
+
+cowboy shot, one lace-gloved hand holding an open folding fan raised to cover the lower half of her face, laughing behind the fan, only her eyes visible above the fan rim, her other hand planted firmly on her own hip, elbow out, chest out, head tilted back so she looks down her nose at the viewer, chin raised, condescending gaze,
+
+(youthful:1.25), a teenage noblewoman, a young lady of eighteen, fresh young face, delicate refined features, luminous fair skin, smooth unlined skin,
+
+large clear icy blue eyes with sharply upturned outer corners narrowed in amusement, visible above the fan, bright golden blonde hair in twin rolled bun curls with long ringlets falling at the sides,
+
+an elegant structured aristocratic court gown in deep jade green, fitted boned bodice with a cinched waist, corset lacing, richly woven damask pattern in the fabric, a cream silk panel down the center front, layered skirt with gathered folds, fitted sleeves with white lace cuffs, fine white lace jabot at the high collar, a small pearl choker, a single emerald brooch, long white lace gloves fully covering both hands all the way to the fingertips,
+
+soft neutral academy-toned gradient background,
+
+classic villainess ojou-sama aura, vertical composition
+```
+
+## 네거티브 프롬프트 v21
+
+```text
+hands on own hips, both hands on hips, arm hanging at side, hand behind back,
+head lowered, looking up, bowing,
+hand over own mouth, bare hand on face, closed fan, folded fan, fan hiding her eyes, fan covering whole face,
+loose robe, wide sleeves, flowing sleeves, kimono, japanese clothes, dressing gown, bathrobe,
+unstructured dress, shapeless dress, draped fabric, plain fabric, no waistline,
+closed mouth, expressionless, sad, crying, embarrassed,
+middle-aged, matronly, wrinkles, nasolabial folds, gaunt, hollow cheeks,
+harsh weathered face, heavy makeup, tired eyes, eye bags,
+monochrome outfit, single flat color dress, plain undecorated dress,
+full length shot, wide shot, full body, distant camera, small face,
+fingerless gloves, half gloves, bare hands, exposed fingers,
+military uniform, epaulettes, silver braid trim,
+pastel pink, baby pink, mint pastel, candy colors, frilly dress, many ribbons,
+child, little girl, chibi, oversized head, childish proportions, toddler,
+dark hair, red hair, short hair, tiara, jeweled hair ornament,
+gaudy jewelry, layered necklaces,
+garden background, stone arches, outdoor background, busy background,
+2girls, multiple girls, multiple views,
+text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy
+```
+
+## 이미지 생성 프롬프트 v20
+
+> **v19(부채 + teenage) 기준에 화풍 조항만 얹은 것.**
+> 앞서 v18 로 시도했을 때는 `teenage` 와 평면 화풍을 **한꺼번에** 바꿔서
+> 무엇의 효과인지 분리가 안 됐다 (게다가 3장에서 중단했다).
+> 이번엔 v19 를 베이스로 삼아 **차이가 화풍 하나**가 되게 한다.
+>
+> 실제 태그는 `flat color` · `anime coloring` 둘뿐이고 나머지는 자연어다.
+> 체감에 가장 크게 기여하는 건 네거티브의 **`depth of field, bokeh`**(배경 흐림 제거)와
+> **`glossy skin, shiny highlights`**(피부 광택 제거)로 보인다.
+
+```text
+laughing, open mouth, covered mouth, holding fan, folding fan, head tilt, looking at viewer,
+
+Charlotte, a haughty young noblewoman, the daughter of a duke, freshly presented at court, only just finished her debutante season, laughing haughtily, the classic arrogant noble lady laugh,
+
+cowboy shot, one lace-gloved hand holding an open folding fan raised to cover the lower half of her face, laughing behind the fan, only her eyes visible above the fan rim, the other hand resting at her waist, chest out, head tilted back,
+
+(youthful:1.25), a teenage noblewoman, a young lady of eighteen, fresh young face, delicate refined features, luminous fair skin, smooth unlined skin,
+
+large clear icy blue eyes with sharply upturned outer corners narrowed in amusement, visible above the fan, bright golden blonde hair in twin rolled bun curls with long ringlets falling at the sides,
+
+an elegant structured aristocratic court gown in deep jade green, fitted boned bodice with a cinched waist, corset lacing, richly woven damask pattern in the fabric, a cream silk panel down the center front, layered skirt with gathered folds, fitted sleeves with white lace cuffs, fine white lace jabot at the high collar, a small pearl choker, a single emerald brooch, long white lace gloves fully covering both hands all the way to the fingertips,
+
+soft neutral academy-toned gradient background,
+
+flat color, anime coloring, bold clean outlines, hard-edged cel shading, few gradients, matte finish,
+
+classic villainess ojou-sama aura, vertical composition
+```
+
+## 네거티브 프롬프트 v20
+
+```text
+3d, realistic, photorealistic, rendered, cgi, volumetric lighting, soft airbrush shading, smooth gradient shading, glossy skin, shiny highlights, subsurface scattering, depth of field, bokeh,
+hand over own mouth, bare hand on face, closed fan, folded fan, fan hiding her eyes, fan covering whole face,
+loose robe, wide sleeves, flowing sleeves, kimono, japanese clothes, dressing gown, bathrobe,
+unstructured dress, shapeless dress, draped fabric, plain fabric, no waistline,
+closed mouth, expressionless, sad, crying, embarrassed,
+middle-aged, matronly, wrinkles, nasolabial folds, gaunt, hollow cheeks,
+harsh weathered face, heavy makeup, tired eyes, eye bags,
+monochrome outfit, single flat color dress, plain undecorated dress,
+full length shot, wide shot, full body, distant camera, small face,
+fingerless gloves, half gloves, bare hands, exposed fingers,
+military uniform, epaulettes, silver braid trim,
+pastel pink, baby pink, mint pastel, candy colors, frilly dress, many ribbons,
+child, little girl, chibi, oversized head, childish proportions, toddler,
+dark hair, red hair, short hair, tiara, jeweled hair ornament,
+gaudy jewelry, layered necklaces,
+garden background, stone arches, outdoor background, busy background,
+2girls, multiple girls, multiple views,
+text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy
+```
+
+## 이미지 생성 프롬프트 v19
+
+> **v17(부채로 가리고 웃기) + `teenage` 만.** 구도·의상은 v8 에서 확정됐다.
+>
+> v18 에서 시도했던 **평면 화풍(`flat color, anime coloring` + 3D 억제)은 뺐다.**
+> 화풍은 지금 그대로 두고 나이 표현만 본다.
+>
+> `teenage` 는 v3 에서 유아화를 유발했던 단어지만 그때는
+> `softly rounded cheeks` + `large ribbon bow` 와 겹친 조합이었다.
+> 구조 억제(`child, chibi, childish proportions, oversized head`)를 유지한 채 단독으로 넣는다.
+
+```text
+laughing, open mouth, covered mouth, holding fan, folding fan, head tilt, looking at viewer,
+
+Charlotte, a haughty young noblewoman, the daughter of a duke, freshly presented at court, only just finished her debutante season, laughing haughtily, the classic arrogant noble lady laugh,
+
+cowboy shot, one lace-gloved hand holding an open folding fan raised to cover the lower half of her face, laughing behind the fan, only her eyes visible above the fan rim, the other hand resting at her waist, chest out, head tilted back,
+
+(youthful:1.25), a teenage noblewoman, a young lady of eighteen, fresh young face, delicate refined features, luminous fair skin, smooth unlined skin,
+
+large clear icy blue eyes with sharply upturned outer corners narrowed in amusement, visible above the fan, bright golden blonde hair in twin rolled bun curls with long ringlets falling at the sides,
+
+an elegant structured aristocratic court gown in deep jade green, fitted boned bodice with a cinched waist, corset lacing, richly woven damask pattern in the fabric, a cream silk panel down the center front, layered skirt with gathered folds, fitted sleeves with white lace cuffs, fine white lace jabot at the high collar, a small pearl choker, a single emerald brooch, long white lace gloves fully covering both hands all the way to the fingertips,
+
+soft neutral academy-toned gradient background,
+
+classic villainess ojou-sama aura, vertical composition
+```
+
+## 네거티브 프롬프트 v19
+
+```text
+hand over own mouth, bare hand on face, closed fan, folded fan, fan hiding her eyes, fan covering whole face,
+loose robe, wide sleeves, flowing sleeves, kimono, japanese clothes, dressing gown, bathrobe,
+unstructured dress, shapeless dress, draped fabric, plain fabric, no waistline,
+closed mouth, expressionless, sad, crying, embarrassed,
+middle-aged, matronly, wrinkles, nasolabial folds, gaunt, hollow cheeks,
+harsh weathered face, heavy makeup, tired eyes, eye bags,
+monochrome outfit, single flat color dress, plain undecorated dress,
+full length shot, wide shot, full body, distant camera, small face,
+fingerless gloves, half gloves, bare hands, exposed fingers,
+military uniform, epaulettes, silver braid trim,
+pastel pink, baby pink, mint pastel, candy colors, frilly dress, many ribbons,
+child, little girl, chibi, oversized head, childish proportions, toddler,
+dark hair, red hair, short hair, tiara, jeweled hair ornament,
+gaudy jewelry, layered necklaces,
+garden background, stone arches, outdoor background, busy background,
+2girls, multiple girls, multiple views,
+text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy
+```
+
+## 이미지 생성 프롬프트 v18
+
+> **v17(부채로 가리고 웃기) 기준.** 구도는 확정됐고 두 가지만 더한다.
+>
+> 1. **`teenage` 복원** — `a teenage noblewoman`. v3 에서 유아화를 유발했던 단어지만
+>    그때는 `softly rounded cheeks` + `large ribbon bow` 와 겹친 조합이었다.
+>    구조 억제(`child, chibi, childish proportions`)는 그대로 두고 단독으로 넣어본다.
+>
+> 2. **평면 화풍** — 최근 생성분이 부드러운 그라데이션·광택으로 **입체감이 과했다.**
+>    참고본(`sub3-chars/selected/charlotte.png`)은 색면이 넓고 그림자 경계가 딱 떨어지는
+>    셀 채색이다. `flat color, anime coloring` 은 실제 태그라 이걸 쓰고,
+>    네거티브로 3D 계열 렌더링을 막는다.
+>
+> ⚠️ `depth of field, bokeh` 도 네거티브에 넣었다 — 배경 흐림이 입체감을 키운다.
+
+```text
+laughing, open mouth, covered mouth, holding fan, folding fan, head tilt, looking at viewer,
+
+Charlotte, a haughty young noblewoman, the daughter of a duke, freshly presented at court, only just finished her debutante season, laughing haughtily, the classic arrogant noble lady laugh,
+
+cowboy shot, one lace-gloved hand holding an open folding fan raised to cover the lower half of her face, laughing behind the fan, only her eyes visible above the fan rim, the other hand resting at her waist, chest out, head tilted back,
+
+(youthful:1.25), a teenage noblewoman, a young lady of eighteen, fresh young face, delicate refined features, luminous fair skin, smooth unlined skin,
+
+large clear icy blue eyes with sharply upturned outer corners narrowed in amusement, visible above the fan, bright golden blonde hair in twin rolled bun curls with long ringlets falling at the sides,
+
+an elegant structured aristocratic court gown in deep jade green, fitted boned bodice with a cinched waist, corset lacing, richly woven damask pattern in the fabric, a cream silk panel down the center front, layered skirt with gathered folds, fitted sleeves with white lace cuffs, fine white lace jabot at the high collar, a small pearl choker, a single emerald brooch, long white lace gloves fully covering both hands all the way to the fingertips,
+
+soft neutral academy-toned gradient background,
+
+flat color, anime coloring, bold clean outlines, hard-edged cel shading, few gradients, matte finish,
+
+classic villainess ojou-sama aura, vertical composition
+```
+
+## 네거티브 프롬프트 v18
+
+```text
+3d, realistic, photorealistic, rendered, cgi, volumetric lighting, soft airbrush shading, smooth gradient shading, glossy skin, shiny highlights, subsurface scattering, depth of field, bokeh,
+hand over own mouth, bare hand on face, closed fan, folded fan, fan hiding her eyes, fan covering whole face,
+loose robe, wide sleeves, flowing sleeves, kimono, japanese clothes, dressing gown, bathrobe,
+unstructured dress, shapeless dress, draped fabric, plain fabric, no waistline,
+closed mouth, expressionless, sad, crying, embarrassed,
+middle-aged, matronly, wrinkles, nasolabial folds, gaunt, hollow cheeks,
+harsh weathered face, heavy makeup, tired eyes, eye bags,
+monochrome outfit, single flat color dress, plain undecorated dress,
+full length shot, wide shot, full body, distant camera, small face,
+fingerless gloves, half gloves, bare hands, exposed fingers,
+military uniform, epaulettes, silver braid trim,
+pastel pink, baby pink, mint pastel, candy colors, frilly dress, many ribbons,
+child, little girl, chibi, oversized head, childish proportions, toddler,
+dark hair, red hair, short hair, tiara, jeweled hair ornament,
+gaudy jewelry, layered necklaces,
+garden background, stone arches, outdoor background, busy background,
+2girls, multiple girls, multiple views,
+text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy
+```
+
+## 이미지 생성 프롬프트 v17
+
+> **부채로 가리고 웃는 안.** v14(확정 의상) 기준에서 **손등 → 펼친 부채**로만 교체.
+> 얼굴 하단을 부채로 덮고 **눈만 부채 위로** 보이게 한다.
+>
+> ⚠️ 눈이 가려지면 오만한 눈매가 통째로 죽으므로 네거티브에
+> `fan hiding her eyes, fan covering whole face` 를 넣었다.
+> ⚠️ `closed fan, folded fan` 도 억제 — 접힌 부채로는 가릴 수가 없다.
+> ⚠️ `hand over own mouth` 는 이제 **네거티브**다. v14 의 손등 포즈로 되돌아가는 것을 막는다.
+>
+> 나이·의상은 v14 그대로. A/B(v15 가중치 / v16 teenage) 결과가 나오면
+> 이긴 쪽 설정을 여기에 옮겨 붙이면 된다.
+
+```text
+laughing, open mouth, covered mouth, holding fan, folding fan, head tilt, looking at viewer,
+
+Charlotte, a haughty young noblewoman, the daughter of a duke, freshly presented at court, only just finished her debutante season, laughing haughtily, the classic arrogant noble lady laugh,
+
+cowboy shot, one lace-gloved hand holding an open folding fan raised to cover the lower half of her face, laughing behind the fan, only her eyes visible above the fan rim, the other hand resting at her waist, chest out, head tilted back,
+
+(youthful:1.25), a young lady of eighteen, fresh young face, delicate refined features, luminous fair skin, smooth unlined skin,
+
+large clear icy blue eyes with sharply upturned outer corners narrowed in amusement, visible above the fan, bright golden blonde hair in twin rolled bun curls with long ringlets falling at the sides,
+
+an elegant structured aristocratic court gown in deep jade green, fitted boned bodice with a cinched waist, corset lacing, richly woven damask pattern in the fabric, a cream silk panel down the center front, layered skirt with gathered folds, fitted sleeves with white lace cuffs, fine white lace jabot at the high collar, a small pearl choker, a single emerald brooch, long white lace gloves fully covering both hands all the way to the fingertips,
+
+soft neutral academy-toned gradient background,
+
+classic villainess ojou-sama aura, vertical composition
+```
+
+## 네거티브 프롬프트 v17
+
+```text
+hand over own mouth, bare hand on face, closed fan, folded fan, fan hiding her eyes, fan covering whole face,
+loose robe, wide sleeves, flowing sleeves, kimono, japanese clothes, dressing gown, bathrobe,
+unstructured dress, shapeless dress, draped fabric, plain fabric, no waistline,
+closed mouth, expressionless, sad, crying, embarrassed,
+middle-aged, matronly, wrinkles, nasolabial folds, gaunt, hollow cheeks,
+harsh weathered face, heavy makeup, tired eyes, eye bags,
+monochrome outfit, single flat color dress, plain undecorated dress,
+full length shot, wide shot, full body, distant camera, small face,
+fingerless gloves, half gloves, bare hands, exposed fingers,
+military uniform, epaulettes, silver braid trim,
+pastel pink, baby pink, mint pastel, candy colors, frilly dress, many ribbons,
+child, little girl, chibi, oversized head, childish proportions, toddler,
+dark hair, red hair, short hair, tiara, jeweled hair ornament,
+gaudy jewelry, layered necklaces,
+garden background, stone arches, outdoor background, busy background,
+2girls, multiple girls, multiple views,
+text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy
+```
+
+## 이미지 생성 프롬프트 v16
+
+> **A/B 중 B — `teenage` 복원.** v14 에 `a teenage noblewoman` 만 추가. 가중치는 그대로 둬서 `teenage` 단독 효과를 본다. ⚠️ v3 에서 이 단어가 유아화를 유발한 전력이 있다 — `child, chibi, childish proportions` 구조 억제는 그대로 유지한다.
+
+```text
+laughing, open mouth, hand over own mouth, head back, head tilt, looking at viewer,
+
+Charlotte, a haughty young noblewoman, the daughter of a duke, freshly presented at court, only just finished her debutante season, laughing haughtily, the classic arrogant noble lady laugh,
+
+cowboy shot, one lace-gloved hand raised with the back of her hand to her mouth, the other hand holding a folded fan, chest out, head tilted back,
+
+(youthful:1.25), a teenage noblewoman, a young lady of eighteen, fresh young face, delicate refined features, luminous fair skin, smooth unlined skin,
+
+bright golden blonde hair in twin rolled bun curls with long ringlets falling at the sides, large clear icy blue eyes with sharply upturned outer corners, narrowed in amusement,
+
+an elegant structured aristocratic court gown in deep jade green, fitted boned bodice with a cinched waist, corset lacing, richly woven damask pattern in the fabric, a cream silk panel down the center front, layered skirt with gathered folds, fitted sleeves with white lace cuffs, fine white lace jabot at the high collar, a small pearl choker, a single emerald brooch, long white lace gloves fully covering both hands all the way to the fingertips,
+
+soft neutral academy-toned gradient background,
+
+classic villainess ojou-sama aura, vertical composition
+```
+
+## 네거티브 프롬프트 v16
+
+```text
+loose robe, wide sleeves, flowing sleeves, kimono, japanese clothes, dressing gown, bathrobe,
+unstructured dress, shapeless dress, draped fabric, plain fabric, no waistline,
+closed mouth, expressionless, sad, crying, embarrassed,
+middle-aged, matronly, wrinkles, nasolabial folds, gaunt, hollow cheeks,
+harsh weathered face, heavy makeup, tired eyes, eye bags,
+monochrome outfit, single flat color dress, plain undecorated dress,
+full length shot, wide shot, full body, distant camera, small face,
+fingerless gloves, half gloves, bare hands, exposed fingers,
+military uniform, epaulettes, silver braid trim,
+pastel pink, baby pink, mint pastel, candy colors, frilly dress, many ribbons,
+child, little girl, chibi, oversized head, childish proportions, toddler,
+dark hair, red hair, short hair, tiara, jeweled hair ornament,
+gaudy jewelry, layered necklaces,
+garden background, stone arches, outdoor background, busy background,
+2girls, multiple girls, multiple views,
+text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy
+```
+
+## 이미지 생성 프롬프트 v15
+
+> **A/B 중 A — 가중치·나이만 강화.** `(youthful:1.25)` → `(youthful:1.45)` + `(young:1.2)`, 나이는 eighteen → seventeen. `teenage` 는 쓰지 않는다. 의상(v14)은 좋다고 확인돼서 손대지 않았다.
+
+```text
+laughing, open mouth, hand over own mouth, head back, head tilt, looking at viewer,
+
+Charlotte, a haughty young noblewoman, the daughter of a duke, freshly presented at court, only just finished her debutante season, laughing haughtily, the classic arrogant noble lady laugh,
+
+cowboy shot, one lace-gloved hand raised with the back of her hand to her mouth, the other hand holding a folded fan, chest out, head tilted back,
+
+(youthful:1.45), (young:1.2), a young lady of seventeen, fresh young face, delicate refined features, luminous fair skin, smooth unlined skin,
+
+bright golden blonde hair in twin rolled bun curls with long ringlets falling at the sides, large clear icy blue eyes with sharply upturned outer corners, narrowed in amusement,
+
+an elegant structured aristocratic court gown in deep jade green, fitted boned bodice with a cinched waist, corset lacing, richly woven damask pattern in the fabric, a cream silk panel down the center front, layered skirt with gathered folds, fitted sleeves with white lace cuffs, fine white lace jabot at the high collar, a small pearl choker, a single emerald brooch, long white lace gloves fully covering both hands all the way to the fingertips,
+
+soft neutral academy-toned gradient background,
+
+classic villainess ojou-sama aura, vertical composition
+```
+
+## 네거티브 프롬프트 v15
+
+```text
+loose robe, wide sleeves, flowing sleeves, kimono, japanese clothes, dressing gown, bathrobe,
+unstructured dress, shapeless dress, draped fabric, plain fabric, no waistline,
+closed mouth, expressionless, sad, crying, embarrassed,
+middle-aged, matronly, wrinkles, nasolabial folds, gaunt, hollow cheeks,
+harsh weathered face, heavy makeup, tired eyes, eye bags,
+monochrome outfit, single flat color dress, plain undecorated dress,
+full length shot, wide shot, full body, distant camera, small face,
+fingerless gloves, half gloves, bare hands, exposed fingers,
+military uniform, epaulettes, silver braid trim,
+pastel pink, baby pink, mint pastel, candy colors, frilly dress, many ribbons,
+child, little girl, chibi, oversized head, childish proportions, toddler,
+dark hair, red hair, short hair, tiara, jeweled hair ornament,
+gaudy jewelry, layered necklaces,
+garden background, stone arches, outdoor background, busy background,
+2girls, multiple girls, multiple views,
+text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy
+```
+
+## 이미지 생성 프롬프트 v14
+
+> v13 에서 **의상만** 바꾼 것. 얼굴·나이·포즈는 그대로.
+>
+> v13 의 제이드 드레스는 **구조가 없어서** 실내복/기모노처럼 읽혔다 —
+> 품이 넓은 소매, 몸에 붙지 않는 드레이프 실크, 장식 없음.
+> 공작가 여식이면 **뼈대가 잡힌 보디스 + 직조 무늬 + 층진 스커트**가 필요하다.
+>
+> ⚠️ 네거티브에 `loose robe, wide sleeves, kimono, dressing gown, unstructured dress` 를
+> 넣어 **드레이프로 되돌아가는 것을 막는다.** 이게 없으면 다시 실내복이 된다.
+> ⚠️ `heavy jewelry` 억제는 **뺐다** — 진주 초커·브로치까지 같이 죽는다.
+> 대신 `gaudy jewelry, layered necklaces` 로 과함만 막는다.
+> 티아라 억제는 **유지** (루크레치아와 겹치므로).
+>
+> ⚠️ `teenage` 는 쓰지 않는다. v3 에서 `teenage academy student` 조합이 유아화를 유발했다.
+> 나이는 **숫자로 못박는다** (`a young lady of eighteen`).
+
+```text
+laughing, open mouth, hand over own mouth, head back, head tilt, looking at viewer,
+
+Charlotte, a haughty young noblewoman, the daughter of a duke, freshly presented at court, only just finished her debutante season, laughing haughtily, the classic arrogant noble lady laugh,
+
+cowboy shot, one lace-gloved hand raised with the back of her hand to her mouth, the other hand holding a folded fan, chest out, head tilted back,
+
+(youthful:1.25), a young lady of eighteen, fresh young face, delicate refined features, luminous fair skin, smooth unlined skin,
+
+bright golden blonde hair in twin rolled bun curls with long ringlets falling at the sides, large clear icy blue eyes with sharply upturned outer corners, narrowed in amusement,
+
+an elegant structured aristocratic court gown in deep jade green, fitted boned bodice with a cinched waist, corset lacing, richly woven damask pattern in the fabric, a cream silk panel down the center front, layered skirt with gathered folds, fitted sleeves with white lace cuffs, fine white lace jabot at the high collar, a small pearl choker, a single emerald brooch, long white lace gloves fully covering both hands all the way to the fingertips,
+
+soft neutral academy-toned gradient background,
+
+classic villainess ojou-sama aura, vertical composition
+```
+
+## 네거티브 프롬프트 v14
+
+```text
+loose robe, wide sleeves, flowing sleeves, kimono, japanese clothes, dressing gown, bathrobe,
+unstructured dress, shapeless dress, draped fabric, plain fabric, no waistline,
+closed mouth, expressionless, sad, crying, embarrassed,
+middle-aged, matronly, wrinkles, nasolabial folds, gaunt, hollow cheeks,
+harsh weathered face, heavy makeup, tired eyes, eye bags,
+monochrome outfit, single flat color dress, plain undecorated dress,
+full length shot, wide shot, full body, distant camera, small face,
+fingerless gloves, half gloves, bare hands, exposed fingers,
+military uniform, epaulettes, silver braid trim,
+pastel pink, baby pink, mint pastel, candy colors, frilly dress, many ribbons,
+child, little girl, chibi, oversized head, childish proportions, toddler,
+dark hair, red hair, short hair, tiara, jeweled hair ornament,
+gaudy jewelry, layered necklaces,
+garden background, stone arches, outdoor background, busy background,
+2girls, multiple girls, multiple views,
+text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy
+```
+
+## 이미지 생성 프롬프트 v13
+
+> v12 가 여전히 나이 들어 보였던 **진짜 원인** — 네거티브가 젊음을 스스로 막고 있었다.
+> `round soft eyes, big innocent doe eyes, drooping eyes` 는 아동화를 막으려고 넣은 것인데
+> **어려 보이는 눈매를 통째로 차단**한다. 걷어냈다.
+>
+> 아동화 억제는 **형태 쪽만** 남긴다 — `chibi, child, little girl, oversized head,
+> childish proportions`. 이건 비율·크기 문제라 나이 인상과 분리된다.
+> 오만함은 눈매(`sharply upturned outer corners`)와 표정으로 유지한다.
+>
+> ⚠️ 여전히 유효한 지뢰: 네거티브에 **`mature adult woman` 금지**(유아화를 밀었음),
+> 포지티브에 **`softly rounded cheeks` 금지**(v3 아동화 원인).
+
+```text
+laughing, open mouth, hand over own mouth, head back, head tilt, looking at viewer,
+
+Charlotte, a haughty young noblewoman freshly presented at court, only just finished her debutante season, laughing haughtily, the classic arrogant noble lady laugh,
+
+cowboy shot, one lace-gloved hand raised with the back of her hand to her mouth, the other hand holding a folded fan, chest out, head tilted back,
+
+(youthful:1.25), a young lady of eighteen, fresh young face, delicate refined features, luminous fair skin, smooth unlined skin,
+
+bright golden blonde hair in twin rolled bun curls with long ringlets falling at the sides, large clear icy blue eyes with sharply upturned outer corners, narrowed in amusement,
+
+elegant noble gown in deep jade green with a soft cream panel down the center front, the jade green opening in a gentle V over the cream, fine white lace at the collar and along the cream panel, softly gathered sleeves, long white lace gloves fully covering both hands all the way to the fingertips,
+
+soft neutral academy-toned gradient background,
+
+classic villainess ojou-sama aura, vertical composition
+```
+
+## 네거티브 프롬프트 v13
+
+```text
+closed mouth, expressionless, sad, crying, embarrassed,
+middle-aged, matronly, wrinkles, nasolabial folds, gaunt, hollow cheeks,
+harsh weathered face, heavy makeup, tired eyes, eye bags,
+monochrome outfit, single flat color dress, plain undecorated dress,
+full length shot, wide shot, full body, distant camera, small face,
+fingerless gloves, half gloves, bare hands, exposed fingers,
+military uniform, epaulettes, silver braid trim,
+pastel pink, baby pink, mint pastel, candy colors, frilly dress, many ribbons,
+child, little girl, chibi, oversized head, childish proportions, toddler,
+dark hair, red hair, short hair, tiara, jeweled hair ornament, heavy jewelry,
+garden background, stone arches, outdoor background, busy background,
+2girls, multiple girls, multiple views,
+text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy
+```
+
+## 이미지 생성 프롬프트 v12
+
+> v11(오호호호 웃음)에 **미형 + 데뷔탕트 직후의 어림**을 더한 것.
+>
+> ⚠️ **어리게 만들 때 밟으면 안 되는 지뢰 둘** (둘 다 charlotte 에서 실제로 터졌다):
+> 1. 네거티브에 **`mature adult woman` 을 넣지 말 것** — 오히려 유아화를 밀었다
+> 2. 포지티브에 **`teenage academy student` + `softly rounded cheeks`** 조합을 쓰지 말 것 —
+>    v3 가 이것으로 아동화되어 폐기됐다
+>
+> 그래서 나이는 **사교계 맥락**(데뷔탕트를 막 마친)으로만 표현하고,
+> 얼굴 형태는 건드리지 않는다. 구조적 아동화 억제
+> (`child, little girl, chibi, oversized head, childish proportions`)는 그대로 둔다.
+
+```text
+laughing, open mouth, hand over own mouth, head back, head tilt, looking at viewer,
+
+Charlotte, a haughty young noblewoman freshly presented at court, only just finished her debutante season, laughing haughtily, the classic arrogant noble lady laugh,
+
+cowboy shot, one lace-gloved hand raised with the back of her hand to her mouth, the other hand holding a folded fan, chest out, head tilted back,
+
+youthful and refined, delicate features, luminous fair skin, slender graceful neck, a fresh unlined face,
+
+bright golden blonde hair in twin rolled bun curls with long ringlets falling at the sides, sharp upturned almond eyes in clear icy blue narrowed in amusement,
+
+elegant noble gown in deep jade green with a soft cream panel down the center front, the jade green opening in a gentle V over the cream, fine white lace at the collar and along the cream panel, softly gathered sleeves, long white lace gloves fully covering both hands all the way to the fingertips,
+
+soft neutral academy-toned gradient background,
+
+classic villainess ojou-sama aura, vertical composition
+```
+
+## 네거티브 프롬프트 v12
+
+```text
+closed mouth, expressionless, sad, crying, embarrassed,
+middle-aged, matronly, wrinkles, gaunt, hollow cheeks, harsh weathered face, heavy makeup, tired eyes,
+monochrome outfit, single flat color dress, plain undecorated dress,
+full length shot, wide shot, full body, distant camera, small face,
+fingerless gloves, half gloves, bare hands, exposed fingers,
+round soft eyes, big innocent doe eyes, drooping eyes,
+military uniform, epaulettes, silver braid trim,
+pastel pink, baby pink, mint pastel, candy colors, frilly dress, many ribbons,
+childish outfit, child, little girl, chibi, oversized head, childish proportions,
+dark hair, red hair, short hair, tiara, jeweled hair ornament, heavy jewelry,
+garden background, stone arches, outdoor background, busy background,
+2girls, multiple girls, multiple views,
+text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy
+```
+
+## 이미지 생성 프롬프트 v11
+
+> 구도: **"오호호호~" 고전 영애 웃음.**
+> 레이스 장갑 낀 손등을 입에 대고, 고개를 젖혀 웃는 그 포즈.
+> charlotte 의 오만함이 가장 알아보기 쉽게 드러나는 클리셰다.
+>
+> ⚠️ **네거티브에서 `open mouth, showing teeth, toothy grin` 을 반드시 빼야 한다.**
+> v9·v10 은 "다문 입의 은근한 우월감" 을 위해 이걸 억제했는데,
+> 그대로 두면 **웃음 자체가 안 나온다.** 정반대 방향의 표정이라 억제를 뒤집는 것이다.
+> (억제하려는 것과 살리려는 것이 같은 단어로 묶이는 전형적인 사고 지점)
+
+```text
+laughing, open mouth, hand over own mouth, head back, head tilt, looking at viewer,
+
+Charlotte, a haughty beautiful young noble lady laughing haughtily, the classic arrogant noble lady laugh,
+
+cowboy shot, one lace-gloved hand raised with the back of her hand to her mouth, the other hand holding a folded fan, chest out, head tilted back,
+
+bright golden blonde hair in twin rolled bun curls with long ringlets falling at the sides, sharp upturned almond eyes in clear icy blue narrowed in amusement,
+
+elegant noble gown in deep jade green with a soft cream panel down the center front, the jade green opening in a gentle V over the cream, fine white lace at the collar and along the cream panel, softly gathered sleeves, long white lace gloves fully covering both hands all the way to the fingertips,
+
+soft neutral academy-toned gradient background,
+
+classic villainess ojou-sama aura, vertical composition
+```
+
+## 네거티브 프롬프트 v11
+
+```text
+closed mouth, expressionless, sad, crying, embarrassed,
+monochrome outfit, single flat color dress, plain undecorated dress,
+full length shot, wide shot, full body, distant camera, small face,
+fingerless gloves, half gloves, bare hands, exposed fingers,
+round soft eyes, big innocent doe eyes, drooping eyes,
+military uniform, epaulettes, silver braid trim,
+pastel pink, baby pink, mint pastel, candy colors, frilly dress, many ribbons,
+childish outfit, child, little girl, chibi, oversized head, childish proportions,
+dark hair, red hair, short hair, tiara, jeweled hair ornament, heavy jewelry,
+garden background, stone arches, outdoor background, busy background,
+2girls, multiple girls, multiple views,
+text, watermark, signature, logo, extra fingers, deformed hands, bad anatomy
+```
+
 ## 이미지 생성 프롬프트 v9
 
 > **v8에서 색감만 되돌린 최종안.**
@@ -175,7 +732,7 @@ A refined and haughty young noble lady, classic aristocratic ojou-sama, romance 
 
 ## 이미지 생성 프롬프트 v3
 
-> 수정: 더 귀족영애답게. 그리고 **`남부의 꽃 - 루크레치아`와 이미지가 겹치는 문제** 해소.
+> 수정: 더 귀족영애답게. 그리고 **`남부의 보석 - 루크레치아`와 이미지가 겹치는 문제** 해소.
 > 둘 다 금발·세로 롤 드릴·청안·접이식 부채를 갖고 있었음.
 > 드릴 머리는 v2에서 잡은 방향이라 유지하고, 나머지로 차별화한다.
 >
