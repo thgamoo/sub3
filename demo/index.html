@@ -3,10 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#571026">
 <title>삼류 악녀는 싫어! — 간단 룰</title>
 <meta name="description" content="한국풍 로판 클리셰 전략 보드게임 «삼류 악녀는 싫어!» 의 간단 룰. 구성 · 게임준비 · 엔딩 · 액션 · 상태이상.">
+<script>
+/* 저장해둔 테마를 **그리기 전에** 붙인다. 나중에 붙이면 밝은 화면이 한 번 번쩍인다. */
+try{ if (localStorage.getItem('sub3:theme') === 'dark') document.documentElement.dataset.theme = 'dark' }catch(e){}
+</script>
 <style>
 /* ────────────────────────────────────────────────────────────
    휴대폰에서 «게임 중에» 펼쳐 보는 화면이다.
@@ -15,20 +18,25 @@
      2. 누를 것은 전부 44px 이상 (엄지로 눌러야 한다)
      3. 모르는 낱말은 그 자리에서 열린다 — 스크롤해서 찾아 내려가지 않는다
    ──────────────────────────────────────────────────────────── */
+/* 기본은 **밝은 테마**다. 시스템이 어두워도 따라가지 않는다 —
+   이 페이지는 게임판 위 조명 아래에서 보는 물건이라, 종이에 가까운 쪽이 읽기 편하다.
+   어두운 쪽이 필요하면 머리말의 ☾ 단추로 바꾸고, 그 선택은 이 브라우저에 남는다. */
 :root{
-  --bg:#f7f1ea; --paper:#fffdfa; --ink:#2e232a; --muted:#7a6b72;
+  color-scheme:light;
+  --bg:#f7f1ea; --paper:#fffdfa; --ink:#2e232a; --muted:#6f5f66;
   --wine:#7d1f38; --wine-deep:#571026; --gold:#b3893a; --gold-soft:#d8b976;
-  --rose:#c9738c; --line:#e8dbd1; --chip:#f2e7de;
+  --rose:#c9738c; --line:#e2d3c8; --chip:#f2e7de; --zebra:rgba(125,31,56,.035);
   --serif:"Nanum Myeongjo","Iowan Old Style","Palatino Linotype",serif;
   --sans:"Apple SD Gothic Neo",Pretendard,"Malgun Gothic","Segoe UI",system-ui,sans-serif;
   --safe-b:env(safe-area-inset-bottom,0px);
 }
-@media (prefers-color-scheme:dark){
-  :root{
-    --bg:#17131a; --paper:#1f1a22; --ink:#f0e6e9; --muted:#b4a3ac;
-    --wine:#e0879e; --wine-deep:#2a1119; --gold:#d8b976; --gold-soft:#e8cf9d;
-    --rose:#e0879e; --line:#372c36; --chip:#2b2230;
-  }
+/* 어두운 쪽은 «검정 위 회색» 이 되지 않게 대비를 넉넉히 준다.
+   글자는 거의 흰색, 테두리·얼룩은 눈에 보일 만큼만. */
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#14111a; --paper:#1e1a25; --ink:#f4edf0; --muted:#c0b0ba;
+  --wine:#f2a8bb; --wine-deep:#2a1119; --gold:#e2c489; --gold-soft:#efd8a6;
+  --rose:#f2a8bb; --line:#413447; --chip:#2e2637; --zebra:rgba(255,255,255,.05);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
@@ -46,9 +54,15 @@ header{
   border-bottom:2px solid var(--gold);
   padding-top:env(safe-area-inset-top,0px);
 }
-.brand{display:flex;align-items:baseline;gap:8px;padding:9px 14px 6px}
+.brand{display:flex;align-items:center;gap:8px;padding:7px 8px 6px 14px}
 .brand b{font-family:var(--serif);color:var(--gold-soft);font-size:16px;letter-spacing:.5px}
-.brand span{color:#e9cdd6;font-size:11.5px;opacity:.85}
+.brand span{color:#e9cdd6;font-size:11.5px;opacity:.85;flex:1;min-width:0}
+/* 테마 단추 — 머리말 오른쪽 끝. 손가락으로 누를 크기(38px)를 지킨다 */
+.tbtn{
+  flex:none;width:38px;height:38px;border:0;border-radius:50%;
+  background:rgba(255,255,255,.12);color:#f3e0e7;font-size:17px;line-height:1;cursor:pointer;
+}
+.tbtn:active{background:rgba(255,255,255,.24)}
 nav{display:flex;gap:2px;padding:0 6px 7px;overflow-x:auto;scrollbar-width:none}
 nav::-webkit-scrollbar{display:none}
 nav button{
@@ -66,7 +80,7 @@ h2{
   font-family:var(--serif);font-size:21px;margin:4px 0 4px;color:var(--wine);
   letter-spacing:-.5px;
 }
-.lede{color:var(--muted);font-size:13.5px;margin:0 0 14px;line-height:1.6}
+.lede{color:var(--muted);font-size:14.5px;margin:0 0 14px;line-height:1.65}
 h3{
   font-size:15.5px;margin:22px 0 8px;padding-left:9px;
   border-left:4px solid var(--gold-soft);line-height:1.4;
@@ -82,7 +96,7 @@ li{margin-bottom:5px}
 .note{
   background:var(--chip);border-left:3px solid var(--gold);
   border-radius:0 10px 10px 0;padding:9px 12px;margin:0 0 12px;
-  font-size:14px;color:var(--ink);line-height:1.6;
+  font-size:14.8px;color:var(--ink);line-height:1.65;
 }
 .note b{color:var(--wine)}
 .warn{border-left-color:#b3261e}
@@ -90,11 +104,11 @@ li{margin-bottom:5px}
 
 /* 표 — 좁은 화면에서 옆으로만 흐르게. 본문이 가로로 밀리면 안 된다 */
 .tw{overflow-x:auto;margin:0 0 12px;-webkit-overflow-scrolling:touch}
-table{border-collapse:collapse;width:100%;font-size:14px;min-width:min(100%,340px)}
-th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+table{border-collapse:collapse;width:100%;font-size:14.8px;min-width:min(100%,340px)}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
 th{background:var(--chip);font-weight:700;white-space:nowrap}
 td.n,th.n{text-align:right;white-space:nowrap}
-tbody tr:nth-child(2n) td{background:rgba(125,31,56,.03)}
+tbody tr:nth-child(2n) td{background:var(--zebra)}
 
 /* ── 키워드 — 이 페이지의 요점 ──
    밑줄 + 작은 표시. 눌러야 할 것과 그냥 강조를 눈으로 갈라야 한다. */
@@ -145,7 +159,7 @@ k.dead::after{content:""}
 
 footer{
   max-width:720px;margin:0 auto;padding:18px 14px calc(28px + var(--safe-b));
-  color:var(--muted);font-size:12px;line-height:1.7;border-top:1px solid var(--line);
+  color:var(--muted);font-size:12.5px;line-height:1.75;border-top:1px solid var(--line);
 }
 footer a{color:var(--wine)}
 </style>
@@ -153,7 +167,10 @@ footer a{color:var(--wine)}
 <body>
 
 <header>
-  <div class="brand"><b>삼류 악녀는 싫어!</b><span>간단 룰 · 2~4인 · 24막</span></div>
+  <div class="brand">
+    <b>삼류 악녀는 싫어!</b><span>간단 룰 · 24막</span>
+    <button class="tbtn" id="theme" aria-label="어두운 테마로 바꾸기" title="어두운 테마로 바꾸기">☾</button>
+  </div>
   <nav id="tabs" role="tablist">
     <button role="tab" data-t="parts" aria-selected="true">구성</button>
     <button role="tab" data-t="setup" aria-selected="false">게임준비</button>
@@ -913,6 +930,23 @@ const hpush = (st, hash) => { if (!histOK) return false
   try { history.pushState(st, '', hash); return true } catch { histOK = false; return false } }
 const hset = (st, hash) => { if (!histOK) return
   try { history.replaceState(st, '', hash) } catch { histOK = false } }
+
+/* ── 테마 ──
+   기본은 밝은 쪽. 시스템 설정을 따라가지 않는 것이 의도다 (CSS 주석 참조).
+   고른 값은 이 브라우저에 남는다 — 볼 때마다 다시 누르게 하면 단추가 없느니만 못하다. */
+const themeBtn = document.getElementById('theme')
+function setTheme(t){
+  const dark = t === 'dark'
+  if (dark) document.documentElement.dataset.theme = 'dark'
+  else delete document.documentElement.dataset.theme
+  themeBtn.textContent = dark ? '☀' : '☾'
+  const label = dark ? '밝은 테마로 바꾸기' : '어두운 테마로 바꾸기'
+  themeBtn.title = label
+  themeBtn.setAttribute('aria-label', label)
+  try{ localStorage.setItem('sub3:theme', dark ? 'dark' : 'light') }catch(e){}
+}
+setTheme(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light')
+themeBtn.onclick = () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark')
 
 /* ── 탭 ── */
 const tabs = document.getElementById('tabs')
