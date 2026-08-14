@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#571026">
+<title>삼류 악녀는 싫어! — 간단 룰</title>
+<meta name="description" content="한국풍 로판 클리셰 전략 보드게임 «삼류 악녀는 싫어!» 의 간단 룰. 구성 · 게임준비 · 엔딩 · 액션 · 상태이상.">
+<style>
+/* ────────────────────────────────────────────────────────────
+   휴대폰에서 «게임 중에» 펼쳐 보는 화면이다.
+   그래서 세 가지를 지킨다:
+     1. 탭은 늘 손가락 닿는 위쪽에 붙어 있고, 다섯 개가 한 줄에 다 보인다
+     2. 누를 것은 전부 44px 이상 (엄지로 눌러야 한다)
+     3. 모르는 낱말은 그 자리에서 열린다 — 스크롤해서 찾아 내려가지 않는다
+   ──────────────────────────────────────────────────────────── */
+:root{
+  --bg:#f7f1ea; --paper:#fffdfa; --ink:#2e232a; --muted:#7a6b72;
+  --wine:#7d1f38; --wine-deep:#571026; --gold:#b3893a; --gold-soft:#d8b976;
+  --rose:#c9738c; --line:#e8dbd1; --chip:#f2e7de;
+  --serif:"Nanum Myeongjo","Iowan Old Style","Palatino Linotype",serif;
+  --sans:"Apple SD Gothic Neo",Pretendard,"Malgun Gothic","Segoe UI",system-ui,sans-serif;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#17131a; --paper:#1f1a22; --ink:#f0e6e9; --muted:#b4a3ac;
+    --wine:#e0879e; --wine-deep:#2a1119; --gold:#d8b976; --gold-soft:#e8cf9d;
+    --rose:#e0879e; --line:#372c36; --chip:#2b2230;
+  }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--sans);font-size:16.5px;line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+body.locked{overflow:hidden}
+
+/* ── 머리 ── */
+header{
+  position:sticky;top:0;z-index:40;
+  background:linear-gradient(180deg,var(--wine-deep),#6b1730);
+  border-bottom:2px solid var(--gold);
+  padding-top:env(safe-area-inset-top,0px);
+}
+.brand{display:flex;align-items:baseline;gap:8px;padding:9px 14px 6px}
+.brand b{font-family:var(--serif);color:var(--gold-soft);font-size:16px;letter-spacing:.5px}
+.brand span{color:#e9cdd6;font-size:11.5px;opacity:.85}
+nav{display:flex;gap:2px;padding:0 6px 7px;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{
+  flex:1 1 0;min-width:62px;min-height:40px;
+  border:0;border-radius:999px;background:transparent;color:#f0d9e1;
+  font:inherit;font-size:13.5px;font-weight:700;padding:6px 4px;cursor:pointer;
+  white-space:nowrap;letter-spacing:-.3px;
+}
+nav button[aria-selected="true"]{background:var(--gold-soft);color:#43101f}
+
+/* ── 본문 ── */
+main{max-width:720px;margin:0 auto;padding:14px 13px calc(40px + var(--safe-b))}
+section[hidden]{display:none}
+h2{
+  font-family:var(--serif);font-size:21px;margin:4px 0 4px;color:var(--wine);
+  letter-spacing:-.5px;
+}
+.lede{color:var(--muted);font-size:13.5px;margin:0 0 14px;line-height:1.6}
+h3{
+  font-size:15.5px;margin:22px 0 8px;padding-left:9px;
+  border-left:4px solid var(--gold-soft);line-height:1.4;
+}
+p{margin:0 0 11px}
+ul,ol{margin:0 0 12px;padding-left:22px}
+li{margin-bottom:5px}
+.card{
+  background:var(--paper);border:1px solid var(--line);border-radius:12px;
+  padding:12px 13px;margin:0 0 12px;
+}
+.card h4{margin:0 0 6px;font-size:15px;color:var(--wine)}
+.note{
+  background:var(--chip);border-left:3px solid var(--gold);
+  border-radius:0 10px 10px 0;padding:9px 12px;margin:0 0 12px;
+  font-size:14px;color:var(--ink);line-height:1.6;
+}
+.note b{color:var(--wine)}
+.warn{border-left-color:#b3261e}
+.warn b{color:#b3261e}
+
+/* 표 — 좁은 화면에서 옆으로만 흐르게. 본문이 가로로 밀리면 안 된다 */
+.tw{overflow-x:auto;margin:0 0 12px;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:min(100%,340px)}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:var(--chip);font-weight:700;white-space:nowrap}
+td.n,th.n{text-align:right;white-space:nowrap}
+tbody tr:nth-child(2n) td{background:rgba(125,31,56,.03)}
+
+/* ── 키워드 — 이 페이지의 요점 ──
+   밑줄 + 작은 표시. 눌러야 할 것과 그냥 강조를 눈으로 갈라야 한다. */
+k{
+  color:var(--wine);font-weight:700;cursor:pointer;
+  border-bottom:1.5px dotted var(--wine);
+  padding:2px 0;   /* 손가락으로 누를 높이 */
+}
+k::after{content:"⌄";font-size:.72em;vertical-align:.15em;margin-left:1px;opacity:.65;font-weight:400}
+k:active{background:rgba(125,31,56,.12)}
+k.dead{color:inherit;border:0;cursor:auto;font-weight:700}
+k.dead::after{content:""}
+
+/* ── 모달 — 화면을 가득 채운다 ── */
+.modal{
+  position:fixed;inset:0;z-index:80;display:none;
+  background:var(--paper);
+  padding-top:env(safe-area-inset-top,0px);
+}
+.modal.on{display:flex;flex-direction:column;animation:up .16s ease-out}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.mhead{
+  display:flex;align-items:center;gap:10px;flex:none;
+  padding:10px 8px 10px 16px;border-bottom:1px solid var(--line);
+  background:var(--paper);
+}
+.mhead h3{
+  margin:0;padding:0;border:0;flex:1;min-width:0;
+  font-family:var(--serif);font-size:19px;color:var(--wine);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.mtag{
+  flex:none;font-size:11px;font-weight:700;color:var(--muted);
+  background:var(--chip);border-radius:999px;padding:3px 9px;
+}
+.mclose{
+  flex:none;width:44px;height:44px;border:0;border-radius:50%;
+  background:var(--chip);color:var(--ink);font-size:20px;line-height:1;cursor:pointer;
+}
+.mclose:active{background:var(--line)}
+.mbody{flex:1;overflow-y:auto;padding:16px 16px calc(28px + var(--safe-b));-webkit-overflow-scrolling:touch}
+.mbody h4{margin:16px 0 6px;font-size:14.5px;color:var(--wine)}
+.mbody>:first-child{margin-top:0}
+.back{
+  display:block;width:100%;margin-top:18px;padding:11px;border:1px solid var(--line);
+  border-radius:10px;background:none;color:var(--muted);font:inherit;font-size:13.5px;cursor:pointer;
+}
+
+footer{
+  max-width:720px;margin:0 auto;padding:18px 14px calc(28px + var(--safe-b));
+  color:var(--muted);font-size:12px;line-height:1.7;border-top:1px solid var(--line);
+}
+footer a{color:var(--wine)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand"><b>삼류 악녀는 싫어!</b><span>간단 룰 · 2~4인 · 24막</span></div>
+  <nav id="tabs" role="tablist">
+    <button role="tab" data-t="parts" aria-selected="true">구성</button>
+    <button role="tab" data-t="setup" aria-selected="false">게임준비</button>
+    <button role="tab" data-t="ending" aria-selected="false">엔딩</button>
+    <button role="tab" data-t="action" aria-selected="false">액션</button>
+    <button role="tab" data-t="status" aria-selected="false">상태이상</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ─────────────────────────── 구성 ─────────────────────────── -->
+<section id="parts" role="tabpanel">
+  <h2>구성</h2>
+  <p class="lede">밑줄 친 낱말을 누르면 그 자리에서 설명이 열립니다.</p>
+
+  <h3>카드</h3>
+  <div class="tw"><table>
+    <thead><tr><th>구성품</th><th class="n">장수</th><th>뒷면</th></tr></thead>
+    <tbody>
+      <tr><td><k>능력 카드</k></td><td class="n">100</td><td>노랑</td></tr>
+      <tr><td><k>물건 카드</k> · <k>단서</k></td><td class="n">27</td><td>파랑</td></tr>
+      <tr><td><k>물건 카드</k> · <k>유물</k></td><td class="n">13</td><td>파랑</td></tr>
+      <tr><td><k>금화</k></td><td class="n">60</td><td>파랑</td></tr>
+      <tr><td><k>운명 카드</k></td><td class="n">48</td><td>검정</td></tr>
+      <tr><td><k>시나리오 카드</k></td><td class="n">3</td><td>별도</td></tr>
+      <tr><td><k>재앙 카드</k></td><td class="n">10</td><td>검정</td></tr>
+      <tr><td><k>성향 카드</k></td><td class="n">20</td><td>분홍</td></tr>
+      <tr><td><k>사기 카드</k></td><td class="n">40</td><td>검정</td></tr>
+      <tr><td><k>캐릭터 카드</k></td><td class="n">17</td><td>—</td></tr>
+      <tr><td>요약 카드 <span style="color:var(--muted);font-size:12px">(인원수만큼)</span></td><td class="n">4</td><td>양면</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note"><b>재앙 카드의 뒷면은 운명 카드와 완전히 같습니다.</b>
+    섞여 들어간 순간부터 다음에 열릴 카드가 무엇인지 아무도 모릅니다.</div>
+
+  <h3>토큰 · 기타</h3>
+  <div class="tw"><table>
+    <thead><tr><th>구성품</th><th class="n">개수</th><th>쓰임</th></tr></thead>
+    <tbody>
+      <tr><td><k>두근! 토큰</k></td><td class="n">30<sup>*</sup></td><td>내 목숨. 회복 불가</td></tr>
+      <tr><td><k>빌런 토큰</k></td><td class="n">30<sup>*</sup></td><td><k>암살</k> 1회당 1개</td></tr>
+      <tr><td><k>조우 토큰</k></td><td class="n">36</td><td>9종 각 4개</td></tr>
+      <tr><td><k>승천의 문 토큰</k></td><td class="n">1</td><td>승천 엔딩</td></tr>
+      <tr><td><k>황제의 증표</k></td><td class="n">1</td><td>군림 엔딩</td></tr>
+      <tr><td>재앙 토큰</td><td class="n">9<sup>*</sup></td><td>선혈의 비 1 · 전염병 5 · 파리 1 · 범용 2</td></tr>
+      <tr><td>막 트랙 마커</td><td class="n">1</td><td>게임판의 24칸 <k>막</k> 트랙</td></tr>
+      <tr><td>6면체 주사위</td><td class="n">1</td><td>모든 판정을 이 하나로</td></tr>
+      <tr><td>게임판</td><td class="n">1</td><td>7개 지역 + 막 트랙</td></tr>
+    </tbody>
+  </table></div>
+  <p class="lede"><sup>*</sup> 아직 확정되지 않은 개수입니다.</p>
+
+  <h3>지역</h3>
+  <div class="tw"><table>
+    <thead><tr><th>지역</th><th>탐색</th><th>특징</th></tr></thead>
+    <tbody>
+      <tr><td>동부 — 율리우스 제국</td><td>가능</td><td>황가와 음모의 땅</td></tr>
+      <tr><td>서부 — 무법지대</td><td>가능</td><td>투기장</td></tr>
+      <tr><td>남부 — 루멘교 왕국연합</td><td>가능</td><td>교회에서 <k>빈사</k> 치료</td></tr>
+      <tr><td>북부 — 프로스트하임</td><td>가능</td><td>설원, 영원의 관</td></tr>
+      <tr><td><k>아카데미</k> (중부)</td><td><b>불가</b></td><td><k>수행</k>이 3장</td></tr>
+      <tr><td>동부 바다</td><td>가능</td><td>동부 덱을 쓴다</td></tr>
+      <tr><td>극동의 섬</td><td><b>불가</b></td><td><k>황제의 증표</k></td></tr>
+    </tbody>
+  </table></div>
+  <p><k>이동</k>은 이웃 지역으로만 하고, 극동의 섬은 <b>동부 바다를 통해서만</b> 드나듭니다.</p>
+</section>
+
+<!-- ─────────────────────────── 게임준비 ─────────────────────────── -->
+<section id="setup" role="tabpanel" hidden>
+  <h2>게임준비</h2>
+  <p class="lede">위에서부터 순서대로 하면 됩니다.</p>
+
+  <ol>
+    <li><b>게임판</b>을 펼치고 <k>막</k> 트랙 1칸에 마커를 놓는다.</li>
+    <li><b>시나리오 덱</b> — <k>운명 카드</k>를 초·중·후반 <b>각 16장씩</b> 세 덱으로 나눠 섞고,
+        각 덱 맨 위에 그 구간의 <k>시나리오 카드</k>를 1장 올린다.</li>
+    <li><b><k>탐색 덱</k></b> — <k>물건 카드</k> 40장을 섞어 10장씩 4묶음으로 나누고,
+        각 묶음에 <k>금화</k> 10장을 넣어 다시 섞는다. 동·서·남·북에 1덱씩(각 20장).</li>
+    <li><b>캐릭터 배정</b> — 무작위로 받는다. 고르지 않은 캐릭터는 <k>NPC 서브빌런</k>으로 시작 지점에.</li>
+    <li><b>선 플레이어</b> — 전원 주사위를 굴려 <b>가장 낮은 눈</b>이 선. 동점자는 재굴림.
+        진행 방향(시계/반시계)은 선이 정한다.</li>
+    <li><b>초기 자원</b> — <k>캐릭터 카드</k>에 적힌 시작 자원을 받고,
+        <k>두근! 토큰</k>은 아래 <b>난이도표</b>대로 받는다.
+        순번 3·4위는 <k>빌런 토큰</k> 1개 또는 <k>능력 카드</k> 1장 중 하나를 더 받는다.</li>
+    <li><b>이상형 세팅</b> — 각 <k>남주</k>에게 <k>성향 카드</k>를 3장씩 <b>뒷면으로</b> 놓는다.</li>
+    <li><b>개막</b> — 초반부 <k>시나리오 카드</k>를 낭독하고 시작.</li>
+  </ol>
+
+  <h3>난이도 — 두근!로만 조절한다</h3>
+  <div class="tw"><table>
+    <thead><tr><th>난이도</th><th class="n">내 두근!</th><th class="n">NPC 두근!</th></tr></thead>
+    <tbody>
+      <tr><td>데이지 (쉬움)</td><td class="n">5</td><td class="n">0</td></tr>
+      <tr><td>릴리</td><td class="n">5</td><td class="n">1</td></tr>
+      <tr><td>로즈</td><td class="n">3</td><td class="n">1</td></tr>
+      <tr><td>아네모네</td><td class="n">2</td><td class="n">1</td></tr>
+      <tr><td>리코리스 (어려움)</td><td class="n"><b>1</b></td><td class="n"><b>2</b></td></tr>
+    </tbody>
+  </table></div>
+  <div class="note">시나리오 덱은 <b>모든 난이도에서 똑같습니다</b> (<k>운명 카드</k> 48장).
+    난이도는 <k>두근! 토큰</k> 개수로만 갈립니다.</div>
+
+  <h3>한 막의 진행</h3>
+  <ol>
+    <li><b>개막</b> — 선 플레이어부터 <k>상태이상</k>을 처리한다.</li>
+    <li><b>플레이어 행동</b> — 선부터 순서대로 각자 <b>행동 2개</b>. (<k>빈사</k>면 1개)</li>
+    <li><b>운명 카드 공개</b> — 그 막의 <b>마지막 순번</b>이 자기 차례를 마친 뒤
+        <k>운명 카드</k> 2장을 열어 순서대로 적용.</li>
+    <li><b>폐막</b> — 잔느의 위치로 <k>남주의 추종</k>을 판정하고, 재앙의 주사위를 처리.</li>
+    <li><b>무대정리</b> — 방금 운명 카드를 연 사람이 <b>다음 막의 선</b>. 마커를 한 칸.</li>
+  </ol>
+  <div class="note"><b><k>시나리오 카드</k>와 <k>재앙 카드</k>는 막을 소모하지 않습니다.</b>
+    뽑았으면 처리한 뒤 <k>운명 카드</k>를 1장 더 뽑습니다 — 그래야 48장이 24막에 정확히 맞습니다.</div>
+</section>
+
+<!-- ─────────────────────────── 엔딩 ─────────────────────────── -->
+<section id="ending" role="tabpanel" hidden>
+  <h2>엔딩 <span style="font-size:13px;color:var(--muted);font-weight:400">— 승리 조건</span></h2>
+  <p class="lede">다섯 중 하나를 완성하면 이깁니다. 전부 <k>각성</k>이 조건에 들어갑니다.</p>
+
+  <div class="card">
+    <h4>노멀 — “나는 살아있다”</h4>
+    <ul>
+      <li>나를 제외한 <b>모든 플레이어 사망</b></li>
+      <li><k>각성</k>한 상태</li>
+      <li><k>메인 빌런</k>이 전부 처치된 상태</li>
+    </ul>
+    <p style="margin:0;font-size:13.5px;color:var(--muted)">충족 즉시 <k>멸망 시나리오</k>가 중단됩니다.</p>
+  </div>
+
+  <div class="card">
+    <h4>해피 — “저 오늘 결혼해요”</h4>
+    <ul>
+      <li>생존 + <k>각성</k></li>
+      <li><k>남주</k> 넷 중 하나와 <b>결혼</b> (<k>약혼</k> 후 10막 경과)</li>
+      <li>그 남주의 통치권에 있는 <k>메인 빌런</k> 제거</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h4>군림 — “짐의 발 앞에 조아리거라”</h4>
+    <ul>
+      <li>생존 + <k>각성</k></li>
+      <li><k>황제의 증표</k> 획득</li>
+      <li>대륙으로 돌아와 <b>황제 선언</b> 후 1막 넘기기</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h4>승천 — “본녀는 세계의 진실을 깨달았도다”</h4>
+    <ul>
+      <li>내 캐릭터에 맞는 <k>각성</k></li>
+      <li><k>세계 진실 물건</k> <b>3장 이상</b> (종류 무관·중복 포함) → <k>승천의 문 토큰</k></li>
+      <li><k>아카데미</k>에서 승천의 문 소환 → 승천</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h4>멸망 — “내가 가질 수 없다면 부숴버릴거야”</h4>
+    <ul>
+      <li>모든 플레이어가 사망</li>
+      <li><k>빌런 토큰</k>이 가장 많은 사람이 승리</li>
+    </ul>
+    <p style="margin:0;font-size:13.5px;color:var(--muted)">죽어도 끝이 아닙니다 — <k>악령</k>이 되어 이쪽을 노립니다.</p>
+  </div>
+
+  <h3>게임이 끝나는 시점</h3>
+  <ol>
+    <li><k>운명 카드</k>가 모두 소진됐을 때 (24막)</li>
+    <li>누군가 엔딩 조건을 충족했을 때</li>
+    <li>모든 플레이어가 사망했을 때 — 그 막은 끝까지 진행</li>
+  </ol>
+
+  <h3>같은 막에 둘 이상이 달성했다면</h3>
+  <ol>
+    <li><k>빌런 토큰</k>이 더 많은 쪽</li>
+    <li>남은 <k>두근! 토큰</k>이 더 많은 쪽</li>
+    <li>그 막에서 <b>먼저</b> 달성한 쪽</li>
+  </ol>
+</section>
+
+<!-- ─────────────────────────── 액션 ─────────────────────────── -->
+<section id="action" role="tabpanel" hidden>
+  <h2>액션</h2>
+  <p class="lede">자기 차례에 <b>행동 2개</b>. <k>빈사</k>면 1개. <k>특수행동</k>은 이 칸을 쓰지 않습니다.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>행동</th><th>한 줄 요약</th></tr></thead>
+    <tbody>
+      <tr><td><k>이동</k></td><td>이웃 지역으로. <k>금화</k> 1장</td></tr>
+      <tr><td><k>탐색</k></td><td>주사위로 <k>탐색 덱</k>에서 뽑기</td></tr>
+      <tr><td><k>수행</k></td><td><k>능력 카드</k> 2장 (<k>아카데미</k>는 3장)</td></tr>
+      <tr><td><k>각성</k></td><td>같은 <k>능력 카드</k> 5장 → <k>고유능력</k></td></tr>
+      <tr><td><k>만남</k></td><td><k>매력 카드</k> 1장 → <k>성향 카드</k> 1장 공개</td></tr>
+      <tr><td><k>모략</k></td><td>같은 능력 2~5장 + 주사위 판정</td></tr>
+      <tr><td><k>거래</k></td><td><k>금화</k> 5개를 걸고 <k>물건 카드</k> 흥정</td></tr>
+      <tr><td><k>약혼</k></td><td>열린 <k>성향 카드</k> 조건을 충족</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>탐색 — 주사위</h3>
+  <div class="tw"><table>
+    <thead><tr><th class="n">주사위</th><th>결과</th></tr></thead>
+    <tbody>
+      <tr><td class="n">1 · 2</td><td><k>능력 카드</k> 1장</td></tr>
+      <tr><td class="n">3 · 4 · 5</td><td><k>물건 카드</k> 1장</td></tr>
+      <tr><td class="n">6</td><td>물건 2장 <b>또는</b> 능력 2장 + 물건 1장</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>모략 — 판정</h3>
+  <p>같은 <k>능력 카드</k>를 <b>2~5장</b> 내고 주사위를 굴립니다. <b>나온 눈과 낸 장수</b>를 비교합니다.</p>
+  <div class="tw"><table>
+    <thead><tr><th>주사위</th><th>결과</th></tr></thead>
+    <tbody>
+      <tr><td>장수 <b>초과</b></td><td><k>발각</k> — 두근! 1 손실 + <k>현상수배</k></td></tr>
+      <tr><td>장수 <b>미만</b></td><td><k>처단</k> — <k>여론악화</k> + 대상 처치</td></tr>
+      <tr><td>장수와 <b>같음</b></td><td><k>암살</k> — 대상 처치 + <k>빌런 토큰</k> 1개</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tw"><table>
+    <thead><tr><th class="n">낸 장수</th><th class="n">발각</th><th class="n">처단</th><th class="n">암살</th></tr></thead>
+    <tbody>
+      <tr><td class="n">2장</td><td class="n">4/6</td><td class="n">1/6</td><td class="n">1/6</td></tr>
+      <tr><td class="n">3장</td><td class="n">3/6</td><td class="n">2/6</td><td class="n">1/6</td></tr>
+      <tr><td class="n">4장</td><td class="n">2/6</td><td class="n">3/6</td><td class="n">1/6</td></tr>
+      <tr><td class="n">5장</td><td class="n">1/6</td><td class="n">4/6</td><td class="n">1/6</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><b>암살 확률은 늘 1/6입니다.</b> 카드를 더 써서 오르는 건
+    «안전하게 처치할 확률»이지 «<k>빌런 토큰</k>을 벌 확률»이 아닙니다.</div>
+
+  <h3>상대가 다르면 결과도 다르다</h3>
+  <ul>
+    <li><k>남주</k> — <k>처단</k>이면 <k>현상수배</k>가 된다</li>
+    <li><b>다른 플레이어</b> — 처단 대신 <k>암습</k>. <k>암살</k>이면 상대는 두근! 1을 잃고 <k>빈사</k>,
+        두근!이 없으면 <b>사망 → <k>악령</k></b></li>
+    <li><k>잔느</k> — <b>절대 죽지 않는다.</b> 잃을 것만 있다 → <k>운명의 가호</k></li>
+  </ul>
+
+  <h3>거래</h3>
+  <p>같은 지역에 다른 플레이어가 있으면 <b><k>금화</k> 5개를 걸고</b> 제안합니다.
+     상대는 반드시 응하고 <k>물건 카드</k> 1장을 보여줍니다.</p>
+  <div class="tw"><table>
+    <thead><tr><th>제안자의 선택</th><th>금화</th><th>결과</th></tr></thead>
+    <tbody>
+      <tr><td>수락</td><td><k>암상</k> 2 + 상대 3</td><td>그 물건을 가져온다</td></tr>
+      <tr><td>거절</td><td>암상 2 (3은 반환)</td><td>아무 일도 없다</td></tr>
+      <tr><td>거절 후 파괴 의뢰</td><td>5 전부</td><td>암상이 그 물건을 파괴</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ─────────────────────────── 상태이상 ─────────────────────────── -->
+<section id="status" role="tabpanel" hidden>
+  <h2>상태이상</h2>
+  <p class="lede">해제는 전부 <k>특수행동</k>입니다 — 행동 칸을 쓰지 않습니다.</p>
+
+  <div class="card">
+    <h4><k>빈사</k></h4>
+    <p style="margin:0 0 6px">자기 턴에 <b>행동을 1개만</b> 할 수 있다.</p>
+    <p style="margin:0 0 4px;font-size:13.5px;color:var(--muted)">해제</p>
+    <ol style="margin:0">
+      <li>남부 교회에서 <k>금화</k> 3개를 내고 치료</li>
+      <li><k>엘릭서</k> 사용</li>
+      <li><k>고유능력</k> «빛의 사제» 또는 «성녀»의 치료</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h4><k>현상수배</k></h4>
+    <p style="margin:0 0 8px">막 시작마다 주사위를 굴려 <b>4 이상</b>이면 같은 지역의 상대에 따라 맞습니다.</p>
+    <div class="tw"><table>
+      <thead><tr><th>같은 지역</th><th>기본</th><th><k>잔느</k>가 함께</th></tr></thead>
+      <tbody>
+        <tr><td><k>남주</k></td><td>두근! 1 감소</td><td><b>두근! 2 감소</b></td></tr>
+        <tr><td><k>메인 빌런</k></td><td>능력 2장 또는 물건 1장 버림</td><td><b>능력 4장 또는 물건 2장</b></td></tr>
+      </tbody>
+    </table></div>
+    <p style="margin:0 0 4px;font-size:13.5px;color:var(--muted)">해제</p>
+    <ol style="margin:0">
+      <li><k>금화</k> 5개로 여론 조작 → <k>여론악화</k>로 바뀜</li>
+      <li><k>고유능력</k>으로 여론 조작 → <k>여론악화</k>로 바뀜</li>
+      <li>원인이 된 상대가 사망 — <b><k>잔느</k>가 원인이면 이 방법은 못 씁니다</b></li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h4><k>여론악화</k></h4>
+    <p style="margin:0 0 6px"><b><k>거래</k>와 <k>만남</k>을 할 수 없다.</b></p>
+    <p style="margin:0 0 4px;font-size:13.5px;color:var(--muted)">해제</p>
+    <ol style="margin:0">
+      <li><k>금화</k> 3개로 «처단 대상이 악녀/빌런이었음»을 공표</li>
+      <li><k>고유능력</k>으로 공표</li>
+    </ol>
+  </div>
+
+  <h3><k>잔느</k>와의 조우 — 여기서 상태이상이 시작된다</h3>
+  <p>잔느는 <k>운명 카드</k>의 지시대로만 움직이지만, <b>그 카드가 당신과 마주치도록 짜여 있습니다.</b>
+     조우 횟수는 플레이어마다 따로 셉니다.</p>
+  <div class="tw"><table>
+    <thead><tr><th>조우 시점의 상태</th><th>결과</th></tr></thead>
+    <tbody>
+      <tr><td>첫 조우</td><td>아무 일도 없다</td></tr>
+      <tr><td>두 번째 이후</td><td><k>여론악화</k></td></tr>
+      <tr><td>이미 <k>여론악화</k></td><td><k>현상수배</k></td></tr>
+      <tr><td>이미 <k>현상수배</k></td><td><b>강제로 잔느에게 <k>모략</k></b></td></tr>
+    </tbody>
+  </table></div>
+  <div class="note warn">마지막 줄은 <b>선택이 아닙니다.</b>
+    <k>여론악화</k> 단계에서 해제 수단(<k>금화</k> 3개 또는 <k>고유능력</k>)을 확보해두지 못하면
+    원치 않는 <k>모략</k>까지 끌려갑니다. 리코리스 난이도에서는 이 한 번으로
+    <b>5/6 확률로 죽습니다.</b></div>
+
+  <h3>죽으면</h3>
+  <p><k>두근! 토큰</k>이 0이 되면 사망하고 <k>악령</k>이 됩니다. 게임에서 빠지는 것이 아니라
+     <b>멸망을 노리는 편으로 갈아탑니다.</b></p>
+</section>
+
+</main>
+
+<footer>
+  «삼류 악녀는 싫어!» 간단 룰 — 게임 중에 찾아보는 용도입니다.
+  정본은 <a href="https://github.com/thgamoo/sub3/tree/main/docs/rules">docs/rules/</a> 이고,
+  인쇄용 룰북 원고는 <a href="https://github.com/thgamoo/sub3/blob/main/docs/rulebook.md">docs/rulebook.md</a> 입니다.
+  규칙과 밸런스는 아직 확정되지 않았습니다.
+</footer>
+
+<!-- 모달은 하나만 두고 내용만 갈아끼운다. 여러 개를 쌓으면 뒤로가기가 꼬인다 -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mtitle">
+  <div class="mhead">
+    <h3 id="mtitle"></h3>
+    <span class="mtag" id="mtag"></span>
+    <button class="mclose" id="mclose" aria-label="닫기">✕</button>
+  </div>
+  <div class="mbody" id="mbody"></div>
+</div>
+
+<script>
+/* ────────────────────────────────────────────────────────────
+   낱말 사전.
+   본문에는 <k>검 카드</k> 처럼만 적고, 여기서 그 낱말을 찾아 붙인다.
+   ALIAS 로 «검 카드 = 능력 카드의 한 종류» 같은 여러 표기를 한 항목에 모은다.
+   ──────────────────────────────────────────────────────────── */
+const G = {
+  '능력 카드': { tag:'카드 100장', html:`
+    <p>모략과 각성의 재료. <b>총 100장</b>이고 일곱 종류입니다.</p>
+    <div class="tw"><table><thead><tr><th>종류</th><th class="n">장수</th><th>각성하면</th></tr></thead><tbody>
+      <tr><td>매력 (부채)</td><td class="n">40</td><td>팜므파탈</td></tr>
+      <tr><td>검</td><td class="n">10</td><td>소드마스터</td></tr>
+      <tr><td>마법 (지팡이)</td><td class="n">10</td><td>마도사</td></tr>
+      <tr><td>선혈 (핏방울)</td><td class="n">10</td><td>혈술사</td></tr>
+      <tr><td>신성 (십자가)</td><td class="n">10</td><td>빛의 사제</td></tr>
+      <tr><td>독약</td><td class="n">10</td><td>(캐릭터 전용 — 독술사)</td></tr>
+      <tr><td>어둠</td><td class="n">10</td><td>마리오네트</td></tr>
+    </tbody></table></div>
+    <h4>어디에 쓰나</h4>
+    <ul>
+      <li><b>같은 종류 5장</b>을 내면 그 자리에서 <k>각성</k> — <k>고유능력</k>을 얻습니다</li>
+      <li><k>모략</k>에 <b>같은 종류 2~5장</b>을 겁니다 (많이 걸수록 안전)</li>
+      <li><k>만남</k>에는 <b>매력 카드 1장</b>이 듭니다 — 매력이 40장인 이유입니다</li>
+    </ul>
+    <h4>어떻게 모으나</h4>
+    <p><k>수행</k>(2장, <k>아카데미</k>는 3장) · <k>탐색</k>(주사위 1·2) · <k>운명 카드</k>의 효과.</p>
+    <p><b>손패 상한 10장</b>입니다 (물건과 합쳐 20장).</p>` },
+
+  '물건 카드': { tag:'카드 40장', html:`
+    <p>뒷면이 파란 카드. <b>단서 27장 + 유물 13장 = 40장</b>이고, <k>금화</k> 40장과 섞여
+       네 지역의 <k>탐색 덱</k>을 이룹니다.</p>
+    <ul>
+      <li><k>단서</k> — 캐릭터의 숨겨진 과거를 밝히는 물건 (18종 27장)</li>
+      <li><k>유물</k> — <k>세계 진실 물건</k> 10장 + <k>엘릭서</k> 3장</li>
+    </ul>
+    <p><b>손패 상한 10장</b>입니다.</p>
+    <div class="note">한 번 뽑혀 나간 물건은 <b>다시 나오지 않습니다.</b>
+      <k>탐색 덱</k>은 리셔플하지 않고, 마르면 <k>금화</k>만 보충됩니다.</div>` },
+
+  '단서': { tag:'물건 27장', html:`
+    <p>캐릭터의 <b>숨겨진 과거</b>를 밝히는 물건. 18종 27장이고, 여러 캐릭터가 얽힌 물건은 2장씩 들어갑니다.</p>
+    <p>예 — 유모의 일기 · 황가의 팬던트 · 벨의 단검 · 교황칙서 · 용사전기 · 영원의 관 · 이교의 계약서.</p>
+    <p><k>군림 엔딩</k>의 <k>황제의 증표</k>를 극동에서 받을 때 <b>3장을 지불</b>하는 길이 있습니다.</p>` },
+
+  '유물': { tag:'물건 13장', html:`
+    <p><k>세계 진실 물건</k> 10장(5종 × 2)과 <k>엘릭서</k> 3장을 묶어 부르는 말입니다.</p>` },
+
+  '세계 진실 물건': { tag:'유물 10장', html:`
+    <p>세계 «판 로만티카» 자체의 진실에 닿는 물건. <b>5종 각 2장</b>입니다.</p>
+    <ul>
+      <li>고대 연구소의 출입증 · HAL의 코어 파편 <span style="color:var(--muted)">— 고대 SF 문명</span></li>
+      <li>승천의 문 설계도 · 승천자의 허물 <span style="color:var(--muted)">— 용사와 승천</span></li>
+      <li>이전 빙의자의 수기 <span style="color:var(--muted)">— «이 세계는 소설이다»</span></li>
+    </ul>
+    <div class="note"><b>3장 이상</b> 모으면 (종류 무관·중복 포함) <k>승천의 문 토큰</k>을 받습니다.</div>` },
+
+  '엘릭서': { tag:'유물 3장', html:`
+    <p>쓰면 <k>빈사</k>에서 즉시 벗어납니다. <b>전체에 3장뿐</b>이고 <k>탐색</k>으로만 나옵니다.</p>` },
+
+  '금화': { tag:'60장', html:`
+    <p><b>총 60장.</b> 40장은 네 <k>탐색 덱</k>에 10장씩 흩어져 있고, 20장은 <k>세계은행연합</k>이 갖고 시작합니다.</p>
+    <h4>나가는 곳</h4>
+    <ul>
+      <li><k>이동</k> 1장</li>
+      <li><k>거래</k> 5장 (<k>암상</k> 수수료 2 + 상대 3)</li>
+      <li><k>빈사</k> 치료 3장 · <k>여론악화</k> 해제 3장 · <k>현상수배</k> 해제 5장</li>
+    </ul>
+    <p>낸 금화는 전부 <k>세계은행연합</k>으로 돌아가고, 덱이 마르면 다시 시장에 풀립니다 —
+       그래서 후반에 금화가 완전히 마르지는 않습니다.</p>` },
+
+  '운명 카드': { tag:'카드 48장', html:`
+    <p><k>잔느</k>를 중심으로 흐르는 <b>메인 시나리오</b>. 초·중·후반 각 16장씩 <b>48장</b>이고,
+       <b>막당 2장</b>씩 소모되어 24막에 정확히 떨어집니다.</p>
+    <p>게임 안의 <b>모든 NPC</b>(잔느 · <k>남주</k> · <k>메인 빌런</k> · <k>NPC 서브빌런</k>)는
+       이 카드의 지시로만 움직입니다. 스스로 판단하는 NPC는 없습니다.</p>
+    <div class="note"><k>빌런 토큰</k> 1개를 내면 운명 카드 1장의 <b>강제력을 회피</b>할 수 있습니다.</div>` },
+
+  '시나리오 카드': { tag:'카드 3장', html:`
+    <p>초·중·후반 덱 <b>맨 위에 1장씩</b> 올려두는 서막(序幕) 카드. 낭독해 구간 전환을 알립니다.</p>
+    <p><b>막을 소모하지 않습니다</b> — 낭독한 뒤 <k>운명 카드</k>를 1장 더 뽑습니다.</p>` },
+
+  '재앙 카드': { tag:'카드 10장', html:`
+    <p><k>악령</k>이 «징조»로 <k>운명 카드</k> 더미에 몰래 섞어 넣는 카드. 10종 각 1장입니다.</p>
+    <p>선혈의 비 · 칼날 비 · 돌림병 · 흑암 · 마력폭발 · 초태 몰살 · 마수폭주 · 파리 · 소멸 · 종막.</p>
+    <div class="note warn"><b>뒷면이 운명 카드와 완전히 같습니다.</b> 섞인 뒤에는 다음 카드가 무엇인지
+      아무도 — 넣은 악령조차 — 모릅니다.</div>
+    <p>재앙도 <b>막을 소모하지 않습니다</b>. 처리한 뒤 운명 카드를 1장 더 뽑습니다.</p>` },
+
+  '성향 카드': { tag:'카드 20장', html:`
+    <p><k>남주</k>가 좋아하는 성격·취향이 적힌 카드. 게임 시작 때 남주마다 <b>3장씩 뒷면으로</b> 깔립니다.</p>
+    <ul>
+      <li><k>만남</k>으로 <b>1장씩</b> 뒤집는다 (<k>매력 카드</k> 1장 소모)</li>
+      <li>1장 이상 열려 있으면 그 조건을 충족해 <k>약혼</k>할 수 있다</li>
+    </ul>` },
+
+  '사기 카드': { tag:'카드 40장', html:`
+    <p><b>사기(死氣) — 죽음의 기운.</b> 속임수(詐欺)가 아닙니다.</p>
+    <p><k>악령</k> 전용 카드입니다. 손패 상한이 10장이고 최대 4인이라 40장을 씁니다.</p>` },
+
+  '캐릭터 카드': { tag:'카드 17장', html:`
+    <p>플레이어 8 (양면 — 뒷면은 <k>악령</k>) + <k>남주</k> 4 + <k>메인 빌런</k> 4 + <k>잔느</k> 1.</p>
+    <p>플레이어 8인은 샬롯 · 데이지 · 마리 · 미호 · 바토리 · 제노비아 · 이레네 · 그레이스.
+       카드에 <b>시작 지점과 시작 자원</b>, 그리고 그 캐릭터만의 <k>고유능력</k> 조건이 적혀 있습니다.</p>` },
+
+  '두근! 토큰': { tag:'토큰', html:`
+    <p><b>인간성의 집합 구현체</b> — 사랑·연민·상냥함. 게임에서는 <b>목숨</b>입니다.</p>
+    <ul>
+      <li>시작 개수는 <b>난이도</b>가 정합니다 (5개 ~ 1개)</li>
+      <li><b>회복 수단이 없습니다.</b> 줄기만 합니다</li>
+      <li>0이 되면 <b>인간으로서 사망</b> → <k>악령</k></li>
+    </ul>
+    <div class="note"><k>빈사</k>는 두근!과 <b>별개의 시스템</b>입니다. 빈사여도 두근!은 그대로고,
+      두근!이 0이어도 빈사는 아닙니다 — 그냥 죽습니다.</div>
+    <p>플레이어와 <k>NPC 서브빌런</k>만 갖습니다. <k>남주</k>·<k>메인 빌런</k>·<k>잔느</k>는 안 갖습니다.</p>` },
+
+  '빌런 토큰': { tag:'토큰 = 빌런 포인트', html:`
+    <p><b><k>암살</k>에 성공할 때마다 1개.</b> (악령의 «살인귀»·«징조»도 각 1개)</p>
+    <h4>쓰임 둘</h4>
+    <ul>
+      <li><b>운명 저항</b> — 1개당 <k>운명 카드</k> 1장의 강제력을 회피</li>
+      <li><b>승점</b> — <k>멸망 엔딩</k>에서 최다 보유자가 승리. 동시 달성 시 1순위 타이브레이커</li>
+    </ul>
+    <div class="note">«빌런 토큰»과 «빌런 포인트»는 <b>같은 것</b>입니다.</div>` },
+
+  '조우 토큰': { tag:'토큰 36개', html:`
+    <p><k>잔느</k> 1종 · 악녀 4종 · <k>남주</k> 4종 = <b>9종 각 4개</b>.
+       특정 <k>운명 카드</k>가 발동할 때 «가장 가까운» 대상의 토큰을 받아 표시해둡니다.</p>` },
+
+  '승천의 문 토큰': { tag:'토큰', html:`
+    <p><k>세계 진실 물건</k>을 <b>3장 이상</b> 모으면 받습니다. <k>아카데미</k>에서 승천의 문을
+       소환해 <b>승천 엔딩</b>으로 갑니다.</p>` },
+
+  '황제의 증표': { tag:'토큰', html:`
+    <p><b>극동의 섬</b>에 잠들어 있습니다 (동부 바다를 통해서만 갈 수 있습니다).</p>
+    <p>받는 길 — <k>단서</k> 3장 지불 / <k>메인 빌런</k> + <k>약혼</k> / 미호의 «요술의 왕» /
+       그레이스의 «만물금본».</p>
+    <p>받은 뒤 <b>대륙으로 돌아와 황제 선언</b>을 하고 1막을 넘기면 <b>군림 엔딩</b>입니다.</p>` },
+
+  '막': { tag:'라운드', html:`
+    <p>게임은 <b>24막</b>입니다 (α~ω 24자). 4인 기준 한 막 약 2분 30초, 전체 약 1시간을 노립니다.</p>
+    <p>막마다 <k>운명 카드</k> 2장이 열려 48장이 정확히 소진됩니다.
+       <k>시나리오 카드</k>와 <k>재앙 카드</k>는 막을 소모하지 않습니다.</p>
+    <p><b>선은 매 막 바뀝니다</b> — 그 막의 마지막 순번이 다음 막의 선입니다.</p>` },
+
+  '탐색 덱': { tag:'지역마다 20장', html:`
+    <p>동·서·남·북에 <b>독립된 덱이 하나씩</b>, 각 20장(<k>물건 카드</k> 10 + <k>금화</k> 10)입니다.
+       동부 바다는 동부 덱을 씁니다. <k>아카데미</k>와 극동은 <b>탐색이 안 됩니다</b>.</p>
+    <div class="note"><b>리셔플하지 않습니다.</b> 파고들수록 그 지역의 물건/금화 비율이 틀어지는 것이
+      의도된 설계입니다 — 어디를 파느냐가 곧 전략입니다.</div>
+    <p>덱이 마르면 <k>세계은행연합</k>에서 <b>금화 2장만</b> 보충됩니다.
+       그래서 <k>단서</k>와 <k>유물</k>은 게임 전체에서 유한합니다.</p>` },
+
+  '세계은행연합': { tag:'은행', html:`
+    <p><k>금화</k> 20장을 갖고 시작합니다. 플레이어가 낸 금화(<k>이동</k>·<k>거래</k>·해제 비용)는
+       전부 여기로 돌아오고, <k>탐색 덱</k>이 마르면 2장씩 다시 풀립니다.</p>` },
+
+  '암상': { tag:'거래 상대', html:`
+    <p><k>거래</k>를 중개하는 뒷세계 상인. 수수료 <b>금화 2개</b>를 떼고, 3개를 더 주면
+       그 물건을 <b>파괴</b>해줍니다. 받은 금화는 <k>세계은행연합</k>으로 갑니다.</p>` },
+
+  '아카데미': { tag:'중부', html:`
+    <p>대륙의 중심이자 <k>잔느</k>의 시작점. 지하에 <b>승천의 문</b>이 잠들어 있습니다.</p>
+    <ul>
+      <li><b><k>탐색</k> 불가</b> — 대신 <k>수행</k>이 2장이 아니라 <b>3장</b></li>
+      <li><k>승천의 문 토큰</k>을 여기서 씁니다</li>
+    </ul>` },
+
+  /* ── 행동 ── */
+  '이동': { tag:'행동', html:`<p>이웃한 지역으로 갑니다. <b><k>금화</k> 1장</b>을 냅니다.</p>
+    <p>극동의 섬은 <b>동부 바다를 통해서만</b> 드나들 수 있습니다.</p>` },
+
+  '탐색': { tag:'행동', html:`
+    <p>그 지역의 <k>탐색 덱</k>에서 주사위를 굴려 뽑습니다.</p>
+    <div class="tw"><table><thead><tr><th class="n">주사위</th><th>결과</th></tr></thead><tbody>
+      <tr><td class="n">1 · 2</td><td><k>능력 카드</k> 1장</td></tr>
+      <tr><td class="n">3 · 4 · 5</td><td><k>물건 카드</k> 1장</td></tr>
+      <tr><td class="n">6</td><td>물건 2장 <b>또는</b> 능력 2장 + 물건 1장</td></tr>
+    </tbody></table></div>
+    <p><b><k>아카데미</k>와 극동에서는 못 합니다.</b></p>` },
+
+  '수행': { tag:'행동', html:`<p><k>능력 카드</k>를 <b>2장</b> 뽑습니다. <k>아카데미</k>에서는 <b>3장</b>.</p>
+    <p>탐색과 달리 주사위가 없어 <b>확실합니다</b> — 각성 재료를 모을 때 쓰는 길입니다.</p>` },
+
+  '각성': { tag:'행동', html:`
+    <p><b>같은 <k>능력 카드</k> 5장</b>을 내고 <k>고유능력</k>을 얻습니다.
+       예를 들어 <b>검 카드 5장</b>을 모았다면 그 자리에서 «소드마스터»로 각성할 수 있습니다.</p>
+    <div class="note"><b>모든 엔딩이 각성을 요구합니다.</b> 각성하지 않으면 어떤 승리 조건도 완성되지 않습니다
+      (<k>멸망 엔딩</k> 제외).</div>
+    <p>캐릭터 전용 <b>특수 고유능력</b>을 얻을 수 있는 상황이면 <b>반드시 그쪽으로</b> 각성합니다.</p>` },
+
+  '고유능력': { tag:'각성의 결과', html:`
+    <p><b>일반 6종</b></p>
+    <div class="tw"><table><thead><tr><th>이름</th><th>재료</th><th>효과</th></tr></thead><tbody>
+      <tr><td>팜므파탈</td><td>매력 5</td><td>여러 <k>남주</k>와 동시에 <k>약혼</k></td></tr>
+      <tr><td>마리오네트</td><td>어둠 5</td><td><k>현상수배</k> 자동 완화 · <k>모략</k> 주사위 3회 재굴림</td></tr>
+      <tr><td>소드마스터</td><td>검 5</td><td><k>발각</k>을 <k>처단</k>으로 바꿈</td></tr>
+      <tr><td>빛의 사제</td><td>신성 5</td><td>신성 카드를 주사위 눈만큼 내고 처단·암살 방어</td></tr>
+      <tr><td>마도사</td><td>마법 5</td><td>마법 카드로 모략하면 발각되지 않음</td></tr>
+      <tr><td>혈술사</td><td>선혈 5</td><td><k>빌런 토큰</k>으로 두근! 손실을 대신 지불</td></tr>
+    </tbody></table></div>
+    <p><b>특수 6종</b> — 요술사(미호) · 검성(제노비아) · 성녀(이레네) · 진조(바토리) ·
+       만물금본(그레이스) · 독술사(마리).</p>
+    <div class="note">일반과 특수는 <b>서로를 막습니다.</b> 누군가 «마도사»로 각성하면 미호는
+      «요술사»가 될 수 없고, 그 반대도 같습니다.</div>` },
+
+  '만남': { tag:'행동', html:`<p><k>매력 카드</k> <b>1장</b>을 써서, 같은 지역에 있는 <k>남주</k>의
+    <k>성향 카드</k>를 <b>1장</b> 엽니다.</p>
+    <p><k>여론악화</k> 상태에서는 할 수 없습니다.</p>` },
+
+  '매력 카드': { tag:'능력 카드 40장', html:`
+    <p><k>능력 카드</k> 중 가장 많은 종류(40장). 부채 그림입니다.</p>
+    <ul>
+      <li><k>만남</k>에 1장씩 소모됩니다 — 그래서 많습니다</li>
+      <li>5장을 모으면 «팜므파탈»로 <k>각성</k></li>
+    </ul>` },
+
+  '모략': { tag:'행동', html:`
+    <p>이 게임의 중심 행동. <k>메인 빌런</k> · <k>남주</k> · 다른 플레이어 · <k>잔느</k>를 노립니다.</p>
+    <p><b>같은 <k>능력 카드</k> 2~5장</b>을 내고 주사위를 굴려, <b>나온 눈과 낸 장수</b>를 비교합니다.</p>
+    <div class="tw"><table><thead><tr><th>주사위</th><th>결과</th></tr></thead><tbody>
+      <tr><td>장수 <b>초과</b></td><td><k>발각</k></td></tr>
+      <tr><td>장수 <b>미만</b></td><td><k>처단</k></td></tr>
+      <tr><td>장수와 <b>같음</b></td><td><k>암살</k></td></tr>
+    </tbody></table></div>
+    <div class="note"><b>암살은 언제나 1/6입니다.</b> 카드를 더 걸면 «발각»이 «처단»으로 바뀔 뿐입니다 —
+      즉 안전해질 뿐 <k>빌런 토큰</k>을 벌 확률은 그대로입니다.</div>
+    <p>상한이 5장인 이유는, 6장 이상이면 <k>발각</k>이 구조적으로 불가능해져 판정이 무의미해지기 때문입니다.</p>` },
+
+  '발각': { tag:'모략 실패', html:`
+    <p>주사위가 <b>낸 장수를 넘었을 때.</b></p>
+    <ul><li><k>두근! 토큰</k> 1개 손실</li><li><k>현상수배</k> 상태가 됨</li></ul>
+    <p>«소드마스터»로 <k>각성</k>하면 이 판정이 <k>처단</k>으로 바뀝니다.</p>` },
+
+  '처단': { tag:'모략 성공(거친)', html:`
+    <p>주사위가 <b>낸 장수보다 작을 때.</b> 대상을 처치하고 그 카드를 내 앞으로 가져옵니다.</p>
+    <ul>
+      <li>나는 <k>여론악화</k>가 된다 (<k>남주</k>가 상대면 <k>현상수배</k>)</li>
+      <li><b><k>빌런 토큰</k>은 못 받습니다</b> — 그건 <k>암살</k>뿐입니다</li>
+    </ul>
+    <p>상대가 플레이어면 처단 대신 <k>암습</k>이 됩니다.</p>` },
+
+  '암습': { tag:'플레이어 상대', html:`
+    <p>플레이어를 <k>모략</k>했을 때의 «처단» 자리. 죽이지는 못하고
+       상대의 <k>능력 카드</k> <b>2장을 무작위로 파괴</b>합니다.</p>` },
+
+  '암살': { tag:'모략 성공(완벽)', html:`
+    <p>주사위가 <b>낸 장수와 정확히 같을 때.</b> 확률은 언제나 <b>1/6</b>입니다.</p>
+    <ul>
+      <li>대상을 처치하고 <b><k>빌런 토큰</k> 1개</b>를 받습니다</li>
+      <li>상태이상이 붙지 않습니다</li>
+      <li>상대가 플레이어면 — 두근!이 있으면 1 잃고 <k>빈사</k>, 없으면 <b>사망 → <k>악령</k></b></li>
+    </ul>` },
+
+  '거래': { tag:'행동', html:`
+    <p>같은 지역에 다른 플레이어가 있을 때, <b><k>금화</k> 5개를 걸고</b> 제안합니다.
+       <b>상대는 반드시 응하고</b> <k>물건 카드</k> 1장을 보여줍니다.</p>
+    <div class="tw"><table><thead><tr><th>선택</th><th>금화</th><th>결과</th></tr></thead><tbody>
+      <tr><td>수락</td><td><k>암상</k> 2 + 상대 3</td><td>그 물건을 가져온다</td></tr>
+      <tr><td>거절</td><td>암상 2 (3 반환)</td><td>아무 일 없음</td></tr>
+      <tr><td>파괴 의뢰</td><td>5 전부</td><td>암상이 파괴</td></tr>
+    </tbody></table></div>
+    <p><k>여론악화</k> 상태에서는 할 수 없습니다.</p>` },
+
+  '약혼': { tag:'행동', html:`
+    <p><k>성향 카드</k>가 <b>1장 이상 열려 있으면</b>, 열린 조건을 <k>능력 카드</k>·<k>물건 카드</k>로
+       충족해 약혼합니다.</p>
+    <ul>
+      <li>약혼 후 <b>10막</b>이 지나면 <b>해피 엔딩</b> 판정 대상이 됩니다</li>
+      <li>이미 다른 플레이어가 약혼했다면 — <b>성향 카드를 추가로 열고</b> 그 조건까지 채워
+          <b>파혼</b>시키고 가로챌 수 있습니다</li>
+      <li>«팜므파탈»로 <k>각성</k>하지 않으면 <b>두 명 이상과 동시 약혼은 불가</b></li>
+    </ul>` },
+
+  '특수행동': { tag:'공짜', html:`
+    <p>자기 차례에 <b>행동 칸을 쓰지 않고</b> 언제든 하는 것. <k>상태이상</k>의 해제가 전부 여기 해당합니다.</p>
+    <p>즉 <k>빈사</k>를 풀면서도 그 턴에 행동 2개를 그대로 쓸 수 있습니다
+       (단 빈사인 동안에는 1개).</p>` },
+
+  /* ── 상태이상 ── */
+  '상태이상': { tag:'3종', html:`
+    <p><k>빈사</k> · <k>현상수배</k> · <k>여론악화</k> 셋입니다. 해제는 전부 <k>특수행동</k>이라
+       행동 칸을 쓰지 않습니다.</p>` },
+
+  '빈사': { tag:'상태이상', html:`
+    <p>자기 턴에 <b>행동을 1개만</b> 할 수 있습니다.</p>
+    <h4>해제</h4>
+    <ol>
+      <li>남부 교회에서 <k>금화</k> 3개를 내고 치료</li>
+      <li><k>엘릭서</k> 사용</li>
+      <li><k>고유능력</k> «빛의 사제» 또는 «성녀»의 치료</li>
+    </ol>
+    <div class="note"><k>두근! 토큰</k>과는 <b>별개의 시스템</b>입니다. 빈사를 풀어도 두근!은 안 돌아옵니다.</div>` },
+
+  '현상수배': { tag:'상태이상', html:`
+    <p>가장 아픈 상태입니다. <b>막 시작마다 주사위</b>를 굴려 <b>4 이상</b>이면 맞습니다.</p>
+    <div class="tw"><table><thead><tr><th>같은 지역</th><th>기본</th><th><k>잔느</k>가 함께</th></tr></thead><tbody>
+      <tr><td><k>남주</k></td><td>두근! 1 감소</td><td><b>두근! 2 감소</b></td></tr>
+      <tr><td><k>메인 빌런</k></td><td>능력 2장 또는 물건 1장</td><td><b>능력 4장 또는 물건 2장</b></td></tr>
+    </tbody></table></div>
+    <h4>해제</h4>
+    <ol>
+      <li><k>금화</k> 5개로 여론 조작 → <k>여론악화</k>로 <b>낮춤</b></li>
+      <li><k>고유능력</k>으로 여론 조작 → <k>여론악화</k>로 낮춤</li>
+      <li>원인이 된 상대가 사망 — <b><k>잔느</k>가 원인이면 불가</b> (잔느는 죽지 않습니다)</li>
+    </ol>
+    <div class="note warn"><k>남주의 추종</k> 때문에 잔느 곁에는 늘 남주가 있습니다.
+      현상수배 상태로 잔느와 마주치는 것이 이 게임에서 <b>가장 비싼 사고</b>입니다.</div>` },
+
+  '여론악화': { tag:'상태이상', html:`
+    <p><b><k>거래</k>와 <k>만남</k>을 할 수 없습니다.</b> 즉 <k>약혼</k> 준비가 막힙니다.</p>
+    <h4>해제</h4>
+    <ol>
+      <li><k>금화</k> 3개로 «처단 대상이 악녀/빌런이었음»을 공표</li>
+      <li><k>고유능력</k>으로 공표</li>
+    </ol>
+    <div class="note">해제 수단(<b>금화 3개</b>)을 미리 쥐고 있어야 합니다.
+      여기서 못 풀면 다음 <k>잔느</k> 조우에 <k>현상수배</k>로 떨어집니다.</div>` },
+
+  /* ── 인물 ── */
+  '잔느': { tag:'주인공', html:`
+    <p>소설 «판 로만티카의 소녀»의 주인공. <b>당신을 처단하러 오는 쪽</b>입니다.</p>
+    <ul>
+      <li><k>운명 카드</k>의 지시대로만 움직입니다</li>
+      <li>그 카드가 <b>당신과 마주치도록 짜여 있습니다</b> — 조우는 저절로 일어납니다</li>
+      <li><b>절대 죽지 않습니다</b> → <k>운명의 가호</k></li>
+    </ul>
+    <h4>조우 단계 (플레이어마다 따로)</h4>
+    <div class="tw"><table><thead><tr><th>지금 상태</th><th>결과</th></tr></thead><tbody>
+      <tr><td>첫 조우</td><td>아무 일 없음</td></tr>
+      <tr><td>두 번째 이후</td><td><k>여론악화</k></td></tr>
+      <tr><td>이미 여론악화</td><td><k>현상수배</k></td></tr>
+      <tr><td>이미 현상수배</td><td><b>강제 <k>모략</k></b></td></tr>
+    </tbody></table></div>` },
+
+  '운명의 가호': { tag:'잔느 상대', html:`
+    <p><k>잔느</k>는 <k>모략</k>의 대상은 되지만 <b>처치·암살이 성립하지 않습니다.</b>
+       <k>빌런 토큰</k>도 못 받습니다. 결과는 <b>손해의 크기</b>로만 갈립니다.</p>
+    <div class="tw"><table><thead><tr><th>주사위</th><th>결과</th></tr></thead><tbody>
+      <tr><td>장수 초과</td><td><b>역공</b> — 두근! <b>2</b> 손실</td></tr>
+      <tr><td>장수 미만</td><td><b>반격</b> — 두근! <b>1</b> 손실</td></tr>
+      <tr><td>장수와 같음</td><td><b>조용한 실패</b> — 아무 일 없음</td></tr>
+    </tbody></table></div>
+    <div class="note warn">무피해 확률은 <b>어떻게 해도 1/6</b>입니다.
+      리코리스 난이도(시작 두근! 1개)에서는 강제 모략 한 번에 <b>5/6 확률로 죽습니다.</b></div>
+    <p>손에 능력 카드가 2장 미만이면 있는 만큼(0~1장)만 냅니다. <b>0장이면 주사위와 무관하게 역공</b>입니다.</p>` },
+
+  '남주': { tag:'NPC 4인', html:`
+    <p>결혼 상대이자 위험 요소. <k>성향 카드</k>를 3장씩 뒷면으로 깔고 시작합니다.</p>
+    <ul>
+      <li><k>만남</k>으로 성향을 열고 <k>약혼</k>합니다</li>
+      <li><k>현상수배</k> 상태에서 같은 지역에 있으면 <b>두근!을 깎습니다</b></li>
+      <li><k>모략</k>의 대상이 될 수도 있습니다 (처단하면 <k>현상수배</k>)</li>
+    </ul>` },
+
+  '남주의 추종': { tag:'막 종료 처리', html:`
+    <p><b>중반부 시나리오부터</b> 적용됩니다. 막 종료 시 <k>잔느</k>가 있는 지역에 <k>남주</k>가
+       하나도 없으면 1명이 그리로 이동합니다.</p>
+    <ol>
+      <li>잔느와 <k>약혼</k>한 남주</li>
+      <li>없으면 <b>거리가 가장 가까운</b> 남주</li>
+      <li>동률이면 <b>해당 전원</b></li>
+    </ol>
+    <div class="note">그래서 잔느 곁에는 결국 늘 남주가 있게 됩니다 —
+      <k>현상수배</k>인 플레이어가 잔느를 피해 다녀야 하는 이유입니다.</div>` },
+
+  '메인 빌런': { tag:'NPC 4인', html:`
+    <p>처치 대상인 메인 악녀 4인. <k>모략</k>으로 처치하고, <k>암살</k>이면 <k>빌런 토큰</k>을 받습니다.</p>
+    <p><b>노멀 엔딩</b>은 이들이 전부 처치된 상태를 요구합니다.
+       <k>현상수배</k> 상태로 같은 지역에 있으면 약점을 잡혀 카드를 버려야 합니다.</p>` },
+
+  'NPC 서브빌런': { tag:'안 고른 캐릭터', html:`
+    <p>플레이어가 고르지 않은 플레이어블 캐릭터 (8인 중 4인 이상). 시작 지점에 놓이고
+       <k>운명 카드</k>의 지시로만 움직입니다.</p>
+    <p>플레이어처럼 <k>두근! 토큰</k>을 갖습니다 — <b>난이도가 높을수록 많이 갖고 시작해</b>
+       처치하기 어려워집니다 (0~2개).</p>` },
+
+  '악령': { tag:'죽은 뒤', html:`
+    <p><k>두근! 토큰</k>이 0이 되면 인간으로서 사망하고 <b>악령</b>이 됩니다.
+       게임에서 빠지는 게 아니라 <b>편을 갈아탑니다.</b></p>
+    <ul>
+      <li><k>캐릭터 카드</k>를 <b>악령 면으로 뒤집습니다</b></li>
+      <li><k>사기 카드</k>를 씁니다 (손패 상한 10장)</li>
+      <li>«징조»로 <k>재앙 카드</k>를 <k>운명 카드</k> 더미에 <b>몰래 섞습니다</b> — 내용도 안 보고</li>
+      <li>«살인귀»·«징조»로 <k>빌런 토큰</k>을 법니다</li>
+    </ul>
+    <p>목표는 <k>멸망 시나리오</k> — 전원이 죽었을 때 빌런 토큰 최다 보유자가 이깁니다.</p>` },
+
+  '멸망 시나리오': { tag:'악령의 판', html:`
+    <p><k>악령</k>이 생긴 시점부터 진행할 수 있습니다. 모든 플레이어가 죽으면
+       <b><k>빌런 토큰</k>이 가장 많은 사람이 승리</b>합니다.</p>
+    <p>누군가 <b>노멀 엔딩</b>을 달성하면 즉시 중단됩니다.</p>` },
+
+  '멸망 엔딩': { tag:'승리 조건', html:`
+    <p>모든 플레이어가 사망했을 때, <k>빌런 토큰</k>을 가장 많이 가진 사람이 이깁니다.
+       “내가 가질 수 없다면 부숴버릴거야”.</p>` },
+
+  '군림 엔딩': { tag:'승리 조건', html:`
+    <p>생존 + <k>각성</k> + <k>황제의 증표</k> 획득 + 대륙에서 <b>황제 선언</b> 후 1막 경과.</p>` },
+}
+
+/* 여러 표기를 한 항목으로 모은다. 본문을 자연스럽게 쓰기 위한 것이다 */
+const ALIAS = {
+  '검 카드':'능력 카드', '매력':'매력 카드', '능력':'능력 카드',
+  '빌런 포인트':'빌런 토큰', '두근!':'두근! 토큰', '두근! 포인트':'두근! 토큰',
+  '단서 카드':'단서', '유물 카드':'유물',
+  '조우':'잔느', '파혼':'약혼', '결혼':'약혼',
+  '손패 상한':'능력 카드', '난이도':'두근! 토큰',
+}
+
+/* ── 탭 ── */
+const tabs = document.getElementById('tabs')
+const panels = [...document.querySelectorAll('main section')]
+function showTab(id, push){
+  const found = panels.some(p => p.id === id)
+  if (!found) id = 'parts'
+  panels.forEach(p => { p.hidden = p.id !== id })
+  ;[...tabs.children].forEach(b => b.setAttribute('aria-selected', String(b.dataset.t === id)))
+  scrollTo(0, 0)
+  if (push) history.replaceState(history.state, '', '#' + id)
+}
+tabs.addEventListener('click', e => {
+  const b = e.target.closest('button')
+  if (b) showTab(b.dataset.t, true)
+})
+
+/* ── 낱말 모달 ──
+   뒤로가기로 닫히는 것이 중요하다. 휴대폰에서 X 를 찾아 누르는 것보다
+   화면 밖으로 쓸어내리는(=뒤로) 쪽이 먼저 나오는 손버릇이다. */
+const modal = document.getElementById('modal')
+const mtitle = document.getElementById('mtitle')
+const mtag = document.getElementById('mtag')
+const mbody = document.getElementById('mbody')
+let open = false
+
+function entryOf(word){
+  const w = word.trim()
+  return G[w] ? [w, G[w]] : (ALIAS[w] && G[ALIAS[w]]) ? [ALIAS[w], G[ALIAS[w]]] : [null, null]
+}
+
+function openKey(word, push){
+  const [key, e] = entryOf(word)
+  if (!e) return
+  mtitle.textContent = key
+  mtag.textContent = e.tag || ''
+  mbody.innerHTML = e.html + '<button class="back" id="mback">닫기</button>'
+  wire(mbody)
+  mbody.scrollTop = 0
+  modal.classList.add('on')
+  document.body.classList.add('locked')
+  open = true
+  document.getElementById('mclose').focus({ preventScroll:true })
+  // 낱말 안에서 낱말을 눌러도 기록은 한 겹만 쌓는다 (계속 쌓으면 뒤로가기가 지겨워진다)
+  if (push) history.pushState({ k:key }, '', '#k=' + encodeURIComponent(key))
+  else history.replaceState({ k:key }, '', '#k=' + encodeURIComponent(key))
+}
+
+function closeKey(back){
+  if (!open) return
+  modal.classList.remove('on')
+  document.body.classList.remove('locked')
+  open = false
+  if (back) history.back()
+}
+
+document.getElementById('mclose').onclick = () => closeKey(true)
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeKey(true) })
+window.addEventListener('popstate', e => {
+  if (e.state && e.state.k) openKey(e.state.k, false)
+  else closeKey(false)
+})
+
+/* <k> 를 눌리게 만든다. 사전에 없는 낱말은 링크로 보이지 않게 죽인다 —
+   눌렀는데 아무 일도 안 일어나는 것이 가장 나쁘다. */
+function wire(root){
+  root.querySelectorAll('k').forEach(el => {
+    if (el.dataset.on) return
+    const [key] = entryOf(el.textContent)
+    if (!key) { el.classList.add('dead'); return }
+    el.dataset.on = '1'
+    el.setAttribute('role', 'button')
+    el.setAttribute('tabindex', '0')
+    el.title = key + ' — 눌러서 설명 보기'
+    const go = ev => { ev.preventDefault(); openKey(el.textContent, !open) }
+    el.addEventListener('click', go)
+    el.addEventListener('keydown', ev => { if (ev.key === 'Enter' || ev.key === ' ') go(ev) })
+  })
+  const back = root.querySelector('#mback')
+  if (back) back.onclick = () => closeKey(true)
+}
+wire(document.body)
+
+/* 주소로 바로 열기 — 링크를 주고받을 수 있어야 한다 (#action, #k=각성) */
+{
+  const h = decodeURIComponent(location.hash.slice(1))
+  if (h.startsWith('k=')) openKey(h.slice(2), false)
+  else if (h) showTab(h, true)
+}
+</script>
+</body>
+</html>
