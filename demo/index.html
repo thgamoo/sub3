@@ -66,10 +66,10 @@ header{
 nav{display:flex;gap:2px;padding:0 6px 7px;overflow-x:auto;scrollbar-width:none}
 nav::-webkit-scrollbar{display:none}
 nav button{
-  flex:1 1 0;min-width:62px;min-height:40px;
+  flex:1 1 0;min-width:54px;min-height:40px;
   border:0;border-radius:999px;background:transparent;color:#f0d9e1;
-  font:inherit;font-size:13.5px;font-weight:700;padding:6px 4px;cursor:pointer;
-  white-space:nowrap;letter-spacing:-.3px;
+  font:inherit;font-size:13px;font-weight:700;padding:6px 3px;cursor:pointer;
+  white-space:nowrap;letter-spacing:-.5px;
 }
 nav button[aria-selected="true"]{background:var(--gold-soft);color:#43101f}
 
@@ -177,6 +177,7 @@ footer a{color:var(--wine)}
     <button role="tab" data-t="ending" aria-selected="false">엔딩</button>
     <button role="tab" data-t="action" aria-selected="false">액션</button>
     <button role="tab" data-t="status" aria-selected="false">상태이상</button>
+    <button role="tab" data-t="power" aria-selected="false">고유능력</button>
   </nav>
 </header>
 
@@ -493,6 +494,109 @@ footer a{color:var(--wine)}
      <b>멸망을 노리는 편으로 갈아탑니다.</b></p>
 </section>
 
+<!-- ─────────────────────────── 고유능력 ─────────────────────────── -->
+<section id="power" role="tabpanel" hidden>
+  <h2>고유능력</h2>
+  <p class="lede"><k>각성</k>하면 얻습니다. <b>모든 엔딩이 각성을 요구합니다</b> — 늦어도 중반에는 한 번 해둬야 합니다.</p>
+
+  <div class="note"><b>같은 <k>능력 카드</k> 5장</b>을 내면 그 자리에서 각성합니다.
+    캐릭터 전용 <b>특수 고유능력</b>을 얻을 수 있는 상황이면 <b>반드시 그쪽으로</b> 각성합니다.</div>
+
+  <h3>일반 6종 — 누구나</h3>
+  <div class="tw"><table>
+    <thead><tr><th>이름</th><th>재료</th><th>효과</th></tr></thead>
+    <tbody>
+      <tr><td><b>팜므파탈</b></td><td><k>매력 카드</k> 5</td><td>여러 <k>남주</k>와 동시에 <k>약혼</k></td></tr>
+      <tr><td><b>마리오네트</b></td><td>어둠 5</td><td><k>현상수배</k>가 다음 막 시작에 <k>여론악화</k>로 내려감 ·
+        <k>모략</k> 주사위를 <b>3번까지 재굴림</b></td></tr>
+      <tr><td><b>소드마스터</b></td><td>검 5</td><td><k>모략</k>의 <k>발각</k>을 <k>처단</k>으로 바꿈</td></tr>
+      <tr><td><b>빛의 사제</b></td><td>신성 5</td><td>모략을 당했을 때 신성 카드를 <b>주사위 눈만큼</b> 내고
+        <k>처단</k>·<k>암살</k>을 막음</td></tr>
+      <tr><td><b>마도사</b></td><td>마법 5</td><td>마법 카드로 <k>모략</k>하면 <b>발각되지 않음</b></td></tr>
+      <tr><td><b>혈술사</b></td><td>선혈 5</td><td><k>빌런 토큰</k>을 대신 내고 <k>두근! 토큰</k> 손실을 막음</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>특수 6종 — 그 캐릭터만</h3>
+  <p>일반 능력보다 강하지만 <b>서로를 잠급니다</b> (아래 참조). 조건도 캐릭터마다 다릅니다.</p>
+
+  <div class="card">
+    <h4>요술사 — 미호</h4>
+    <ul>
+      <li>각성 조건 — 유물 <b>«요마변환기»</b> 획득 (마법 카드가 아닙니다)</li>
+      <li><k>모략</k>에서 <k>발각</k>이 나와도 <b>아무 일도 일어나지 않음</b></li>
+      <li>여러 <k>남주</k>와 동시에 <k>약혼</k> 가능</li>
+    </ul>
+    <p style="margin:0;font-size:13.5px;color:var(--muted)">마도사와 상호 배타. 미호는 마도사로 각성할 수 없습니다.</p>
+  </div>
+
+  <div class="card">
+    <h4>검성 — 제노비아</h4>
+    <ul>
+      <li>각성 조건 — 검 카드 <b>4장</b> (일반보다 1장 적습니다)</li>
+      <li><k>모략</k>의 <k>발각</k>을 <k>처단</k>으로 바꿈</li>
+      <li><b>검 카드 1장</b>만으로도 <k>모략</k>을 할 수 있음</li>
+      <li>재앙 «칼날 비»에 영향을 받지 않음</li>
+    </ul>
+    <p style="margin:0;font-size:13.5px;color:var(--muted)">소드마스터와 상호 배타.</p>
+  </div>
+
+  <div class="card">
+    <h4>성녀 — 이레네</h4>
+    <ul>
+      <li>각성 조건 — 신성 카드 <b>4장</b>, 또는 유물 «성상» 1개</li>
+      <li>모략을 당했을 때 신성 카드 <b>1장만</b> 내고 <k>처단</k>·<k>암살</k>을 막음
+        <span style="color:var(--muted)">(빛의 사제는 주사위 눈만큼 냅니다)</span></li>
+      <li><k>빈사</k>를 치료할 수 있음</li>
+    </ul>
+    <p style="margin:0;font-size:13.5px;color:var(--muted)">빛의 사제와 상호 배타.</p>
+  </div>
+
+  <div class="card">
+    <h4>진조 — 바토리</h4>
+    <ul>
+      <li>각성 조건 — 선혈 카드 <b>4장</b></li>
+      <li><b>사망하지 않는다</b></li>
+    </ul>
+    <p style="margin:0;font-size:13.5px;color:var(--muted)">혈술사와 상호 배타.</p>
+  </div>
+
+  <div class="card">
+    <h4>만물금본 — 그레이스</h4>
+    <ul>
+      <li><k>금화</k> <b>5개</b>를 내면 <b>일반 고유능력 중 하나를 추가로</b> 각성</li>
+      <li><k>황제의 증표</k>를 받는 길 중 하나이기도 함</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h4>독술사 — 마리</h4>
+    <ul>
+      <li>각성 조건 — 독약 카드 5장</li>
+      <li>모략을 <b>당하면</b> 상대에게 <k>빈사</k>를 부여. 이미 빈사인 상대는 <b><k>암살</k></b></li>
+      <li><k>남주의 추종</k>으로 따라온 남주를 <k>처단</k>한다</li>
+      <li>사망할 때, 같은 지역의 <b>모든 캐릭터에게 페널티 없이 <k>모략</k></b></li>
+      <li>재앙 «돌림병»에 면역</li>
+    </ul>
+  </div>
+
+  <h3>먼저 각성한 쪽이 상대를 잠근다</h3>
+  <p>일반과 특수는 <b>짝지어 서로를 막습니다.</b> 예를 들어 누군가 <b>마도사</b>로 각성하면
+     미호는 그 게임에서 <b>요술사</b>가 될 수 없고, 미호가 먼저 <b>요술사</b>가 되면
+     다른 누구도 <b>마도사</b>로 각성하지 못합니다.</p>
+  <div class="tw"><table>
+    <thead><tr><th>특수</th><th>잠기는 일반</th></tr></thead>
+    <tbody>
+      <tr><td>요술사 (미호)</td><td>마도사</td></tr>
+      <tr><td>검성 (제노비아)</td><td>소드마스터</td></tr>
+      <tr><td>성녀 (이레네)</td><td>빛의 사제</td></tr>
+      <tr><td>진조 (바토리)</td><td>혈술사</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note warn"><b>먼저 가는 쪽이 이깁니다.</b> 같은 계열을 노리는 사람이 있으면
+    카드가 다 모이기 전에 상대가 먼저 각성해 길이 막힐 수 있습니다.</div>
+</section>
+
 </main>
 
 <footer>
@@ -715,7 +819,8 @@ const G = {
     <p><b>특수 6종</b> — 요술사(미호) · 검성(제노비아) · 성녀(이레네) · 진조(바토리) ·
        만물금본(그레이스) · 독술사(마리).</p>
     <div class="note">일반과 특수는 <b>서로를 막습니다.</b> 누군가 «마도사»로 각성하면 미호는
-      «요술사»가 될 수 없고, 그 반대도 같습니다.</div>` },
+      «요술사»가 될 수 없고, 그 반대도 같습니다.</div>
+    <p style="text-align:center"><button class="back" data-go="power" style="margin:6px 0 0">「고유능력」 탭에서 전부 보기 →</button></p>` },
 
   '만남': { tag:'행동', html:`<p><k>매력 카드</k> <b>1장</b>을 써서, 같은 지역에 있는 <k>남주</k>의
     <k>성향 카드</k>를 <b>1장</b> 엽니다.</p>
@@ -1033,6 +1138,16 @@ function wire(root){
   })
   const back = root.querySelector('#mback')
   if (back) back.onclick = () => closeKey(true)
+  // 모달에서 탭으로 건너가기 («고유능력 탭에서 전부 보기»)
+  root.querySelectorAll('[data-go]').forEach(b => {
+    b.onclick = () => {
+      const wasPushed = pushed
+      closeKey(true)
+      // history.back() 은 한 박자 뒤에 반영된다. 바로 주소를 고치면 그 뒤에 덮인다.
+      if (wasPushed) setTimeout(() => showTab(b.dataset.go, true), 0)
+      else showTab(b.dataset.go, true)
+    }
+  })
 }
 wire(document.body)
 
