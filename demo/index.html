@@ -904,6 +904,16 @@ const ALIAS = {
   '손패 상한':'능력 카드', '난이도':'두근! 토큰',
 }
 
+/* ── 주소 다루기 ──
+   `file://` 로 열면 크롬이 pushState 를 막는다 (origin 이 null 이라 거절한다).
+   그 예외 하나에 모달이 통째로 안 열리면 안 되므로, 주소 기능은 **있으면 쓰고
+   없으면 없는 대로** 돌아가게 둔다. 서버로 열면 뒤로가기·링크가 다 살아난다. */
+let histOK = true
+const hpush = (st, hash) => { if (!histOK) return false
+  try { history.pushState(st, '', hash); return true } catch { histOK = false; return false } }
+const hset = (st, hash) => { if (!histOK) return
+  try { history.replaceState(st, '', hash) } catch { histOK = false } }
+
 /* ── 탭 ── */
 const tabs = document.getElementById('tabs')
 const panels = [...document.querySelectorAll('main section')]
@@ -913,7 +923,7 @@ function showTab(id, push){
   panels.forEach(p => { p.hidden = p.id !== id })
   ;[...tabs.children].forEach(b => b.setAttribute('aria-selected', String(b.dataset.t === id)))
   scrollTo(0, 0)
-  if (push) history.replaceState(history.state, '', '#' + id)
+  if (push) hset(history.state, '#' + id)
 }
 tabs.addEventListener('click', e => {
   const b = e.target.closest('button')
@@ -928,6 +938,8 @@ const mtitle = document.getElementById('mtitle')
 const mtag = document.getElementById('mtag')
 const mbody = document.getElementById('mbody')
 let open = false
+/** 이 모달이 «뒤로가기 한 번» 을 차지하고 있는가 (file:// 에서는 늘 false) */
+let pushed = false
 
 function entryOf(word){
   const w = word.trim()
@@ -947,8 +959,9 @@ function openKey(word, push){
   open = true
   document.getElementById('mclose').focus({ preventScroll:true })
   // 낱말 안에서 낱말을 눌러도 기록은 한 겹만 쌓는다 (계속 쌓으면 뒤로가기가 지겨워진다)
-  if (push) history.pushState({ k:key }, '', '#k=' + encodeURIComponent(key))
-  else history.replaceState({ k:key }, '', '#k=' + encodeURIComponent(key))
+  const hash = '#k=' + encodeURIComponent(key)
+  if (push) pushed = hpush({ k:key }, hash) || pushed
+  else hset({ k:key }, hash)
 }
 
 function closeKey(back){
@@ -956,7 +969,10 @@ function closeKey(back){
   modal.classList.remove('on')
   document.body.classList.remove('locked')
   open = false
-  if (back) history.back()
+  // 뒤로 밀어야 하는 건 «내가 쌓아둔 기록이 있을 때» 뿐이다.
+  // 없는데 back() 을 부르면 페이지 자체를 떠나버린다.
+  if (back && pushed) { pushed = false; history.back() }
+  else { pushed = false; hset(null, '#' + (panels.find(p => !p.hidden)?.id ?? 'parts')) }
 }
 
 document.getElementById('mclose').onclick = () => closeKey(true)
